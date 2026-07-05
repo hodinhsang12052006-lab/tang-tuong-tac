@@ -42,6 +42,7 @@ build/Release
 
 # Dependency directories for subprojects
 mmo-shop/node_modules/
+shop-via-vercel/node_modules/
 
 # Local databases and JSON storage files
 mmo-shop/data/db.json
@@ -50,6 +51,7 @@ services_config.json
 
 # Environment configuration files
 .env
+shop-via-vercel/.env
 .env.test
 .env.production
 .env.local

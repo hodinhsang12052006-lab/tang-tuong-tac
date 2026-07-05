@@ -216,7 +216,7 @@
                     <i class="fa-solid fa-crown text-amber-400 text-lg w-5 text-center"></i>
                     <span class="text-sm">Dịch Vụ VIP 👑</span>
                 </a>
-                <a href="http://localhost:4000" target="_blank"
+                <a href="https://shop.bitpawnetwork.com" target="_blank"
                     class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
                     id="nav-via-shop">
                     <i class="fa-solid fa-store text-sky-400 text-lg w-5 text-center"></i>
@@ -1321,7 +1321,7 @@
                 const res = await fetch('/api/services');
                 const data = await res.json();
                 console.log('SMM Services Fetch Response:', data); // In log kiểm tra dữ liệu thật ra console log
-                
+
                 if (data.success && data.data) {
                     databaseServices = data.data;
                 } else {
@@ -1848,7 +1848,7 @@
             const token = localStorage.getItem('bitpaw_token');
             const viaShopLink = document.getElementById('nav-via-shop');
             if (viaShopLink && token) {
-                viaShopLink.href = `http://localhost:4000?token=${encodeURIComponent(token)}`;
+                viaShopLink.href = 'https://shop.bitpawnetwork.com/?token=${encodeURIComponent(token)}`;
             }
 
             // Render local storage cache first to avoid layout shift
