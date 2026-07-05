@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitpawnetwork - Nền Tảng SMM Panel Tự Động Hàng Đầu</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            950: '#030712',
+                            900: '#0b1329',
+                            800: '#111c44',
+                            700: '#1b2559',
+                            600: '#253575'
+                        },
+                        neon: {
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            purple: '#8b5cf6',
+                            pink: '#ec4899'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out infinite 3s',
+                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 3s ease-in-out infinite',
+                        'flow-line': 'flowLine 15s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        flowLine: {
+                            '0%': { strokeDashoffset: '100' },
+                            '100%': { strokeDashoffset: '0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        /* Custom styles that extend Tailwind or handle specific visual details */
+        body {
+            background-color: #030712;
+            color: #f3f4f6;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-hover {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel-hover:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+            transform: translateY(-12px);
+        }
+
+        .glass-navbar {
+            background: rgba(3, 7, 18, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Glowing text & borders */
+        .text-neon-glow {
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5), 0 0 20px rgba(6, 182, 212, 0.2);
+        }
+        
+        .btn-neon-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-neon-glow:hover {
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.8), 0 0 40px rgba(139, 92, 246, 0.4);
+            transform: scale(1.03);
+        }
+
+        /* Hide scrollbars for layout beauty */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1b2559;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #253575;
+        }
+
+        /* Custom glow blob background */
+        .glow-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.25;
+        }
+
+        /* Active styling for Accordion and Tabs */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-open .accordion-content {
+            max-height: 300px;
+        }
+        .accordion-open .accordion-icon {
+            transform: rotate(180deg);
+            color: #06b6d4;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Background Glow Blobs -->
+    <div class="glow-blob bg-neon-blue w-[400px] h-[400px] top-[-100px] left-[-100px]"></div>
+    <div class="glow-blob bg-neon-purple w-[500px] h-[500px] top-[20%] right-[-150px]"></div>
+    <div class="glow-blob bg-neon-cyan w-[450px] h-[450px] bottom-[15%] left-[-150px]"></div>
+    <div class="glow-blob bg-neon-blue w-[500px] h-[500px] bottom-[-200px] right-[-100px]"></div>
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-navbar transition-all duration-300" id="main-header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <img src="cho1.jpg" alt="Bitpawnetwork Logo" class="h-10 w-10 rounded-full object-cover border-2 border-neon-cyan/50 shadow-lg shadow-neon-blue/20 group-hover:shadow-neon-cyan/40 transition duration-300">
+                    <span class="font-heading font-extrabold text-2xl tracking-wider text-white">
+                        Bitpaw<span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple">network</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#hero" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
+                        Trang Chủ
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#features" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
+                        Dịch Vụ
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#how-it-works" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
+                        Cách Hoạt Động
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#live-preview" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
+                        Bảng Giá
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#footer" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
+                        Liên Hệ
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                </nav>
+
+                <!-- Authentication Buttons (Desktop) -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-gray-300 hover:text-white font-semibold transition-colors duration-200 px-4 py-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10">
+                        Đăng Nhập
+                    </a>
+                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="btn-neon-glow font-semibold text-white px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-sm tracking-wide">
+                        Đăng Ký Ngay
+                    </a>
+                </div>
+
+                <!-- Hamburger Button (Mobile) -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 rounded-lg bg-white/5 border border-white/10" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Slider -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-dark-950/95 backdrop-blur-xl transition-all duration-300">
+            <div class="px-4 pt-2 pb-6 space-y-3">
+                <a href="#hero" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Trang Chủ</a>
+                <a href="#features" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Dịch Vụ</a>
+                <a href="#how-it-works" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Cách Hoạt Động</a>
+                <a href="#live-preview" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Bảng Giá</a>
+                <a href="#footer" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Liên Hệ</a>
+                <div class="pt-4 flex flex-col space-y-3 px-3">
+                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-center font-semibold text-gray-300 hover:text-white py-2.5 rounded-xl border border-white/10 hover:bg-white/5 transition duration-200">
+                        Đăng Nhập
+                    </a>
+                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="text-center font-semibold text-white py-2.5 rounded-xl bg-gradient-to-r from-neon-blue to-neon-cyan shadow-lg shadow-neon-blue/20">
+                        Đăng Ký Ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-32 pb-20 md:pt-40 md:pb-32 flex items-center min-h-[90vh]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Side: Copywriting -->
+                <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full glass-panel border border-neon-cyan/20 text-xs font-semibold tracking-wider text-neon-cyan uppercase animate-pulse-slow">
+                        <span class="flex h-2 w-2 relative">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
+                        </span>
+                        <span>Đã kích hoạt hệ thống tự động V2.0</span>
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 drop-shadow-md">
+                        Nền Tảng SMM Panel <br />
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">Tự Động Hàng Đầu</span>
+                    </h1>
+
+                    <p class="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+                        Tăng trưởng nhanh chóng lượt Like, View, Follow và tương tác trên tất cả các nền tảng mạng xã hội: Facebook, TikTok, Instagram, Youtube. Hệ thống an toàn, bảo mật tuyệt đối, hoạt động 24/7/365.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#how-it-works" class="w-full sm:w-auto btn-neon-glow text-center font-bold text-white px-8 py-4 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple shadow-lg shadow-neon-blue/20">
+                            Bắt Đầu Ngay <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        </a>
+                        <a href="#live-preview" class="w-full sm:w-auto text-center font-bold text-gray-300 hover:text-white px-8 py-4 rounded-xl border border-white/10 hover:border-neon-cyan/40 bg-white/5 hover:bg-white/10 transition-all duration-300 backdrop-blur-md">
+                            Xem Bảng Giá <i class="fa-solid fa-list ml-2"></i>
+                        </a>
+                    </div>
+
+                    <!-- Client Trust Icons -->
+                    <div class="pt-6 border-t border-white/5 flex flex-wrap items-center justify-center lg:justify-start gap-6 opacity-75">
+                        <span class="text-xs font-semibold tracking-widest text-gray-400 uppercase">Đối tác tin cậy:</span>
+                        <div class="flex items-center space-x-6 text-xl text-gray-400">
+                            <i class="fa-brands fa-tiktok hover:text-neon-cyan transition duration-200"></i>
+                            <i class="fa-brands fa-facebook hover:text-neon-blue transition duration-200"></i>
+                            <i class="fa-brands fa-instagram hover:text-neon-purple transition duration-200"></i>
+                            <i class="fa-brands fa-youtube hover:text-red-500 transition duration-200"></i>
+                            <i class="fa-brands fa-telegram hover:text-neon-cyan transition duration-200"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Cyber Art & Floating UI Graph -->
+                <div class="lg:col-span-5 relative flex justify-center items-center">
+                    <div class="w-full max-w-[450px] aspect-square relative animate-float">
+                        <!-- Circle behind graphics -->
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-neon-blue/20 via-neon-purple/20 to-transparent border border-white/5 flex items-center justify-center">
+                            <div class="w-3/4 h-3/4 rounded-full bg-gradient-to-tr from-neon-cyan/10 to-transparent border border-neon-cyan/10"></div>
+                        </div>
+
+                        <!-- Floating Component 1: Order Status Card -->
+                        <div class="absolute top-[10%] left-[-5%] w-[260px] glass-panel rounded-2xl p-4 shadow-2xl border-white/10 backdrop-blur-xl">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-2 h-2 rounded-full bg-green-500 animate-ping"></div>
+                                    <span class="text-[10px] font-semibold text-green-500 uppercase tracking-widest">Đang xử lý</span>
+                                </div>
+                                <span class="text-[10px] text-gray-400">Đơn hàng #73849</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-8 h-8 rounded-lg bg-neon-blue/20 flex items-center justify-center">
+                                        <i class="fa-brands fa-tiktok text-neon-blue"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-white">Tăng Tik Tok Likes</h4>
+                                        <p class="text-[9px] text-gray-400">Số lượng: 10,000</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-neon-cyan">+10.0k</span>
+                            </div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5 mt-3 overflow-hidden">
+                                <div class="bg-gradient-to-r from-neon-blue to-neon-cyan h-full rounded-full w-[78%]"></div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Component 2: Performance Circular Chart -->
+                        <div class="absolute bottom-[10%] right-[-5%] w-[180px] glass-panel rounded-2xl p-4 shadow-2xl border-white/10 backdrop-blur-xl flex flex-col items-center">
+                            <div class="relative w-16 h-16 flex items-center justify-center">
+                                <!-- SVG progress ring -->
+                                <svg class="w-full h-full transform -rotate-90">
+                                    <circle cx="32" cy="32" r="26" stroke="rgba(255,255,255,0.05)" stroke-width="4" fill="transparent"/>
+                                    <circle cx="32" cy="32" r="26" stroke="url(#cyan-purple-grad)" stroke-width="4" fill="transparent" stroke-dasharray="163" stroke-dashoffset="20" class="animate-pulse-slow"/>
+                                    <defs>
+                                        <linearGradient id="cyan-purple-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#06b6d4" />
+                                            <stop offset="100%" stop-color="#8b5cf6" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-xs font-bold text-white">99.9%</span>
+                                </div>
+                            </div>
+                            <h4 class="text-xs font-bold text-white mt-2 text-center">Hoàn thành đúng hẹn</h4>
+                            <p class="text-[9px] text-gray-400 text-center">Bảo hành trọn đời</p>
+                        </div>
+
+                        <!-- Floating Icons -->
+                        <div class="absolute top-[40%] right-[5%] w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-neon-purple shadow-xl animate-float-delayed border-white/10">
+                            <i class="fa-solid fa-heart text-lg"></i>
+                        </div>
+                        <div class="absolute bottom-[40%] left-[5%] w-14 h-14 rounded-xl glass-panel flex items-center justify-center text-neon-cyan shadow-xl animate-float border-white/10">
+                            <i class="fa-solid fa-thumbs-up text-xl animate-pulse"></i>
+                        </div>
+
+                        <!-- Vector Lines inside grid -->
+                        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Cybernetic connections -->
+                            <path d="M 90, 160 L 200, 100 L 330, 200 L 250, 310 Z" stroke="url(#line-grad)" stroke-width="1.5" stroke-dasharray="8,4" class="opacity-60" />
+                            <circle cx="200" cy="100" r="3" fill="#06b6d4" />
+                            <circle cx="330" cy="200" r="3" fill="#8b5cf6" />
+                            <circle cx="250" cy="310" r="3" fill="#3b82f6" />
+                            <circle cx="90" cy="160" r="3" fill="#ec4899" />
+                            <defs>
+                                <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#06b6d4" />
+                                    <stop offset="50%" stop-color="#3b82f6" />
+                                    <stop offset="100%" stop-color="#8b5cf6" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Counter Section -->
+    <section class="py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-3xl p-8 sm:p-10 border-white/10 shadow-2xl relative overflow-hidden">
+                <!-- Background visual elements -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-neon-blue/10 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-neon-cyan/10 rounded-full blur-2xl"></div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
+                    <div class="space-y-2 border-r border-white/5 last:border-0 md:pr-4">
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight">5M+</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-widest font-semibold">Đơn hoàn thành</p>
+                    </div>
+                    <div class="space-y-2 border-r border-white/5 md:border-r last:border-0 md:px-4">
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue tracking-tight">150K+</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-widest font-semibold">Khách hàng tin dùng</p>
+                    </div>
+                    <div class="space-y-2 border-r border-white/5 last:border-0 md:px-4">
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple tracking-tight">2,500+</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-widest font-semibold">Dịch vụ hoạt động</p>
+                    </div>
+                    <div class="space-y-2 last:border-0 md:pl-4">
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight">&lt; 0.1s</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-widest font-semibold">Thời gian kích hoạt</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 md:py-32 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4 mb-16">
+                <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neon-blue/10 border border-neon-blue/30 text-xs font-semibold tracking-wider text-neon-blue uppercase">
+                    Tính Năng Độc Quyền
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-sm">
+                    Tại Sao Chọn <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">Bitpawnetwork?</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+                    Chúng tôi mang lại giải pháp tăng tương tác mạng xã hội ưu việt nhất với chi phí tối ưu và công nghệ tự động hóa tối đa.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature Card 1 -->
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center text-neon-cyan">
+                            <i class="fa-solid fa-tags text-xl"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">Giá Rẻ Tận Gốc</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light">
+                            Hệ thống kết nối trực tiếp không qua trung gian giúp bạn nhận được mức giá tối ưu và cạnh tranh nhất thị trường.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-neon-cyan font-semibold">
+                        <span>Bảng giá đại lý</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center text-neon-blue">
+                            <i class="fa-solid fa-bolt text-xl"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">Hệ Thống Tự Động 100%</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light">
+                            Đặt đơn và theo dõi tiến độ một cách tự động chỉ sau vài giây. Nạp tiền tự động qua ngân hàng và ví điện tử.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-neon-blue font-semibold">
+                        <span>Trải nghiệm ngay</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple">
+                            <i class="fa-solid fa-code text-xl"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">API Tích Hợp Mạnh Mẽ</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light">
+                            Cung cấp tài liệu API toàn diện với tốc độ xử lý nhanh, ổn định cho các đối tác muốn tự xây dựng SMM Panel.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-neon-purple font-semibold">
+                        <span>Tài liệu API</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Feature Card 4 -->
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-xl bg-neon-pink/10 border border-neon-pink/20 flex items-center justify-center text-neon-pink">
+                            <i class="fa-solid fa-headset text-xl"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">Hỗ Trợ Chuyên Nghiệp 24/7</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light">
+                            Đội ngũ chuyên viên giàu kinh nghiệm trực tuyến xuyên suốt để xử lý mọi thắc mắc và vấn đề kỹ thuật của khách hàng.
+                        </p>
+                    </div>
+                    <div class="pt-6 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-neon-pink font-semibold">
+                        <span>Tạo ticket hỗ trợ</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 md:py-32 relative z-10 bg-dark-900/40 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4 mb-16">
+                <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neon-purple/10 border border-neon-purple/30 text-xs font-semibold tracking-wider text-neon-purple uppercase">
+                    Quy Trình Sử Dụng
+                </div>
+                <h2 class="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight">
+                    Chỉ 3 Bước Đơn Giản <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Để Bắt Đầu</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+                    Thiết lập chiến dịch truyền thông của bạn chưa bao giờ dễ dàng và nhanh chóng như thế.
+                </p>
+            </div>
+
+            <div class="relative">
+                <!-- Connective dotted line (Desktop) -->
+                <div class="hidden lg:block absolute top-1/2 left-[15%] right-[15%] h-0.5 border-t border-dashed border-white/25 transform -translate-y-1/2 z-0"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center text-center space-y-4 group">
+                        <div class="relative">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-neon-blue to-neon-purple p-[2px] shadow-lg shadow-neon-blue/20 group-hover:scale-105 transition-all duration-300">
+                                <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center text-white text-2xl font-bold">
+                                    01
+                                </div>
+                            </div>
+                            <!-- Ring overlay -->
+                            <div class="absolute -inset-2 rounded-3xl border border-neon-blue/20 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"></div>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl text-white mt-4">Đăng Ký Tài Khoản</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xs font-light">
+                            Tạo tài khoản nhanh chóng chỉ trong 30 giây bằng cách điền các thông tin cơ bản, bảo mật tuyệt đối.
+                        </p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center text-center space-y-4 group">
+                        <div class="relative">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-neon-cyan to-neon-blue p-[2px] shadow-lg shadow-neon-cyan/20 group-hover:scale-105 transition-all duration-300">
+                                <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center text-white text-2xl font-bold">
+                                    02
+                                </div>
+                            </div>
+                            <!-- Ring overlay -->
+                            <div class="absolute -inset-2 rounded-3xl border border-neon-cyan/20 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"></div>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl text-white mt-4">Nạp Tiền Thông Minh</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xs font-light">
+                            Nạp tiền tự động 100% qua Ngân hàng, Ví MoMo hoặc tiền mã hóa (USDT). Tích điểm thưởng lớn cho mỗi lần nạp.
+                        </p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center text-center space-y-4 group">
+                        <div class="relative">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-neon-purple to-neon-pink p-[2px] shadow-lg shadow-neon-pink/20 group-hover:scale-105 transition-all duration-300">
+                                <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center text-white text-2xl font-bold">
+                                    03
+                                </div>
+                            </div>
+                            <!-- Ring overlay -->
+                            <div class="absolute -inset-2 rounded-3xl border border-neon-pink/20 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"></div>
+                        </div>
+                        <h3 class="font-heading font-bold text-xl text-white mt-4">Đặt Đơn & Trải Nghiệm</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xs font-light">
+                            Lựa chọn dịch vụ phù hợp, nhập đường link và số lượng. Hệ thống sẽ ngay lập tức tự động chạy đơn hàng cho bạn.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Preview & Calculator Section -->
+    <section id="live-preview" class="py-24 md:py-32 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Left: Interactive Price Preview -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="space-y-4 text-center lg:text-left">
+                        <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-xs font-semibold tracking-wider text-neon-cyan uppercase">
+                            Bảng Giá Trực Tuyến
+                        </div>
+                        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                            Danh Sách <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Dịch Vụ Nổi Bật</span>
+                        </h2>
+                        <p class="text-gray-400 text-sm sm:text-base">
+                            Bảng giá dịch vụ cập nhật trực tiếp theo thời gian thực từ API.
+                        </p>
+                    </div>
+
+                    <!-- Category Tab Buttons -->
+                    <div class="flex flex-wrap items-center gap-2.5 bg-dark-900/60 p-1.5 rounded-xl border border-white/5 max-w-md">
+                        <button onclick="switchTab('facebook')" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 bg-neon-blue text-white" id="tab-btn-facebook">
+                            <i class="fa-brands fa-facebook mr-1.5"></i> Facebook
+                        </button>
+                        <button onclick="switchTab('tiktok')" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white" id="tab-btn-tiktok">
+                            <i class="fa-brands fa-tiktok mr-1.5"></i> TikTok
+                        </button>
+                        <button onclick="switchTab('instagram')" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white" id="tab-btn-instagram">
+                            <i class="fa-brands fa-instagram mr-1.5"></i> Instagram
+                        </button>
+                        <button onclick="switchTab('youtube')" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white" id="tab-btn-youtube">
+                            <i class="fa-brands fa-youtube mr-1.5"></i> YouTube
+                        </button>
+                    </div>
+
+                    <!-- Service List Container -->
+                    <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl border-white/10">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-white/5 text-gray-300 font-semibold border-b border-white/10">
+                                    <tr>
+                                        <th class="p-4 pl-6 text-xs uppercase tracking-wider">ID</th>
+                                        <th class="p-4 text-xs uppercase tracking-wider">Tên Dịch Vụ</th>
+                                        <th class="p-4 text-xs uppercase tracking-wider text-right">Giá trên 1,000 lượt</th>
+                                        <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Bảo Hành</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5 text-gray-300" id="service-table-body">
+                                    <!-- Dynamic rows loaded from JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Estimated Cost Calculator -->
+                <div class="lg:col-span-5">
+                    <div class="glass-panel rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl space-y-6 relative overflow-hidden">
+                        <!-- Decorative glow element -->
+                        <div class="absolute -top-12 -right-12 w-24 h-24 bg-neon-purple/20 rounded-full blur-2xl pointer-events-none"></div>
+
+                        <div class="space-y-1">
+                            <h3 class="font-heading font-bold text-xl text-white">Tính Giá Đơn Hàng</h3>
+                            <p class="text-xs text-gray-400">Ước lượng chi phí cho chiến dịch của bạn nhanh chóng.</p>
+                        </div>
+
+                        <!-- Form Calculator -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1.5">Chọn Nền Tảng</label>
+                                <select id="calc-platform" onchange="updateCalcServices()" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neon-cyan transition duration-200">
+                                    <option value="facebook">Facebook</option>
+                                    <option value="tiktok">TikTok</option>
+                                    <option value="instagram">Instagram</option>
+                                    <option value="youtube">YouTube</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1.5">Chọn Dịch Vụ</label>
+                                <select id="calc-service" onchange="calculateCost()" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neon-cyan transition duration-200">
+                                    <!-- Dynamic Options -->
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1.5">Số Lượng</label>
+                                <div class="relative">
+                                    <input type="number" id="calc-quantity" min="100" max="1000000" value="1000" oninput="calculateCost()" class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neon-cyan transition duration-200">
+                                    <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs font-semibold text-gray-500 uppercase">Lượt</span>
+                                </div>
+                                <span class="text-[10px] text-gray-400 mt-1 block" id="calc-min-max">Tối thiểu: 100 - Tối đa: 1,000,000</span>
+                            </div>
+
+                            <!-- Cost Breakdown Box -->
+                            <div class="bg-white/5 rounded-xl p-4 border border-white/5 space-y-2">
+                                <div class="flex items-center justify-between text-xs text-gray-400">
+                                    <span>Giá gốc (mỗi lượt):</span>
+                                    <span id="calc-price-per-one">0.02đ</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-gray-400">
+                                    <span>Loại dịch vụ:</span>
+                                    <span class="text-neon-cyan" id="calc-service-badge">Tốc độ siêu tốc</span>
+                                </div>
+                                <hr class="border-white/5 my-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-semibold text-white">Tổng cộng:</span>
+                                    <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue" id="calc-total-cost">20,000 đ</span>
+                                </div>
+                            </div>
+
+                            <a href="#" class="block w-full text-center font-bold text-white py-3.5 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple btn-neon-glow text-sm">
+                                Tạo Đơn Hàng Ngay <i class="fa-solid fa-cart-shopping ml-1.5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section id="faq" class="py-24 md:py-32 relative z-10 bg-dark-900/30 border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-4 mb-16">
+                <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-xs font-semibold tracking-wider text-neon-cyan uppercase">
+                    Hỗ Trợ Giải Đáp
+                </div>
+                <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+                    Các Câu Hỏi <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Thường Gặp</span>
+                </h2>
+                <p class="text-gray-400 text-sm sm:text-base">
+                    Giải đáp tất cả các băn khoăn phổ biến nhất của quý khách hàng trước khi bắt đầu chiến dịch.
+                </p>
+            </div>
+
+            <!-- Accordion List -->
+            <div class="space-y-4">
+                <!-- Accordion Item 1 -->
+                <div class="glass-panel rounded-2xl overflow-hidden border-white/10 transition-all duration-300 accordion-item" id="faq-1">
+                    <button onclick="toggleAccordion('faq-1')" class="w-full flex items-center justify-between p-5 text-left font-semibold text-white focus:outline-none hover:bg-white/5 transition duration-200">
+                        <span>Dịch vụ của Bitpawnetwork có an toàn cho tài khoản của tôi không?</span>
+                        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300 accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-5 pt-0 text-xs sm:text-sm text-gray-300 font-light leading-relaxed border-t border-white/5 bg-white/5">
+                            Chúng tôi cam kết sử dụng công nghệ tương tác thực 100% cùng các thuật toán thích ứng thông minh, đảm bảo an toàn tuyệt đối. Tài khoản của bạn sẽ không bao giờ bị khóa hoặc ảnh hưởng xấu.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 2 -->
+                <div class="glass-panel rounded-2xl overflow-hidden border-white/10 transition-all duration-300 accordion-item" id="faq-2">
+                    <button onclick="toggleAccordion('faq-2')" class="w-full flex items-center justify-between p-5 text-left font-semibold text-white focus:outline-none hover:bg-white/5 transition duration-200">
+                        <span>Thời gian hoàn thành đơn hàng là bao lâu?</span>
+                        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300 accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-5 pt-0 text-xs sm:text-sm text-gray-300 font-light leading-relaxed border-t border-white/5 bg-white/5">
+                            Ngay sau khi hệ thống xác nhận thanh toán đơn hàng thành công, việc khởi chạy sẽ bắt đầu ngay sau 0.1 giây. Thời gian hoàn thành phụ thuộc vào gói dịch vụ và số lượng bạn chọn, thông thường diễn ra trong vài giờ hoặc tự nhiên nhất theo ngày.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 3 -->
+                <div class="glass-panel rounded-2xl overflow-hidden border-white/10 transition-all duration-300 accordion-item" id="faq-3">
+                    <button onclick="toggleAccordion('faq-3')" class="w-full flex items-center justify-between p-5 text-left font-semibold text-white focus:outline-none hover:bg-white/5 transition duration-200">
+                        <span>Hệ thống hỗ trợ những cổng nạp tiền nào?</span>
+                        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300 accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-5 pt-0 text-xs sm:text-sm text-gray-300 font-light leading-relaxed border-t border-white/5 bg-white/5">
+                            Hệ thống của chúng tôi hỗ trợ đa dạng phương thức nạp tiền bao gồm: Chuyển khoản ngân hàng tự động (Vietcombank, MBBank,...), Ví điện tử (Momo, ZaloPay) và đặc biệt là thanh toán tiền mã hóa (USDT TRC20, BTC, ETH) cho khách hàng quốc tế.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 4 -->
+                <div class="glass-panel rounded-2xl overflow-hidden border-white/10 transition-all duration-300 accordion-item" id="faq-4">
+                    <button onclick="toggleAccordion('faq-4')" class="w-full flex items-center justify-between p-5 text-left font-semibold text-white focus:outline-none hover:bg-white/5 transition duration-200">
+                        <span>Tôi có thể làm đại lý hoặc tích hợp API không?</span>
+                        <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300 accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-5 pt-0 text-xs sm:text-sm text-gray-300 font-light leading-relaxed border-t border-white/5 bg-white/5">
+                            Hoàn toàn có thể. Chúng tôi hỗ trợ đầy đủ API kết nối cực kỳ tối ưu với các trang SMM Panel khác. Bạn chỉ cần vào tài khoản cá nhân, lấy khóa API trong mục Profile và làm theo tài liệu hướng dẫn để tích hợp dịch vụ giá sỉ của chúng tôi vào website của bạn.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support CTA Banner Section -->
+    <section class="py-24 md:py-32 relative z-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-3xl p-8 sm:p-12 border-white/10 text-center relative overflow-hidden shadow-2xl">
+                <!-- Inner glow blobs -->
+                <div class="absolute -top-12 -left-12 w-32 h-32 bg-neon-cyan/20 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-neon-purple/20 rounded-full blur-2xl"></div>
+                
+                <div class="relative z-10 space-y-6">
+                    <h3 class="font-heading font-extrabold text-2xl sm:text-3xl lg:text-4xl text-white leading-tight tracking-tight">
+                        Bạn Sẵn Sàng <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Tăng Trưởng Chỉ Số Truyền Thông?</span>
+                    </h3>
+                    <p class="text-gray-300 text-sm sm:text-base max-w-xl mx-auto font-light">
+                        Đăng ký tài khoản ngay hôm nay để nhận thêm 10% giá trị nạp tiền lần đầu và tận hưởng kho dịch vụ SMM tốc độ, uy tín nhất.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="#" class="w-full sm:w-auto btn-neon-glow font-bold text-white px-8 py-3.5 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple text-sm">
+                            Đăng Ký Tài Khoản Miễn Phí
+                        </a>
+                        <a href="#faq" class="w-full sm:w-auto font-bold text-gray-300 hover:text-white px-8 py-3.5 rounded-xl border border-white/10 hover:border-neon-cyan/40 bg-white/5 hover:bg-white/10 transition duration-200 text-sm">
+                            Liên Hệ Kỹ Thuật
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="footer" class="bg-dark-950 border-t border-white/5 relative z-10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+                
+                <!-- Grid Col 1: About & Branding -->
+                <div class="lg:col-span-2 space-y-5">
+                    <a href="#" class="flex items-center space-x-3 group">
+                        <img src="cho1.jpg" alt="Bitpawnetwork Logo" class="h-9 w-9 rounded-full object-cover border border-neon-cyan/30 shadow-md">
+                        <span class="font-heading font-extrabold text-xl tracking-wider text-white">
+                            Bitpaw<span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue">network</span>
+                        </span>
+                    </a>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light">
+                        Bitpawnetwork là nhà cung cấp giải pháp SMM Panel hàng đầu khu vực, chuyên cung cấp các dịch vụ tăng tương tác tự động cho Facebook, TikTok, Instagram, Youtube. Bảo mật, ổn định và giá sỉ rẻ nhất thị trường.
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <a href="https://www.facebook.com/chuyhieuhong/" target="_blank" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:border-neon-cyan/40 flex items-center justify-center text-gray-400 hover:text-neon-cyan transition duration-200" title="Facebook">
+                            <i class="fa-brands fa-facebook-f text-sm"></i>
+                        </a>
+                        <a href="https://zalo.me/0794678904" target="_blank" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:border-neon-cyan/40 flex items-center justify-center text-gray-400 hover:text-neon-cyan transition duration-200" title="Zalo Chat">
+                            <i class="fa-solid fa-comment-dots text-sm"></i>
+                        </a>
+                        <a href="https://t.me/onichan013" target="_blank" class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:border-neon-cyan/40 flex items-center justify-center text-gray-400 hover:text-neon-cyan transition duration-200" title="Telegram">
+                            <i class="fa-brands fa-telegram text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Grid Col 2: Services Quick Links -->
+                <div class="space-y-4">
+                    <h4 class="font-heading font-bold text-sm text-white uppercase tracking-wider">Giải Pháp</h4>
+                    <ul class="space-y-2.5 text-xs sm:text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition duration-200">Dịch Vụ Facebook</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Dịch Vụ TikTok</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Dịch Vụ Instagram</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Dịch Vụ YouTube</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Các Nền Tảng Khác</a></li>
+                    </ul>
+                </div>
+
+                <!-- Grid Col 3: Useful Resources -->
+                <div class="space-y-4">
+                    <h4 class="font-heading font-bold text-sm text-white uppercase tracking-wider">Thông Tin</h4>
+                    <ul class="space-y-2.5 text-xs sm:text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition duration-200">Điều Khoản Dịch Vụ</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Chính Sách Bảo Mật</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Chính Sách Hoàn Tiền</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Tài Liệu Hướng Dẫn API</a></li>
+                        <li><a href="#" class="hover:text-white transition duration-200">Blog Tin Tức</a></li>
+                    </ul>
+                </div>
+
+                <!-- Grid Col 4: Support info -->
+                <div class="space-y-4">
+                    <h4 class="font-heading font-bold text-sm text-white uppercase tracking-wider">Liên Hệ</h4>
+                    <ul class="space-y-2.5 text-xs sm:text-sm text-gray-400">
+                        <li class="flex items-center space-x-2">
+                            <i class="fa-solid fa-envelope text-neon-cyan text-xs"></i>
+                            <span class="hover:text-white transition duration-200">support@bitpawnetwork.com</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fa-brands fa-facebook text-neon-cyan text-xs"></i>
+                            <a href="https://www.facebook.com/chuyhieuhong/" target="_blank" class="hover:text-white transition duration-200">Hỗ trợ Facebook</a>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fa-brands fa-telegram text-neon-cyan text-xs"></i>
+                            <a href="https://t.me/onichan013" target="_blank" class="hover:text-white transition duration-200">@onichan013 (Telegram)</a>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fa-solid fa-comment-dots text-neon-cyan text-xs"></i>
+                            <a href="https://zalo.me/0794678904" target="_blank" class="hover:text-white transition duration-200">0794678904 (Zalo)</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom: Divider, Copyright and Payment logos -->
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                <p class="text-xs text-gray-500 text-center md:text-left">
+                    &copy; 2026 Bitpawnetwork. Tất cả quyền được bảo lưu. Thiết kế và phát triển với giao diện cao cấp SMM.
+                </p>
+                <div class="flex items-center space-x-4 opacity-40 hover:opacity-75 transition duration-300">
+                    <i class="fa-brands fa-cc-visa text-2xl hover:text-white transition"></i>
+                    <i class="fa-brands fa-cc-mastercard text-2xl hover:text-white transition"></i>
+                    <i class="fa-solid fa-wallet text-xl hover:text-white transition" title="Momo/E-Wallets"></i>
+                    <i class="fa-brands fa-bitcoin text-xl hover:text-white transition" title="Bitcoin/Crypto"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Authentication Modal (Glassmorphism UI) -->
+    <div id="auth-modal" class="fixed inset-0 z-[90] flex items-center justify-center bg-black/60 backdrop-blur-md hidden transition-opacity duration-300">
+        <div class="glass-panel w-full max-w-[500px] rounded-3xl pt-14 p-7 relative z-[100] shadow-2xl border border-white/10 mx-4 overflow-hidden font-sans antialiased">
+            <!-- Close Button -->
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-1.5 rounded-lg bg-white/5 border border-white/10 transition z-[110]">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Tabs header (Segmented Control Container) -->
+            <div class="bg-dark-950/80 border border-white/5 p-1 rounded-2xl flex mb-6 relative">
+                <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 text-center py-2.5 rounded-xl font-sans font-medium text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-white bg-gradient-to-r from-neon-blue to-neon-purple shadow-lg shadow-neon-blue/30 scale-[1.02]">
+                    Đăng Nhập
+                </button>
+                <button id="tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 text-center py-2.5 rounded-xl font-sans font-medium text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-400 hover:text-white">
+                    Đăng Ký
+                </button>
+            </div>
+
+            <!-- Response Messages -->
+            <div id="auth-message" class="hidden mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed"></div>
+
+            <!-- Login Form -->
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Email hoặc Số điện thoại</label>
+                    <div class="relative">
+                        <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" id="login-identifier" required placeholder="nhapsdt@gmail.com hoặc 0987654321" class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Mật khẩu</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                    </div>
+                </div>
+                <button type="submit" class="w-full btn-neon-glow font-bold text-white py-4 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-sm tracking-wide mt-2 hover:scale-[1.01] active:scale-[0.99] hover:shadow-lg hover:shadow-neon-blue/50 hover:-translate-y-0.5 transition-all duration-200">
+                    Xác Nhận Đăng Nhập <i class="fa-solid fa-right-to-bracket ml-1.5"></i>
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Họ và Tên</label>
+                        <div class="relative">
+                            <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" id="register-fullname" placeholder="Họ và tên..." class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Tên đăng nhập (Username)</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user-gear absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="text" id="register-username" required placeholder="Tên đăng nhập..." class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Email</label>
+                        <div class="relative">
+                            <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="email" id="register-email" required placeholder="Địa chỉ Email..." class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Số điện thoại</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="tel" id="register-phone" required placeholder="Số điện thoại..." class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Mật khẩu</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="password" id="register-password" required placeholder="Mật khẩu..." class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5 font-sans">Nhập lại mật khẩu</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input type="password" id="register-confirm-password" required placeholder="Nhập lại mật khẩu..." class="w-full bg-dark-950/85 border border-white/10 focus:border-blue-500 focus:shadow-[0_0_15px_rgba(59,130,246,0.5)] focus:outline-none rounded-xl pl-11 pr-4 py-3.5 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms Checkbox -->
+                <div class="flex items-start space-x-2 pt-1 font-sans">
+                    <input type="checkbox" id="register-terms" required class="mt-0.5 w-3.5 h-3.5 rounded bg-dark-950 border-white/10 text-neon-cyan focus:ring-neon-cyan/40 focus:ring-offset-0 focus:outline-none">
+                    <label for="register-terms" class="text-[10px] text-gray-400 leading-normal select-none">
+                        Tôi đồng ý với <a href="#terms" class="text-neon-cyan hover:underline">Điều khoản Dịch vụ</a> và <a href="#privacy" class="text-neon-cyan hover:underline">Chính sách bảo mật</a> của Bitpawnetwork.
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full btn-neon-glow font-bold text-white py-4 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-sm tracking-wide mt-2 hover:scale-[1.01] active:scale-[0.99] hover:shadow-lg hover:shadow-neon-blue/50 hover:-translate-y-0.5 transition-all duration-200">
+                    Tạo Tài Khoản Ngay <i class="fa-solid fa-user-plus ml-1.5"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vanilla Javascript Logic -->
+    <script>
+        // --- 1. Dynamic Data Structure for Services (Tabs & Calculator) ---
+        const servicesData = {
+            facebook: [
+                { id: 101, name: "Tăng Like Bài Viết (Tốc độ thường - Ổn định)", price: 8, warranty: "Không", speed: "Thường" },
+                { id: 102, name: "Tăng Like Bài Viết (VIP - Tốc độ cực nhanh)", price: 15, warranty: "30 ngày", speed: "Siêu tốc" },
+                { id: 103, name: "Tăng Sub/Follow Trang Cá Nhân (Profile VIP)", price: 38, warranty: "60 ngày", speed: "Ổn định" },
+                { id: 104, name: "Tăng Share Bài Viết (Người dùng thật)", price: 42, warranty: "Không", speed: "Tự nhiên" }
+            ],
+            tiktok: [
+                { id: 201, name: "Tăng Tim/Like Video TikTok (Tốc độ nhanh)", price: 12, warranty: "Không", speed: "Nhanh" },
+                { id: 202, name: "Tăng Followers Kênh TikTok (Không tụt - Có Avatar)", price: 45, warranty: "30 ngày", speed: "Ổn định" },
+                { id: 203, name: "Tăng View Video TikTok (Kích hoạt tức thì)", price: 0.8, warranty: "Không", speed: "Siêu tốc" },
+                { id: 204, name: "Tăng Comment TikTok (Tùy chỉnh nội dung)", price: 85, warranty: "Không", speed: "Thường" }
+            ],
+            instagram: [
+                { id: 301, name: "Tăng Likes Bài Viết Instagram (Giá rẻ cực tốt)", price: 9, warranty: "Không", speed: "Tốc độ nhanh" },
+                { id: 302, name: "Tăng Followers Instagram (Tài khoản hoạt động)", price: 35, warranty: "45 ngày", speed: "Bình thường" },
+                { id: 303, name: "Tăng View Reels Instagram (Siêu tốc)", price: 1.5, warranty: "Không", speed: "Siêu tốc" }
+            ],
+            youtube: [
+                { id: 401, name: "Tăng View Video YouTube (Thời lượng xem cao)", price: 48, warranty: "30 ngày", speed: "Chậm & Tự nhiên" },
+                { id: 402, name: "Tăng Sub/Đăng Ký YouTube (Hạn chế tụt tối đa)", price: 160, warranty: "90 ngày", speed: "Bảo mật" },
+                { id: 403, name: "Tăng Like Video YouTube (Kích hoạt nhanh)", price: 25, warranty: "Không", speed: "Nhanh" }
+            ]
+        };
+
+        // --- 2. Interactive Navigation Bar Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 20) {
+                header.classList.add('py-4', 'shadow-2xl', 'bg-dark-950/90');
+                header.classList.remove('py-0');
+            } else {
+                header.classList.remove('py-4', 'shadow-2xl', 'bg-dark-950/90');
+            }
+        });
+
+        // --- 3. Mobile Burger Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuIcon.className = "fa-solid fa-bars text-xl";
+            } else {
+                menuIcon.className = "fa-solid fa-xmark text-xl";
+            }
+        });
+
+        // Close mobile menu on clicking any navigation link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.className = "fa-solid fa-bars text-xl";
+            });
+        });
+
+        // --- 4. Service Preview Tab Switcher Logic ---
+        let currentActiveTab = 'facebook';
+
+        function switchTab(platform) {
+            currentActiveTab = platform;
+            
+            // Highlight Active Button
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white";
+            });
+            const activeBtn = document.getElementById(`tab-btn-${platform}`);
+            activeBtn.className = "tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 bg-neon-blue text-white";
+
+            // Render Table Rows
+            renderServiceTable(platform);
+        }
+
+        function renderServiceTable(platform) {
+            const tableBody = document.getElementById('service-table-body');
+            const data = servicesData[platform];
+            
+            tableBody.innerHTML = '';
+            data.forEach(service => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5";
+                row.innerHTML = `
+                    <td class="p-4 pl-6 text-xs text-gray-500 font-mono">#${service.id}</td>
+                    <td class="p-4">
+                        <div class="font-semibold text-white text-xs sm:text-sm">${service.name}</div>
+                        <div class="text-[10px] text-gray-400 flex items-center space-x-2 mt-1">
+                            <span class="bg-white/5 px-1.5 py-0.5 rounded border border-white/5"><i class="fa-solid fa-gauge-high mr-1 text-neon-cyan"></i>${service.speed}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-right font-bold text-neon-cyan text-xs sm:text-sm">${service.price.toLocaleString('vi-VN')} đ</td>
+                    <td class="p-4 text-center">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${service.warranty !== 'Không' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-gray-500/10 text-gray-400'}">
+                            ${service.warranty !== 'Không' ? `<i class="fa-solid fa-shield mr-1"></i> ${service.warranty}` : 'Không'}
+                        </span>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // --- 5. Interactive SMM Calculator Logic ---
+        function updateCalcServices() {
+            const platform = document.getElementById('calc-platform').value;
+            const serviceSelect = document.getElementById('calc-service');
+            const data = servicesData[platform];
+
+            serviceSelect.innerHTML = '';
+            data.forEach((service, index) => {
+                const option = document.createElement('option');
+                option.value = service.id;
+                option.textContent = service.name;
+                // Store price and badge directly in dataset
+                option.dataset.price = service.price;
+                option.dataset.speed = service.speed;
+                if (index === 0) option.selected = true;
+                serviceSelect.appendChild(option);
+            });
+
+            calculateCost();
+        }
+
+        function calculateCost() {
+            const serviceSelect = document.getElementById('calc-service');
+            const quantityInput = document.getElementById('calc-quantity');
+            
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            if (!selectedOption) return;
+
+            const pricePerThousand = parseFloat(selectedOption.dataset.price);
+            const speed = selectedOption.dataset.speed;
+            const quantity = parseInt(quantityInput.value) || 0;
+
+            // Calculate cost (price is per 1000 items)
+            const totalCost = (pricePerThousand / 1000) * quantity;
+            const pricePerOne = pricePerThousand / 1000;
+
+            // Update UI elements
+            document.getElementById('calc-price-per-one').textContent = `${pricePerOne.toFixed(2)} đ`;
+            document.getElementById('calc-service-badge').textContent = `Tốc độ: ${speed}`;
+            document.getElementById('calc-total-cost').textContent = `${Math.ceil(totalCost).toLocaleString('vi-VN')} đ`;
+        }
+
+        // --- 6. FAQ Accordion Logic ---
+        function toggleAccordion(itemId) {
+            const item = document.getElementById(itemId);
+            const isOpen = item.classList.contains('accordion-open');
+
+            // Close all items first to create a premium single-collapse feel
+            document.querySelectorAll('.accordion-item').forEach(acc => {
+                acc.classList.remove('accordion-open');
+            });
+
+            // Toggle selected item
+            if (!isOpen) {
+                item.classList.add('accordion-open');
+            }
+        }
+
+        // --- 8. Auth Modal Logic ---
+        function openAuthModal(tab = 'login') {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('hidden');
+            switchAuthTab(tab);
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.add('hidden');
+            // Reset fields
+            document.getElementById('auth-message').className = 'hidden mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed';
+            document.getElementById('auth-message').textContent = '';
+        }
+
+        function switchAuthTab(tab) {
+            const loginBtn = document.getElementById('tab-login-btn');
+            const registerBtn = document.getElementById('tab-register-btn');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (tab === 'login') {
+                loginBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-bold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-white bg-gradient-to-r from-neon-blue to-neon-purple shadow-lg shadow-neon-blue/30 scale-[1.02]";
+                registerBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-bold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-400 hover:text-white";
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else {
+                registerBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-bold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-white bg-gradient-to-r from-neon-blue to-neon-purple shadow-lg shadow-neon-blue/30 scale-[1.02]";
+                loginBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-bold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-400 hover:text-white";
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('login-identifier').value;
+            const password = document.getElementById('login-password').value;
+            const messageBox = document.getElementById('auth-message');
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ emailOrPhone: identifier, password })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-green-500/10 text-green-400 border border-green-500/20";
+                    messageBox.textContent = "Đăng nhập thành công! Đang chuyển hướng...";
+                    messageBox.classList.remove('hidden');
+                    
+                    // Save JWT token
+                    localStorage.setItem('bitpaw_token', data.token);
+                    localStorage.setItem('bitpaw_user', JSON.stringify(data.user));
+
+                    setTimeout(() => {
+                        if (data.user.role === 'admin') {
+                            window.location.href = '/admin';
+                        } else {
+                            window.location.href = '/dashboard';
+                        }
+                    }, 1000);
+                } else {
+                    messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
+                    messageBox.textContent = data.message;
+                    messageBox.classList.remove('hidden');
+                }
+            } catch (err) {
+                messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
+                messageBox.textContent = "Lỗi kết nối mạng, vui lòng thử lại sau.";
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('register-fullname').value.trim();
+            const username = document.getElementById('register-username').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const phone = document.getElementById('register-phone').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const termsChecked = document.getElementById('register-terms').checked;
+            const messageBox = document.getElementById('auth-message');
+
+            if (!termsChecked) {
+                messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
+                messageBox.textContent = "Bạn phải đồng ý với Điều khoản Dịch vụ và Chính sách bảo mật.";
+                messageBox.classList.remove('hidden');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
+                messageBox.textContent = "Mật khẩu nhập lại không khớp.";
+                messageBox.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullName, username, email, phone, password, confirmPassword })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-green-500/10 text-green-400 border border-green-500/20";
+                    messageBox.textContent = data.message + " Đang chuyển hướng...";
+                    messageBox.classList.remove('hidden');
+
+                    localStorage.setItem('bitpaw_token', data.token);
+                    localStorage.setItem('bitpaw_user', JSON.stringify(data.user));
+
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
+                    messageBox.textContent = data.message;
+                    messageBox.classList.remove('hidden');
+                }
+            } catch (err) {
+                messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
+                messageBox.textContent = "Lỗi kết nối mạng, vui lòng thử lại sau.";
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        // --- 7. Initialization on Page Load ---
+        window.addEventListener('DOMContentLoaded', () => {
+            // Load default SMM panel table
+            switchTab('facebook');
+            // Load calculator services
+            updateCalcServices();
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

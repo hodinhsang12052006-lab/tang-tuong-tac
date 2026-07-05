@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitpawnetwork - Admin Panel</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            950: '#030712',
+                            900: '#0b1329',
+                            800: '#111c44',
+                            700: '#1b2559',
+                            600: '#253575'
+                        },
+                        neon: {
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            purple: '#8b5cf6',
+                            pink: '#ec4899',
+                            amber: '#f59e0b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        body {
+            background-color: #030712;
+            color: #f3f4f6;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Glassmorphism panel styling */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-sidebar {
+            background: rgba(11, 19, 41, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .glass-topbar {
+            background: rgba(3, 7, 18, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1b2559;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+
+        /* Glowing texts */
+        .glow-text-amber {
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
+        .glow-btn-amber {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glow-btn-amber:hover {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* Toggle Switch Styling */
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #f59e0b; /* Amber */
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            transform: translateX(100%);
+        }
+
+        /* Background glow blob */
+        .glow-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased h-screen flex overflow-hidden">
+
+    <!-- Background glow elements -->
+    <div class="glow-blob bg-neon-amber w-[450px] h-[450px] top-[5%] left-[25%]"></div>
+    <div class="glow-blob bg-neon-purple w-[400px] h-[400px] bottom-[5%] right-[15%]"></div>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden backdrop-blur-sm transition-opacity duration-300"></div>
+
+    <!-- Sidebar Navigation (Admin Panel) -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-[280px] z-50 glass-sidebar flex flex-col justify-between transform -translate-x-full md:translate-x-0 md:static transition-transform duration-300 ease-in-out">
+        <!-- Sidebar Top Part -->
+        <div class="flex flex-col">
+            <!-- Branding Header -->
+            <div class="h-20 flex items-center px-6 border-b border-white/5 justify-between">
+                <a href="index.html" class="flex items-center space-x-2.5">
+                    <img src="cho1.jpg" alt="Bitpawnetwork Logo" class="h-8 w-8 rounded-full object-cover border border-neon-amber/40">
+                    <span class="font-heading font-extrabold text-lg tracking-wider text-white">
+                        Bitpaw<span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-amber to-white">Admin</span>
+                    </span>
+                </a>
+                <!-- Close Button (Mobile Only) -->
+                <button id="close-sidebar-btn" class="md:hidden text-gray-400 hover:text-white p-1 rounded-lg bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1.5 flex-1" id="admin-sidebar-nav">
+                <a href="javascript:void(0)" onclick="switchAdminTab('overview')" class="admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-amber/20 to-neon-purple/5 border-l-4 border-neon-amber transition-all duration-150" id="nav-overview">
+                    <i class="fa-solid fa-chart-line text-neon-amber text-lg w-5 text-center"></i>
+                    <span class="text-sm">Tổng quan (Overview)</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchAdminTab('users')" class="admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150" id="nav-users">
+                    <i class="fa-solid fa-user-group text-lg w-5 text-center"></i>
+                    <span class="text-sm">Quản lý người dùng</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchAdminTab('orders')" class="admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150" id="nav-orders">
+                    <i class="fa-solid fa-cart-shopping text-lg w-5 text-center"></i>
+                    <span class="text-sm">Quản lý đơn hàng</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchAdminTab('deposits')" class="admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150" id="nav-deposits">
+                    <i class="fa-solid fa-money-bill-wave text-lg w-5 text-center"></i>
+                    <span class="text-sm">Quản lý nạp tiền</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchAdminTab('services')" class="admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150" id="nav-services">
+                    <i class="fa-solid fa-list text-lg w-5 text-center"></i>
+                    <span class="text-sm">Quản lý dịch vụ</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchAdminTab('api')" class="admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150" id="nav-api">
+                    <i class="fa-solid fa-cloud-arrow-down text-lg w-5 text-center"></i>
+                    <span class="text-sm">Cấu hình API</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchAdminTab('settings')" class="admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150" id="nav-settings">
+                    <i class="fa-solid fa-sliders text-lg w-5 text-center"></i>
+                    <span class="text-sm">Cài đặt hệ thống</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Bottom: Admin Profile Info -->
+        <div class="p-4 border-t border-white/5 bg-white/[0.02]">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=80&h=80&q=80" alt="Admin Avatar" class="w-10 h-10 rounded-xl object-cover border border-white/10">
+                        <div class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-neon-amber border-2 border-dark-950"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-white">Quản trị viên</h4>
+                        <span class="text-[10px] text-gray-400">Quyền: Master Admin</span>
+                    </div>
+                </div>
+                <!-- Logout Button -->
+                <a href="index.html" class="p-2 rounded-lg bg-white/5 hover:bg-red-500/10 hover:text-red-400 border border-white/5 text-gray-400 transition" title="Đăng xuất">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto relative z-10">
+        
+        <!-- Top Navigation Bar (Admin Panel) -->
+        <header class="h-20 min-h-[5rem] px-6 md:px-8 glass-topbar flex items-center justify-between sticky top-0 z-30">
+            <!-- Left Header: Hamburger & Greetings -->
+            <div class="flex items-center space-x-4">
+                <button id="open-sidebar-btn" class="md:hidden text-gray-300 hover:text-white p-2 rounded-lg bg-white/5 border border-white/10 focus:outline-none">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div class="hidden sm:block">
+                    <h2 class="font-heading font-semibold text-lg text-white">Quản Trị Hệ Thống</h2>
+                    <p class="text-xs text-gray-400">Quản lý API, cấu hình dịch vụ và phân tích doanh thu.</p>
+                </div>
+            </div>
+
+            <!-- Right Header: Provider API Balance & Notifications -->
+            <div class="flex items-center space-x-4">
+                <!-- Provider API Balance Badge -->
+                <div class="flex items-center space-x-2 bg-gradient-to-tr from-neon-amber/15 to-white/5 border border-neon-amber/20 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-lg" title="Số dư tại Provider gốc">
+                    <i class="fa-solid fa-cloud text-neon-amber text-sm"></i>
+                    <div>
+                        <span class="text-[9px] text-gray-400 uppercase tracking-widest block leading-none font-semibold">API Provider Balance</span>
+                        <span class="text-sm font-bold text-white leading-none">$1,250.00</span>
+                    </div>
+                </div>
+
+                <!-- Notifications Bell (Admin Alerts) -->
+                <div class="relative">
+                    <button id="notif-btn" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white flex items-center justify-center hover:bg-white/10 transition relative focus:outline-none">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="absolute top-2 right-2 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-amber opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neon-amber"></span>
+                        </span>
+                    </button>
+
+                    <!-- Notifications Dropdown (Admin specific) -->
+                    <div id="notif-dropdown" class="absolute right-0 mt-3 w-80 glass-card rounded-2xl p-4 shadow-2xl border-white/10 hidden z-50">
+                        <div class="flex items-center justify-between pb-3 border-b border-white/5">
+                            <h4 class="font-bold text-white text-xs sm:text-sm">Cảnh Báo Quản Trị</h4>
+                            <button onclick="clearNotifications()" class="text-[10px] text-neon-amber hover:underline">Xóa tất cả</button>
+                        </div>
+                        <div class="divide-y divide-white/5 max-h-60 overflow-y-auto mt-2" id="notif-list">
+                            <div class="py-2.5">
+                                <div class="flex items-center justify-between text-[10px] text-gray-400 mb-1">
+                                    <span class="font-semibold text-red-500"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Cảnh báo số dư</span>
+                                    <span>5 phút trước</span>
+                                </div>
+                                <p class="text-xs text-white">Số dư tại nhà cung cấp gốc thấp hơn hạn mức tối thiểu ($100.00). Vui lòng nạp thêm!</p>
+                            </div>
+                            <div class="py-2.5">
+                                <div class="flex items-center justify-between text-[10px] text-gray-400 mb-1">
+                                    <span class="font-semibold text-neon-amber"><i class="fa-solid fa-envelope mr-1"></i>Hỗ trợ mới</span>
+                                    <span>2 giờ trước</span>
+                                </div>
+                                <p class="text-xs text-white">User #92834 vừa gửi một yêu cầu hỗ trợ (Ticket #1024).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- Main Inner Dashboard Area -->
+        <div class="p-6 md:p-8 space-y-8 flex-1">
+            <!-- 1. OVERVIEW TAB -->
+            <div id="section-overview" class="space-y-8">
+                <!-- Financial Profit Stats Grid -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Card 1 -->
+                    <div class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-white/10 relative overflow-hidden">
+                        <div class="w-12 h-12 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center text-neon-blue shadow-inner">
+                            <i class="fa-solid fa-chart-line text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Tổng Doanh Thu</span>
+                            <h3 class="font-heading font-extrabold text-2xl text-white mt-1" id="stat-total-revenue">$0.00</h3>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-white/10 relative overflow-hidden">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 shadow-inner">
+                            <i class="fa-solid fa-file-invoice-dollar text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Chi Phí API Gốc</span>
+                            <h3 class="font-heading font-extrabold text-2xl text-white mt-1" id="stat-total-cost">$0.00</h3>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Profit -->
+                    <div class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-neon-amber/20 relative overflow-hidden bg-gradient-to-tr from-neon-amber/5 to-transparent">
+                        <div class="w-12 h-12 rounded-xl bg-neon-amber/10 border border-neon-amber/20 flex items-center justify-center text-neon-amber shadow-inner">
+                            <i class="fa-solid fa-coins text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold text-neon-amber">Tổng Lợi Nhuận</span>
+                            <h3 class="font-heading font-extrabold text-2xl text-neon-amber glow-text-amber mt-1" id="stat-total-profit">$0.00</h3>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-white/10 relative overflow-hidden">
+                        <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple shadow-inner">
+                            <i class="fa-solid fa-users text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Tổng Số User</span>
+                            <h3 class="font-heading font-extrabold text-2xl text-white mt-1" id="stat-total-users">0</h3>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Welcome Dashboard Card -->
+                <div class="glass-card rounded-3xl p-6 sm:p-8 border-white/10 bg-gradient-to-tr from-neon-amber/10 via-transparent to-transparent relative overflow-hidden">
+                    <div class="absolute right-6 top-6 text-neon-amber/25 opacity-20 pointer-events-none">
+                        <i class="fa-solid fa-shield-halved text-8xl"></i>
+                    </div>
+                    <h3 class="font-heading font-black text-xl sm:text-2xl text-white mb-2">Chào mừng bạn trở lại, Admin!</h3>
+                    <p class="text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-2xl">
+                        Đây là bảng điều khiển quản trị tối cao của Bitpawnetwork. Hãy kiểm tra các yêu cầu nạp tiền đang chờ duyệt ở tab <strong>Quản lý nạp tiền</strong> để cộng số dư thủ công cho khách hàng, hoặc theo dõi các đơn hàng đang được đồng bộ tự động.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2. API CONFIGURATION TAB -->
+            <div id="section-api" class="space-y-8 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left: API Connection Form -->
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-lg bg-neon-amber/10 border border-neon-amber/30 flex items-center justify-center text-neon-amber">
+                                    <i class="fa-solid fa-link text-sm"></i>
+                                </div>
+                                <h3 class="font-heading font-bold text-lg text-white">Kết Nối Nhà Cung Cấp API</h3>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
+                                Đã kết nối
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Provider URL</label>
+                                <input type="url" id="provider-url" value="https://justanotherpanel.com/api/v2" class="w-full bg-dark-900 border border-white/10 focus:border-neon-amber rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">API Key (Token)</label>
+                                <input type="password" id="provider-key" value="••••••••••••••••••••••••••••••••" class="w-full bg-dark-900 border border-white/10 focus:border-neon-amber rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                            <p class="text-[10px] text-gray-400">Đồng bộ dịch vụ tự động mỗi 24 giờ.</p>
+                            <button onclick="syncAPI(this)" class="w-full sm:w-auto glow-btn-amber bg-gradient-to-r from-neon-amber to-neon-purple text-dark-950 font-bold px-6 py-3 rounded-xl text-xs tracking-wider uppercase flex items-center justify-center">
+                                <i class="fa-solid fa-rotate mr-2" id="sync-icon"></i> Đồng bộ ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Global Markup Setting -->
+                    <div class="lg:col-span-5 glass-card rounded-2xl p-6 border-white/10 shadow-2xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-3 border-b border-white/5 pb-4 mb-4">
+                                <div class="w-8 h-8 rounded-lg bg-neon-purple/10 border border-neon-purple/30 flex items-center justify-center text-neon-purple">
+                                    <i class="fa-solid fa-percent text-sm"></i>
+                                </div>
+                                <h3 class="font-heading font-bold text-base text-white">Cài Đặt Chênh Lệch Giá (Markup)</h3>
+                            </div>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light mb-4">
+                                Tự động tăng giá bán ra dựa trên phần trăm (%) chênh lệch cộng thêm so với giá gốc của nhà cung cấp gốc.
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Tỷ Lệ Tăng Giá Toàn Cục</label>
+                                <div class="relative">
+                                    <input type="number" id="global-markup" min="0" max="500" value="30" class="w-full bg-dark-900 border border-white/10 focus:border-neon-amber rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none transition">
+                                    <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm font-bold text-gray-400">%</span>
+                                </div>
+                            </div>
+                            <button onclick="applyGlobalMarkup()" class="w-full text-center text-xs font-bold text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-neon-amber/50 py-3.5 rounded-xl transition duration-200 uppercase tracking-wider">
+                                Áp Dụng Cho Tất Cả Dịch Vụ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. SERVICES MANAGEMENT TAB -->
+            <div id="section-services" class="space-y-8 hidden">
+                <div class="glass-card rounded-2xl border-white/10 shadow-2xl overflow-hidden">
+                    <div class="px-6 py-5 border-b border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-neon-amber/10 border border-neon-amber/30 flex items-center justify-center text-neon-amber">
+                                <i class="fa-solid fa-list text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Quản Lý Dịch Vụ API</h3>
+                        </div>
+                        <div class="relative w-full sm:w-64">
+                            <input type="text" id="search-service" placeholder="Tìm kiếm dịch vụ..." oninput="filterServices()" class="w-full bg-dark-900 border border-white/10 focus:border-neon-amber rounded-lg pl-9 pr-4 py-2 text-xs text-white focus:outline-none transition">
+                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-white/5 text-gray-300 font-semibold border-b border-white/10">
+                                <tr>
+                                    <th class="p-4 pl-6 text-xs uppercase tracking-wider">Mã dịch vụ</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Tên dịch vụ</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Giá gốc API (1K)</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-center">Tỉ lệ Markup</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Giá bán ra (1K)</th>
+                                    <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5 text-gray-300" id="admin-services-body">
+                                <tr>
+                                    <td colspan="6" class="p-8 text-center text-gray-500 text-xs">
+                                        <i class="fa-solid fa-spinner fa-spin text-lg mb-2 block text-gray-600"></i>
+                                        Đang cập nhật danh sách dịch vụ từ cơ sở dữ liệu...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. USERS MANAGEMENT TAB -->
+            <div id="section-users" class="space-y-8 hidden">
+                <div class="glass-card rounded-2xl border-white/10 shadow-2xl overflow-hidden">
+                    <div class="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-neon-amber/10 border border-neon-amber/30 flex items-center justify-center text-neon-amber">
+                                <i class="fa-solid fa-user-group text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Quản Lý Thành Viên</h3>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-white/5 text-gray-300 font-semibold border-b border-white/10">
+                                <tr>
+                                    <th class="p-4 pl-6 text-xs uppercase tracking-wider">Họ tên / Tên đăng nhập</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Số điện thoại</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Số dư ví ($)</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-center">Ngày tham gia</th>
+                                    <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5 text-gray-300" id="admin-users-body">
+                                <tr>
+                                    <td colspan="5" class="p-8 text-center text-gray-500 text-xs">
+                                        <i class="fa-solid fa-spinner fa-spin text-lg mb-2 block text-gray-600"></i>
+                                        Đang tải danh sách người dùng...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ORDERS MANAGEMENT TAB -->
+            <div id="section-orders" class="space-y-8 hidden">
+                <div class="glass-card rounded-2xl border-white/10 shadow-2xl overflow-hidden">
+                    <div class="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-neon-amber/10 border border-neon-amber/30 flex items-center justify-center text-neon-amber">
+                                <i class="fa-solid fa-cart-shopping text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Lịch Sử Đơn Hàng Hệ Thống</h3>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-white/5 text-gray-300 font-semibold border-b border-white/10">
+                                <tr>
+                                    <th class="p-4 pl-6 text-xs uppercase tracking-wider">Mã đơn</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Khách hàng</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Dịch vụ</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Đường dẫn</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Số lượng</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Thu khách</th>
+                                    <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5 text-gray-300" id="admin-orders-body">
+                                <tr>
+                                    <td colspan="7" class="p-8 text-center text-gray-500 text-xs">
+                                        <i class="fa-solid fa-spinner fa-spin text-lg mb-2 block text-gray-600"></i>
+                                        Đang tải danh sách đơn hàng...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. DEPOSITS APPROVAL TAB -->
+            <div id="section-deposits" class="space-y-8 hidden">
+                <div class="glass-card rounded-2xl border-white/10 shadow-2xl overflow-hidden">
+                    <div class="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-neon-amber/10 border border-neon-amber/30 flex items-center justify-center text-neon-amber">
+                                <i class="fa-solid fa-money-bill-wave text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Duyệt Yêu Cầu Nạp Tiền</h3>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap col-gap-4">
+                            <thead class="bg-white/5 text-gray-300 font-semibold border-b border-white/10">
+                                <tr>
+                                    <th class="p-4 pl-6 text-xs uppercase tracking-wider">Khách hàng</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Mã giao dịch (Ref)</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Số tiền nạp</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Thời gian gửi</th>
+                                    <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Phê duyệt thủ công</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5 text-gray-300" id="admin-pending-deposits-body">
+                                <tr>
+                                    <td colspan="5" class="p-8 text-center text-gray-500 text-xs">
+                                        <i class="fa-solid fa-circle-check text-2xl mb-2 block text-gray-600"></i>
+                                        Không có yêu cầu nạp tiền nào đang chờ duyệt.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. SYSTEM SETTINGS TAB -->
+            <div id="section-settings" class="space-y-8 hidden">
+                <div class="glass-card rounded-2xl border-white/10 p-6 shadow-2xl">
+                    <h3 class="font-heading font-bold text-lg text-white mb-4">Cài Đặt Hệ Thống</h3>
+                    <div class="space-y-4 max-w-md">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Hạn mức nạp tối thiểu ($)</label>
+                            <input type="number" value="1.00" class="w-full bg-dark-900 border border-white/10 focus:border-neon-amber rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none transition">
+                        </div>
+                        <button onclick="alert('Lưu cài đặt thành công!')" class="glow-btn-amber bg-gradient-to-r from-neon-amber to-neon-purple text-dark-950 font-bold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider">
+                            Lưu Cấu HÌnh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </main>
+
+    <!-- Vanilla Javascript Logic -->
+    <script>
+        // --- 1. Tab Switching Logic ---
+        function switchAdminTab(tab) {
+            // Hide all sections
+            document.getElementById('section-overview').classList.add('hidden');
+            document.getElementById('section-api').classList.add('hidden');
+            document.getElementById('section-services').classList.add('hidden');
+            document.getElementById('section-users').classList.add('hidden');
+            document.getElementById('section-orders').classList.add('hidden');
+            document.getElementById('section-deposits').classList.add('hidden');
+            document.getElementById('section-settings').classList.add('hidden');
+
+            // Reset navigation active styles
+            document.querySelectorAll('.admin-nav-item').forEach(item => {
+                item.className = "admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150";
+            });
+
+            // Show selected section & set active menu
+            const activeNav = document.getElementById(`nav-${tab}`);
+            if (activeNav) {
+                activeNav.className = "admin-nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-amber/20 to-neon-purple/5 border-l-4 border-neon-amber transition-all duration-150";
+            }
+
+            if (tab === 'overview') {
+                document.getElementById('section-overview').classList.remove('hidden');
+                fetchStats();
+            } else if (tab === 'api') {
+                document.getElementById('section-api').classList.remove('hidden');
+            } else if (tab === 'services') {
+                document.getElementById('section-services').classList.remove('hidden');
+                fetchServices();
+            } else if (tab === 'users') {
+                document.getElementById('section-users').classList.remove('hidden');
+                fetchAdminUsers();
+            } else if (tab === 'orders') {
+                document.getElementById('section-orders').classList.remove('hidden');
+                fetchAdminOrders();
+            } else if (tab === 'deposits') {
+                document.getElementById('section-deposits').classList.remove('hidden');
+                fetchPendingDeposits();
+            } else if (tab === 'settings') {
+                document.getElementById('section-settings').classList.remove('hidden');
+            }
+
+            toggleSidebar(false);
+        }
+
+        // --- 2. Mobile Sidebar Drawer Logic ---
+        const openSidebarBtn = document.getElementById('open-sidebar-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+        function toggleSidebar(isOpen) {
+            if (isOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarBackdrop.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                sidebarBackdrop.classList.add('hidden');
+            }
+        }
+
+        openSidebarBtn.addEventListener('click', () => toggleSidebar(true));
+        closeSidebarBtn.addEventListener('click', () => toggleSidebar(false));
+        sidebarBackdrop.addEventListener('click', () => toggleSidebar(false));
+
+        // --- 3. Notification Dropdown Toggle ---
+        const notifBtn = document.getElementById('notif-btn');
+        const notifDropdown = document.getElementById('notif-dropdown');
+
+        notifBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifDropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!notifDropdown.classList.contains('hidden') && !notifDropdown.contains(e.target) && e.target !== notifBtn) {
+                notifDropdown.classList.add('hidden');
+            }
+        });
+
+        function clearNotifications() {
+            document.getElementById('notif-list').innerHTML = `
+                <div class="py-6 text-center text-xs text-gray-500">
+                    <i class="fa-solid fa-bell-slash mb-2 text-lg block"></i>
+                    Không có cảnh báo mới
+                </div>
+            `;
+            const badge = notifBtn.querySelector('.flex');
+            if (badge) badge.remove();
+        }
+
+        // --- 4. Fetch Services List & Markup Calculation ---
+        let servicesList = [];
+        async function fetchServices() {
+            try {
+                const res = await fetch('/api/services');
+                const data = await res.json();
+                if (data.success) {
+                    servicesList = data.data;
+                    renderServicesTable();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderServicesTable(filteredData = null) {
+            const tableBody = document.getElementById('admin-services-body');
+            const dataToRender = filteredData || servicesList;
+
+            tableBody.innerHTML = '';
+            if (dataToRender.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-gray-500 text-xs">
+                            Không tìm thấy dịch vụ nào.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            dataToRender.forEach(service => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5";
+                row.innerHTML = `
+                    <td class="p-4 pl-6 text-xs text-gray-500 font-mono">#${service.serviceId || service.service_id}</td>
+                    <td class="p-4 font-semibold text-white text-xs sm:text-sm">${service.name}</td>
+                    <td class="p-4 text-right font-mono text-xs text-gray-400">$${parseFloat(service.originalPrice || service.original_price || 0).toFixed(2)}</td>
+                    <td class="p-4 text-center text-xs font-bold text-neon-amber">
+                        ${service.markupPercent || 50}%
+                    </td>
+                    <td class="p-4 text-right font-bold text-white text-xs sm:text-sm">$${parseFloat(service.sellingPrice || service.selling_price || 0).toFixed(2)}</td>
+                    <td class="p-4 text-center">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
+                            Active
+                        </span>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // --- 5. Search Filter ---
+        function filterServices() {
+            const query = document.getElementById('search-service').value.toLowerCase();
+            const filtered = servicesList.filter(s => s.name.toLowerCase().includes(query) || s.service_id.toString().includes(query));
+            renderServicesTable(filtered);
+        }
+
+        // --- 6. Fetch System Orders ---
+        async function fetchAdminOrders() {
+            const tableBody = document.getElementById('admin-orders-body');
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/admin/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.data.length > 0) {
+                    tableBody.innerHTML = '';
+                    data.data.forEach(order => {
+                        const row = document.createElement('tr');
+                        row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5 text-xs text-gray-300";
+                        
+                        let statusSelect = `
+                            <select onchange="changeOrderStatus('${order._id}', this)" class="rounded-full text-[10px] font-semibold px-2 py-1 border focus:outline-none bg-dark-900 cursor-pointer ${
+                                order.status === 'Completed' ? 'text-green-400 border-green-500/20 bg-green-500/10' :
+                                order.status === 'Processing' ? 'text-blue-400 border-blue-500/20 bg-blue-500/10' :
+                                order.status === 'Pending' ? 'text-yellow-400 border-yellow-500/20 bg-yellow-500/10' :
+                                order.status === 'Canceled' ? 'text-red-400 border-red-500/20 bg-red-500/10' :
+                                'text-gray-400 border-gray-500/20 bg-gray-500/10'
+                            }">
+                                <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''} class="bg-dark-950 text-yellow-400">Pending</option>
+                                <option value="Processing" ${order.status === 'Processing' ? 'selected' : ''} class="bg-dark-950 text-blue-400">In Progress</option>
+                                <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''} class="bg-dark-950 text-green-400">Completed</option>
+                                <option value="Canceled" ${order.status === 'Canceled' ? 'selected' : ''} class="bg-dark-950 text-red-400">Canceled</option>
+                                <option value="Partial" ${order.status === 'Partial' ? 'selected' : ''} class="bg-dark-950 text-gray-400">Partial</option>
+                            </select>
+                        `;
+
+                        row.innerHTML = `
+                            <td class="p-4 pl-6 font-mono text-[10px] text-gray-500">#${order._id.slice(-6).toUpperCase()}</td>
+                            <td class="p-4 font-semibold text-white">
+                                <div>${order.userId ? order.userId.username : 'Ẩn danh'}</div>
+                                <div class="text-[10px] text-gray-500 font-normal">${order.userId && order.userId.email ? order.userId.email : ''}</div>
+                                <div class="text-[10px] text-neon-amber font-normal">${order.userId && order.userId.phone ? order.userId.phone : ''}</div>
+                            </td>
+                            <td class="p-4">${order.serviceId ? order.serviceId.name : 'Dịch vụ'}</td>
+                            <td class="p-4 text-neon-cyan truncate max-w-[150px]"><a href="${order.link}" target="_blank" class="hover:underline">${order.link}</a></td>
+                            <td class="p-4 text-right font-mono">${parseInt(order.quantity).toLocaleString()}</td>
+                            <td class="p-4 text-right font-bold text-white">$${parseFloat(order.charge).toFixed(2)}</td>
+                            <td class="p-4 text-center">${statusSelect}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-gray-500 text-xs">
+                                Chưa có đơn hàng nào trên hệ thống.
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function changeOrderStatus(orderId, selectElement) {
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+            const newStatus = selectElement.value;
+
+            try {
+                const res = await fetch(`/api/admin/orders/update-status/${orderId}`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    // Update class colors on change
+                    selectElement.className = `rounded-full text-[10px] font-semibold px-2 py-1 border focus:outline-none bg-dark-900 cursor-pointer ${
+                        newStatus === 'Completed' ? 'text-green-400 border-green-500/20 bg-green-500/10' :
+                        newStatus === 'Processing' ? 'text-blue-400 border-blue-500/20 bg-blue-500/10' :
+                        newStatus === 'Pending' ? 'text-yellow-400 border-yellow-500/20 bg-yellow-500/10' :
+                        newStatus === 'Canceled' ? 'text-red-400 border-red-500/20 bg-red-500/10' :
+                        'text-gray-400 border-gray-500/20 bg-gray-500/10'
+                    }`;
+                    console.log(`[Admin] Cập nhật trạng thái đơn hàng #${orderId} thành công sang: ${newStatus}`);
+                } else {
+                    alert('Lỗi cập nhật: ' + data.message);
+                    fetchAdminOrders();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Không thể kết nối đến máy chủ.');
+                fetchAdminOrders();
+            }
+        }
+
+        // --- 7. Fetch User Accounts List ---
+        async function fetchAdminUsers() {
+            const tableBody = document.getElementById('admin-users-body');
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/admin/users', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.status === 401 || res.status === 403) {
+                    alert('Tài khoản hiện tại không có quyền Admin. Vui lòng đăng nhập lại bằng tài khoản Admin!');
+                    window.location.href = '/login.html';
+                    return;
+                }
+                const data = await res.json();
+                if (data.success && data.data && data.data.length > 0) {
+                    tableBody.innerHTML = '';
+                    data.data.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5 text-xs text-gray-300";
+                        row.innerHTML = `
+                            <td class="p-4 pl-6 font-bold text-white">${user.fullName || user.username}</td>
+                            <td class="p-4 text-gray-400">${user.phone || 'Trống'}</td>
+                            <td class="p-4 text-right font-mono font-bold text-neon-amber">$${parseFloat(user.balance || 0).toFixed(2)}</td>
+                            <td class="p-4 text-center text-gray-400">${user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                            <td class="p-4 text-center">
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-white/5 border border-white/10 uppercase tracking-widest text-gray-300">
+                                    ${user.role}
+                                </span>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-gray-500 text-xs">
+                                Chưa có người dùng nào đăng ký.
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // --- 8. Fetch Pending Deposit Requests ---
+        async function fetchPendingDeposits() {
+            const tableBody = document.getElementById('admin-pending-deposits-body');
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/admin/transactions/pending', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.data.length > 0) {
+                    tableBody.innerHTML = '';
+                    data.data.forEach(tx => {
+                        const row = document.createElement('tr');
+                        row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5 text-xs text-gray-300";
+                        row.innerHTML = `
+                            <td class="p-4 pl-6 font-semibold text-white">
+                                <div>${tx.userId ? tx.userId.username : 'N/A'}</div>
+                                <div class="text-[10px] text-gray-500">${tx.userId ? tx.userId.email : ''}</div>
+                            </td>
+                            <td class="p-4 font-mono text-[10px] text-neon-cyan">${tx.transactionId}</td>
+                            <td class="p-4 text-right font-bold text-green-400 font-mono">$${parseFloat(tx.amount).toFixed(2)}</td>
+                            <td class="p-4 text-gray-500">${new Date(tx.createdAt).toLocaleString('vi-VN')}</td>
+                            <td class="p-4 text-center">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <button onclick="approveDeposit('${tx._id}')" class="px-3 py-1.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-bold text-[10px] shadow transition">Duyệt</button>
+                                    <button onclick="rejectDeposit('${tx._id}')" class="px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 text-white font-bold text-[10px] shadow transition">Từ chối</button>
+                                </div>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-gray-500 text-xs">
+                                <i class="fa-solid fa-circle-check text-xl mb-2 text-green-400 block"></i>
+                                Không có yêu cầu nạp tiền nào đang chờ duyệt.
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // --- 9. Approve Manual Deposit ---
+        async function approveDeposit(txId) {
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+            if (!confirm('Bạn có chắc chắn muốn duyệt và cộng số dư cho giao dịch này?')) return;
+
+            try {
+                const res = await fetch(`/api/payments/approve/${txId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                alert(data.message);
+                fetchPendingDeposits();
+                fetchStats();
+            } catch (err) {
+                console.error(err);
+                alert('Không thể thực hiện phê duyệt giao dịch.');
+            }
+        }
+
+        // --- 10. Reject Manual Deposit ---
+        async function rejectDeposit(txId) {
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+            if (!confirm('Bạn có chắc chắn muốn từ chối yêu cầu nạp tiền này?')) return;
+
+            try {
+                const res = await fetch(`/api/payments/reject/${txId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                alert(data.message);
+                fetchPendingDeposits();
+                fetchStats();
+            } catch (err) {
+                console.error(err);
+                alert('Không thể thực hiện từ chối giao dịch.');
+            }
+        }
+
+        // --- 11. Fetch Financial & User Dashboard Stats ---
+        async function fetchStats() {
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/admin/stats', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.status === 401 || res.status === 403) {
+                    // Chuyển hướng đã được thực hiện ở hàm fetchAdminUsers để tránh lặp trùng cảnh báo
+                    return;
+                }
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const stats = data.data;
+                    document.getElementById('stat-total-revenue').textContent = `$${parseFloat(stats.totalRevenue).toFixed(2)}`;
+                    document.getElementById('stat-total-cost').textContent = `$${parseFloat(stats.totalCost).toFixed(2)}`;
+                    document.getElementById('stat-total-profit').textContent = `$${parseFloat(stats.totalProfit).toFixed(2)}`;
+                    document.getElementById('stat-total-users').textContent = stats.totalUsers;
+                }
+            } catch (err) {
+                console.error('Lỗi khi tải thống kê:', err);
+            }
+        }
+
+        // --- 12. Real API Sync Syncing ---
+        async function syncAPI(btn) {
+            const syncIcon = document.getElementById('sync-icon');
+            syncIcon.classList.add('fa-spin');
+            btn.disabled = true;
+            btn.classList.add('opacity-75');
+
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) {
+                alert('Vui lòng đăng nhập lại.');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/sync-services', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        providerUrl: 'https://subvip247.com/api/v2',
+                        apiKey: '1d6f5db46046b41ead91e24355330e51'
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alert(data.message);
+                    // Reload services list if in the services tab
+                    const servicesTabVisible = !document.getElementById('section-services').classList.contains('hidden');
+                    if (servicesTabVisible) {
+                        fetchServices();
+                    }
+                } else {
+                    alert('Lỗi đồng bộ: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Lỗi kết nối khi đồng bộ dịch vụ.');
+            } finally {
+                syncIcon.classList.remove('fa-spin');
+                btn.disabled = false;
+                btn.classList.remove('opacity-75');
+            }
+        }
+
+
+
+        // --- 13. Initialization on Load ---
+        window.addEventListener('DOMContentLoaded', async () => {
+            renderServicesTable();
+            // Gọi đồng loạt tất cả các API để tải dữ liệu, ngăn ngừa tình trạng F5 bị reset về 0
+            await Promise.all([
+                fetchStats(),
+                fetchServices(),
+                fetchAdminUsers(),
+                fetchAdminOrders(),
+                fetchPendingDeposits()
+            ]).catch(err => console.error('Lỗi khi tải trước dữ liệu Admin:', err));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitpawnetwork - Bảng Điều Khiển Khách Hàng</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            950: '#030712',
+                            900: '#0b1329',
+                            800: '#111c44',
+                            700: '#1b2559',
+                            600: '#253575'
+                        },
+                        neon: {
+                            cyan: '#06b6d4',
+                            blue: '#3b82f6',
+                            purple: '#8b5cf6',
+                            pink: '#ec4899'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        body {
+            background-color: #030712;
+            color: #f3f4f6;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Glassmorphism panel styling */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-sidebar {
+            background: rgba(11, 19, 41, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .glass-topbar {
+            background: rgba(3, 7, 18, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #111c44;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1b2559;
+        }
+
+        /* Glowing text & box glow */
+        .glow-text-cyan {
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+        }
+
+        /* Hoạt ảnh bộ khung xương nhấp nháy Skeleton Loading */
+        @keyframes skeleton-pulse {
+
+            0%,
+            100% {
+                opacity: 0.35;
+            }
+
+            50% {
+                opacity: 0.85;
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-pulse 1.8s infinite ease-in-out;
+        }
+
+        .glow-btn {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glow-btn:hover {
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* Background glow blob */
+        .glow-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased h-screen flex overflow-hidden">
+
+    <!-- Background glow elements -->
+    <div class="glow-blob bg-neon-blue w-[400px] h-[400px] top-[10%] left-[20%]"></div>
+    <div class="glow-blob bg-neon-purple w-[450px] h-[450px] bottom-[10%] right-[10%]"></div>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-backdrop"
+        class="fixed inset-0 bg-black/60 z-40 hidden md:hidden backdrop-blur-sm transition-opacity duration-300"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 w-[280px] z-50 glass-sidebar flex flex-col justify-between transform -translate-x-full md:translate-x-0 md:static transition-transform duration-300 ease-in-out">
+        <!-- Sidebar Top Part -->
+        <div class="flex flex-col">
+            <!-- Branding Header -->
+            <div class="h-20 flex items-center px-6 border-b border-white/5 justify-between">
+                <a href="index.html" class="flex items-center space-x-2.5">
+                    <img src="cho1.jpg" alt="Bitpawnetwork Logo"
+                        class="h-8 w-8 rounded-full object-cover border border-neon-cyan/40">
+                    <span class="font-heading font-extrabold text-lg tracking-wider text-white">
+                        Bitpaw<span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue">network</span>
+                    </span>
+                </a>
+                <!-- Close Button (Mobile Only) -->
+                <button id="close-sidebar-btn"
+                    class="md:hidden text-gray-400 hover:text-white p-1 rounded-lg bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1.5 flex-1" id="sidebar-nav">
+                <a href="javascript:void(0)" onclick="switchDashboardTab('dashboard')"
+                    class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150"
+                    id="nav-dashboard">
+                    <i class="fa-solid fa-chart-pie text-neon-cyan text-lg w-5 text-center"></i>
+                    <span class="text-sm">Bảng điều khiển</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchDashboardTab('new-order')"
+                    class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
+                    id="nav-new-order">
+                    <i class="fa-solid fa-cart-plus text-lg w-5 text-center"></i>
+                    <span class="text-sm">Đặt đơn mới</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchDashboardTab('orders')"
+                    class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
+                    id="nav-orders">
+                    <i class="fa-solid fa-list-check text-lg w-5 text-center"></i>
+                    <span class="text-sm">Quản lý đơn hàng</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchDashboardTab('add-funds')"
+                    class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
+                    id="nav-add-funds">
+                    <i class="fa-solid fa-wallet text-lg w-5 text-center"></i>
+                    <span class="text-sm">Nạp tiền</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchDashboardTab('api-docs')"
+                    class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
+                    id="nav-api-docs">
+                    <i class="fa-solid fa-code text-lg w-5 text-center"></i>
+                    <span class="text-sm">Tài liệu API</span>
+                </a>
+                <a href="javascript:void(0)" onclick="switchDashboardTab('vip-services')"
+                    class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
+                    id="nav-vip-services">
+                    <i class="fa-solid fa-crown text-amber-400 text-lg w-5 text-center"></i>
+                    <span class="text-sm">Dịch Vụ VIP 👑</span>
+                </a>
+                <a href="http://localhost:4000" target="_blank"
+                    class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
+                    id="nav-via-shop">
+                    <i class="fa-solid fa-store text-sky-400 text-lg w-5 text-center"></i>
+                    <span class="text-sm">Mua Via / Clone 🛒</span>
+                </a>
+                <div class="space-y-1">
+                    <a href="javascript:void(0)" onclick="switchDashboardTab('support'); toggleSupportDropdown()"
+                        class="nav-item flex items-center justify-between px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
+                        id="nav-support">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-headset text-lg w-5 text-center"></i>
+                            <span class="text-sm">Hỗ trợ / Ticket</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"
+                            id="support-arrow"></i>
+                    </a>
+                    <div id="support-submenu" class="hidden pl-6 pr-2 py-2 space-y-2">
+                        <a href="https://www.facebook.com/chuyhieuhong/" target="_blank"
+                            class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-blue-600/10 hover:bg-blue-600/25 border border-blue-500/20 text-xs font-semibold text-blue-400 hover:text-blue-300 transition duration-150">
+                            <i class="fa-brands fa-facebook text-sm"></i>
+                            <span>Chat Facebook</span>
+                        </a>
+                        <a href="https://zalo.me/0794678904" target="_blank"
+                            class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-cyan-600/10 hover:bg-cyan-600/25 border border-cyan-500/20 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition duration-150">
+                            <i class="fa-solid fa-comment-dots text-sm"></i>
+                            <span>Chat Zalo</span>
+                        </a>
+                        <a href="https://t.me/onichan013" target="_blank"
+                            class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-sky-600/10 hover:bg-sky-600/25 border border-sky-500/20 text-xs font-semibold text-sky-400 hover:text-sky-300 transition duration-150">
+                            <i class="fa-brands fa-telegram text-sm"></i>
+                            <span>Chat Telegram</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Sidebar Bottom: User Profile Info -->
+        <div class="p-4 border-t border-white/5 bg-white/[0.02]">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80&q=80"
+                            alt="Avatar" class="w-10 h-10 rounded-xl object-cover border border-white/10">
+                        <div
+                            class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-dark-950">
+                        </div>
+                    </div>
+                    <div>
+                        <h4 id="user-display-name" class="text-xs font-bold text-white">Đang tải...</h4>
+                        <span id="user-display-id" class="text-[10px] text-gray-400">ID: #...</span>
+                    </div>
+                </div>
+                <!-- Logout Button -->
+                <a href="index.html"
+                    class="p-2 rounded-lg bg-white/5 hover:bg-red-500/10 hover:text-red-400 border border-white/5 text-gray-400 transition"
+                    title="Đăng xuất">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto relative z-10">
+
+        <!-- Top Navigation Bar -->
+        <header class="h-20 min-h-[5rem] px-6 md:px-8 glass-topbar flex items-center justify-between sticky top-0 z-30">
+            <!-- Left Header: Hamburger & Greetings -->
+            <div class="flex items-center space-x-4">
+                <button id="open-sidebar-btn"
+                    class="md:hidden text-gray-300 hover:text-white p-2 rounded-lg bg-white/5 border border-white/10 focus:outline-none">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div class="hidden sm:block">
+                    <h2 class="font-heading font-semibold text-lg text-white">Bảng Điều Khiển</h2>
+                    <p class="text-xs text-gray-400">Chào mừng bạn trở lại, chúc bạn một ngày tốt lành!</p>
+                </div>
+            </div>
+
+            <!-- Right Header: Account Balance, Notifications & Profile -->
+            <div class="flex items-center space-x-4">
+                <!-- Current Balance Badge -->
+                <div
+                    class="flex items-center space-x-2 bg-gradient-to-tr from-neon-blue/15 to-neon-cyan/5 border border-neon-cyan/20 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-wallet text-neon-cyan text-sm"></i>
+                    <div>
+                        <span
+                            class="text-[9px] text-gray-400 uppercase tracking-widest block leading-none font-semibold">Số
+                            Dư</span>
+                        <div class="flex flex-col">
+                            <span id="user-balance-top" class="text-sm font-bold text-white leading-none">$0.00</span>
+                            <span id="user-display-balance-vnd" class="text-[9px] text-gray-400 mt-0.5 font-sans">~ 0
+                                đ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Button with dropdown wrapper -->
+                <div class="relative">
+                    <button id="notif-btn"
+                        class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white flex items-center justify-center hover:bg-white/10 transition relative focus:outline-none">
+                        <i class="fa-regular fa-bell"></i>
+                        <!-- No badge initially -->
+                    </button>
+
+                    <!-- Notifications Dropdown (Hidden by default) -->
+                    <div id="notif-dropdown"
+                        class="absolute right-0 mt-3 w-80 glass-card rounded-2xl p-4 shadow-2xl border-white/10 hidden z-50">
+                        <div class="flex items-center justify-between pb-3 border-b border-white/5">
+                            <h4 class="font-bold text-white text-xs sm:text-sm">Thông Báo Mới</h4>
+                            <button onclick="clearNotifications()" class="text-[10px] text-neon-cyan hover:underline">Đã
+                                đọc tất cả</button>
+                        </div>
+                        <div class="divide-y divide-white/5 max-h-60 overflow-y-auto mt-2" id="notif-list">
+                            <div class="py-6 text-center text-xs text-gray-500">
+                                <i class="fa-solid fa-bell-slash mb-2 text-lg block"></i>
+                                Không có thông báo mới
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- Main Inner Dashboard Area -->
+        <div class="p-6 md:p-8 space-y-8 flex-1">
+            <!-- 1. MAIN DASHBOARD CONTENT -->
+            <div id="section-dashboard" class="space-y-8">
+
+                <!-- Quick Stats Grid (4 columns) -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Stat Card 1 -->
+                    <div
+                        class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-white/10 relative overflow-hidden">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple shadow-inner">
+                            <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Tổng Đơn
+                                Hàng</span>
+                            <h3 id="stat-total-orders" class="font-heading font-extrabold text-2xl text-white mt-1">0
+                            </h3>
+                        </div>
+                        <!-- Decorative back lines -->
+                        <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-neon-purple/5 rounded-full blur-xl"></div>
+                    </div>
+
+                    <!-- Stat Card 2 -->
+                    <div
+                        class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-white/10 relative overflow-hidden">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-neon-pink/10 border border-neon-pink/20 flex items-center justify-center text-neon-pink shadow-inner">
+                            <i class="fa-solid fa-money-bill-wave text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Số Dư Đã
+                                Tiêu</span>
+                            <h3 id="stat-total-spent" class="font-heading font-extrabold text-2xl text-white mt-1">$0.00
+                            </h3>
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-neon-pink/5 rounded-full blur-xl"></div>
+                    </div>
+
+                    <!-- Stat Card 3 -->
+                    <div
+                        class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-white/10 relative overflow-hidden">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center text-neon-cyan shadow-inner">
+                            <i class="fa-solid fa-wallet text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Số Dư Hiện
+                                Có</span>
+                            <div class="flex flex-col">
+                                <h3 id="user-balance-stat" class="font-heading font-extrabold text-2xl text-white mt-1">
+                                    $0.00</h3>
+                                <span id="stat-balance-vnd" class="text-xs text-gray-400 font-sans mt-0.5">~ 0 đ</span>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-neon-cyan/5 rounded-full blur-xl"></div>
+                    </div>
+
+                    <!-- Stat Card 4 -->
+                    <div
+                        class="glass-card rounded-2xl p-5 flex items-center space-x-4 border-white/10 relative overflow-hidden">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shadow-inner">
+                            <i id="stat-processing-icon" class="fa-solid fa-circle-notch fa-spin text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Đang Xử
+                                Lý</span>
+                            <h3 id="stat-processing-orders"
+                                class="font-heading font-extrabold text-2xl text-white mt-1">0 <span
+                                    class="text-xs font-normal text-gray-400">đơn hàng</span></h3>
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-amber-500/5 rounded-full blur-xl"></div>
+                    </div>
+                </section>
+
+                <!-- Order Form Section -->
+                <section id="new-order" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+                    <!-- Left: Placements & Input Area (7 cols) -->
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl relative">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
+                                <i class="fa-solid fa-cart-plus text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Đặt Đơn Hàng Mới</h3>
+                        </div>
+
+                        <!-- Placements Form -->
+                        <form onsubmit="placeOrder(event)" class="space-y-5">
+                            <!-- Platform Dropdown -->
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nền
+                                    Tảng Mạng Xã Hội</label>
+                                <div class="relative">
+                                    <select id="order-platform" onchange="updateServices()"
+                                        class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none appearance-none transition-all duration-200">
+                                        <option value="facebook">Facebook</option>
+                                        <option value="tiktok">TikTok</option>
+                                        <option value="instagram">Instagram</option>
+                                        <option value="youtube">YouTube</option>
+                                    </select>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Service Dropdown -->
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Gói
+                                    Dịch Vụ</label>
+                                <div class="relative">
+                                    <select id="order-service" onchange="updateServiceInfo()"
+                                        class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none appearance-none transition-all duration-200">
+                                        <!-- Options populated by Javascript -->
+                                    </select>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Target Link Input -->
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Đường
+                                    Dẫn (Link / URL)</label>
+                                <div class="relative">
+                                    <input type="url" required id="order-link"
+                                        placeholder="https://facebook.com/username/posts/12345..."
+                                        class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none transition-all duration-200">
+                                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                        <i class="fa-solid fa-link text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quantity Input -->
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Số
+                                    Lượng Cần Mua</label>
+                                <div class="relative">
+                                    <input type="number" required id="order-quantity" min="100" max="100000"
+                                        value="1000" oninput="calculateTotal()"
+                                        class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none transition-all duration-200">
+                                    <div
+                                        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs font-bold text-gray-500 uppercase">
+                                        Lượt
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between mt-1.5 text-[10px] text-gray-400">
+                                    <span id="limit-min-max">Tối thiểu: 100 - Tối đa: 100,000</span>
+                                    <span>Nhập số lượng thực tế cần tăng</span>
+                                </div>
+                            </div>
+
+                            <!-- Final Charge Calculation Box -->
+                            <div
+                                class="p-4 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between">
+                                <div>
+                                    <span
+                                        class="text-[10px] text-gray-400 uppercase tracking-widest block leading-none font-semibold mb-1">Tổng
+                                        phí đơn hàng</span>
+                                    <span
+                                        class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple text-neon-glow"
+                                        id="order-charge">$1.80</span>
+                                </div>
+                                <button type="submit"
+                                    class="glow-btn bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-white font-bold px-6 py-3.5 rounded-xl text-sm tracking-wide">
+                                    Tiến Hành Đặt Đơn <i class="fa-solid fa-circle-chevron-right ml-1"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right: Service Details/Specs Card (5 cols) -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <!-- Service Specs Card -->
+                        <div class="glass-card rounded-2xl p-6 border-white/10 shadow-2xl relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-neon-cyan/10 rounded-full blur-2xl"></div>
+
+                            <h4 class="font-heading font-bold text-base text-white mb-4 flex items-center space-x-2">
+                                <i class="fa-solid fa-circle-info text-neon-cyan text-sm"></i>
+                                <span>Chi Tiết Gói Dịch Vụ</span>
+                            </h4>
+
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4 text-xs">
+                                    <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-gray-400 block mb-0.5">Tốc độ chạy</span>
+                                        <span class="font-bold text-white" id="spec-speed">50K / ngày</span>
+                                    </div>
+                                    <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-gray-400 block mb-0.5">Kích hoạt</span>
+                                        <span class="font-bold text-neon-cyan" id="spec-start">0 - 15 phút</span>
+                                    </div>
+                                    <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-gray-400 block mb-0.5">Chế độ bảo hành</span>
+                                        <span class="font-bold text-white" id="spec-warranty">30 ngày</span>
+                                    </div>
+                                    <div class="bg-white/5 p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-gray-400 block mb-0.5">Đơn giá / 1000 lượt</span>
+                                        <span class="font-bold text-neon-cyan" id="spec-rate">$1.80</span>
+                                    </div>
+                                </div>
+
+                                <hr class="border-white/5">
+
+                                <!-- Important Guidelines -->
+                                <div class="space-y-2 text-xs">
+                                    <span class="font-bold text-white block">🚨 Lưu ý quan trọng khi đặt đơn:</span>
+                                    <ul
+                                        class="list-disc list-inside space-y-1.5 text-gray-300 font-light leading-relaxed pl-1">
+                                        <li>Hãy chắc chắn bài viết / tài khoản được để ở chế độ **Công khai**.</li>
+                                        <li>Không đặt 2 đơn hàng trùng link cho cùng một dịch vụ khi đơn cũ chưa chạy
+                                            xong.</li>
+                                        <li>Mọi đơn hàng sai cấu trúc link hoặc thiếu quyền công khai hệ thống sẽ tự
+                                            động hủy và hoàn tiền lại ví.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Small fast support banner inside card -->
+                        <div
+                            class="glass-card rounded-2xl p-5 border-white/10 flex items-center justify-between shadow-xl">
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-neon-blue/10 flex items-center justify-center text-neon-blue">
+                                    <i class="fa-solid fa-headset text-lg"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-white">Bạn gặp lỗi kỹ thuật?</h4>
+                                    <p class="text-[10px] text-gray-400">Tạo ticket hỗ trợ ngay lập tức</p>
+                                </div>
+                            </div>
+                            <a href="#support" class="text-xs font-semibold text-neon-cyan hover:underline">Liên hệ <i
+                                    class="fa-solid fa-chevron-right text-[10px] ml-1"></i></a>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- Recent Orders Section -->
+                <section id="order-history" class="glass-card rounded-2xl border-white/10 shadow-2xl overflow-hidden">
+                    <div class="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-neon-purple/10 border border-neon-purple/30 flex items-center justify-center text-neon-purple">
+                                <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Đơn Hàng Gần Đây</h3>
+                        </div>
+                        <button class="text-xs font-semibold text-neon-cyan hover:underline">Xem tất cả đơn</button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-white/5 text-gray-300 font-semibold border-b border-white/10">
+                                <tr>
+                                    <th class="p-4 pl-6 text-xs uppercase tracking-wider">Mã đơn</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Ngày đặt</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Dịch vụ</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Đường dẫn</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Số lượng</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-right">Tổng phí</th>
+                                    <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5 text-gray-300" id="recent-orders-table">
+                                <!-- Skeleton loading placeholders for high concurrency performance sensation -->
+                                <tr class="border-b border-white/5">
+                                    <td class="p-4 pl-6">
+                                        <div class="h-3 w-12 skeleton"></div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="h-3 w-20 skeleton"></div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="h-3 w-24 skeleton"></div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="h-3 w-36 skeleton"></div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="h-3 w-10 skeleton ml-auto"></div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="h-3 w-12 skeleton ml-auto"></div>
+                                    </td>
+                                    <td class="p-4 text-center">
+                                        <div class="h-5 w-16 skeleton mx-auto"></div>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-white/5">
+                                    <td class="p-4 pl-6">
+                                        <div class="h-3 w-12 skeleton"></div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="h-3 w-20 skeleton"></div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="h-3 w-24 skeleton"></div>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="h-3 w-36 skeleton"></div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="h-3 w-10 skeleton ml-auto"></div>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="h-3 w-12 skeleton ml-auto"></div>
+                                    </td>
+                                    <td class="p-4 text-center">
+                                        <div class="h-5 w-16 skeleton mx-auto"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 2. ADD FUNDS SECTION (NẠP TIỀN) -->
+            <div id="section-add-funds" class="space-y-8 hidden">
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-24 h-24 bg-neon-cyan/10 rounded-full blur-2xl pointer-events-none">
+                    </div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
+                            <i class="fa-solid fa-wallet text-sm"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">Nạp Tiền Vào Tài Khoản</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        <!-- Left Info -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <p class="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                                Vui lòng chuyển khoản ngân hàng chính xác theo thông tin dưới đây. Sau khi chuyển khoản,
+                                bạn hãy gửi yêu cầu xác thực bằng form bên dưới kèm mã giao dịch để chúng tôi phê duyệt
+                                cộng số dư.
+                            </p>
+
+                            <!-- Bank Details Card -->
+                            <div
+                                class="bg-white/5 rounded-2xl p-6 border border-white/5 space-y-4 shadow-inner relative">
+                                <div
+                                    class="absolute top-4 right-4 text-xs font-bold text-neon-cyan uppercase tracking-widest bg-neon-cyan/10 px-2.5 py-1 rounded-lg border border-neon-cyan/20">
+                                    Active</div>
+                                <div class="flex flex-col sm:flex-row justify-between gap-4">
+                                    <div>
+                                        <span
+                                            class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold mb-1">Ngân
+                                            hàng</span>
+                                        <span class="text-lg font-bold text-white uppercase tracking-wide">Vikki</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold mb-1">Chủ
+                                            tài khoản</span>
+                                        <span
+                                            class="text-lg font-bold text-white uppercase tracking-wide">HODINHSANG</span>
+                                    </div>
+                                </div>
+                                <hr class="border-white/5">
+                                <div>
+                                    <span
+                                        class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold mb-1">Số
+                                        tài khoản</span>
+                                    <div class="flex items-center space-x-3">
+                                        <span
+                                            class="text-2xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue tracking-wide"
+                                            id="bank-acc-num">559583034</span>
+                                        <button onclick="copyToClipboard('559583034', this)"
+                                            class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/5 transition flex items-center space-x-1"
+                                            title="Sao chép">
+                                            <i class="fa-regular fa-copy text-xs"></i>
+                                            <span class="text-[10px]">Copy</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-neon-blue/10 p-3.5 rounded-xl border border-neon-blue/20 text-xs text-gray-300 leading-relaxed font-light">
+                                    📌 <strong>Cú pháp nạp tiền bắt buộc:</strong> <span
+                                        class="font-mono text-neon-cyan font-bold" id="bank-memo">BITPAW SANG</span>
+                                </div>
+                            </div>
+
+                            <!-- Deposit Request Form -->
+                            <form id="deposit-request-form" onsubmit="submitDepositRequest(event)"
+                                class="glass-card rounded-2xl p-6 border-white/10 space-y-4">
+                                <h4 class="font-heading font-bold text-sm text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-paper-plane text-neon-cyan"></i>
+                                    <span>Gửi yêu cầu xác thực nạp tiền</span>
+                                </h4>
+
+                                <!-- Prominent Exchange Rate Display -->
+                                <div
+                                    class="bg-blue-500/10 border border-blue-500/20 text-xs text-blue-400 p-3.5 rounded-xl flex items-center justify-between font-sans">
+                                    <span>💡 Tỷ giá nạp tự động: <strong>1 USD = <span id="rate-display">26,162</span>
+                                            VNĐ</strong> (Bao gồm phí chênh lệch 3%)</span>
+                                </div>
+
+                                <div id="deposit-message"
+                                    class="hidden p-3.5 rounded-xl text-xs font-semibold leading-relaxed"></div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 font-sans">Số
+                                            tiền chuyển khoản (VNĐ)</label>
+                                        <div class="relative">
+                                            <span
+                                                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-sans">đ</span>
+                                            <input type="number" id="deposit-amount-vnd" min="1000" required
+                                                placeholder="Ví dụ: 261620" oninput="calculateUsd()"
+                                                class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl pl-4 pr-8 py-2.5 text-xs text-white focus:outline-none transition">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 font-sans">Số
+                                            dư nhận được (USD)</label>
+                                        <div class="relative">
+                                            <span
+                                                class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs">$</span>
+                                            <input type="text" id="deposit-amount" readonly
+                                                placeholder="Tự động tính..."
+                                                class="w-full bg-dark-950 border border-white/5 rounded-xl pl-8 pr-4 py-2.5 text-xs text-gray-400 focus:outline-none cursor-not-allowed">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 font-sans">Mã
+                                            giao dịch / Mã tham chiếu</label>
+                                        <div class="relative">
+                                            <i
+                                                class="fa-solid fa-hashtag absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                                            <input type="text" id="deposit-txid" required
+                                                placeholder="Mã giao dịch trên biên lai"
+                                                class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl pl-8 pr-4 py-2.5 text-xs text-white focus:outline-none transition">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="w-full glow-btn bg-gradient-to-r from-neon-blue to-neon-cyan text-white text-xs uppercase tracking-wider font-bold py-3.5 rounded-xl flex items-center justify-center space-x-2 hover:scale-[1.01] transition-all">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>Xác nhận đã chuyển khoản</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Right QR Code Image & History -->
+                        <div class="lg:col-span-5 space-y-6">
+                            <div
+                                class="glass-card p-4 rounded-3xl border-white/10 shadow-2xl relative overflow-hidden group flex flex-col items-center">
+                                <!-- QR Image displaying stk nganhang.jpg -->
+                                <img src="stk%20nganhang.jpg" alt="QR Code Chuyển Khoản Vikki"
+                                    class="w-full max-w-[280px] rounded-2xl border border-white/5 shadow-inner transition duration-300 group-hover:scale-[1.02]">
+                                <div class="text-center mt-3">
+                                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Quét mã
+                                        QR để chuyển khoản nhanh</span>
+                                </div>
+                            </div>
+
+                            <!-- User's Deposit History -->
+                            <div class="glass-card rounded-2xl p-5 border-white/10">
+                                <h4 class="font-heading font-bold text-sm text-white flex items-center space-x-2 mb-4">
+                                    <i class="fa-solid fa-clock-rotate-left text-neon-purple"></i>
+                                    <span>Lịch sử nạp tiền gần đây</span>
+                                </h4>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr
+                                                class="border-b border-white/10 text-gray-400 text-[10px] uppercase tracking-wider">
+                                                <th class="p-2 pl-0">Mã GD</th>
+                                                <th class="p-2">Thời gian</th>
+                                                <th class="p-2 text-right">Số tiền</th>
+                                                <th class="p-2 text-center pr-0">Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="user-deposits-table-body">
+                                            <!-- Skeleton loading placeholders for high concurrency performance sensation -->
+                                            <tr class="border-b border-white/5">
+                                                <td class="p-2 pl-0">
+                                                    <div class="h-3 w-16 skeleton"></div>
+                                                </td>
+                                                <td class="p-2">
+                                                    <div class="h-3 w-20 skeleton"></div>
+                                                </td>
+                                                <td class="p-2 text-right">
+                                                    <div class="h-3 w-10 skeleton ml-auto"></div>
+                                                </td>
+                                                <td class="p-2 text-center pr-0">
+                                                    <div class="h-5 w-14 skeleton mx-auto"></div>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-b border-white/5">
+                                                <td class="p-2 pl-0">
+                                                    <div class="h-3 w-16 skeleton"></div>
+                                                </td>
+                                                <td class="p-2">
+                                                    <div class="h-3 w-20 skeleton"></div>
+                                                </td>
+                                                <td class="p-2 text-right">
+                                                    <div class="h-3 w-10 skeleton ml-auto"></div>
+                                                </td>
+                                                <td class="p-2 text-center pr-0">
+                                                    <div class="h-5 w-14 skeleton mx-auto"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. API DOCS SECTION -->
+            <div id="section-api-docs" class="space-y-8 hidden">
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-neon-purple/10 border border-neon-purple/30 flex items-center justify-center text-neon-purple">
+                            <i class="fa-solid fa-code text-sm"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">Tài Liệu Kết Nối API</h3>
+                    </div>
+                    <div class="space-y-4 text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                        <p>Bitpawnetwork hỗ trợ giao thức kết nối API chuẩn quốc tế dành cho đại lý và các hệ thống SMM
+                            Panel liên kết khác.</p>
+                        <div
+                            class="bg-dark-900 border border-white/10 rounded-xl p-4 font-mono text-left overflow-x-auto text-neon-cyan text-xs">
+                            HTTP Method: POST<br>
+                            Endpoint: http://localhost:3005/api/orders<br>
+                            Headers: Authorization: Bearer &lt;YOUR_API_TOKEN&gt;
+                        </div>
+                        <p>Vui lòng liên hệ với Quản trị viên để nhận mã API Token và tài liệu tích hợp nâng cao.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. SUPPORT SECTION -->
+            <div id="section-support" class="space-y-8 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Ticket Form (7 cols) -->
+                    <div class="lg:col-span-7 glass-card rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-neon-pink/10 border border-neon-pink/30 flex items-center justify-center text-neon-pink">
+                                <i class="fa-solid fa-headset text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Gửi Yêu Cầu Hỗ Trợ (Ticket)</h3>
+                        </div>
+                        <form
+                            onsubmit="event.preventDefault(); alert('Gửi ticket thành công! Kỹ thuật viên sẽ phản hồi bạn trong 15-30 phút.')"
+                            class="space-y-4">
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Tiêu
+                                    Đề</label>
+                                <input type="text" required placeholder="Nhập tiêu đề cần hỗ trợ..."
+                                    class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neon-cyan transition duration-200">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nội
+                                    Dung Chi Tiết</label>
+                                <textarea required placeholder="Mô tả chi tiết vấn đề bạn đang gặp phải..." rows="4"
+                                    class="w-full bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neon-cyan transition duration-200"></textarea>
+                            </div>
+                            <button type="submit"
+                                class="glow-btn bg-gradient-to-r from-neon-blue to-neon-purple text-white font-bold px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider">
+                                Gửi Hỗ Trợ
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Direct Support Contacts (5 cols) -->
+                    <div class="lg:col-span-5 glass-card rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl space-y-6">
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="w-8 h-8 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
+                                <i class="fa-solid fa-comments text-sm"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-white">Hỗ Trợ Trực Tiếp</h3>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed font-light">
+                            Nếu cần giải quyết gấp các vấn đề về nạp tiền hoặc lỗi đơn hàng, vui lòng liên hệ trực tiếp
+                            với chúng tôi qua các kênh hỗ trợ 24/7 dưới đây:
+                        </p>
+                        <div class="space-y-3.5">
+                            <a href="https://www.facebook.com/chuyhieuhong/" target="_blank"
+                                class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-blue-600/10 hover:bg-blue-600/25 border border-blue-500/20 text-sm font-semibold text-blue-400 hover:text-blue-300 transition duration-200">
+                                <span class="flex items-center space-x-3">
+                                    <i class="fa-brands fa-facebook text-lg"></i>
+                                    <span>Chat Facebook</span>
+                                </span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </a>
+                            <a href="https://zalo.me/0794678904" target="_blank"
+                                class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-cyan-600/10 hover:bg-cyan-600/25 border border-cyan-500/20 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition duration-200">
+                                <span class="flex items-center space-x-3">
+                                    <i class="fa-solid fa-comment-dots text-lg"></i>
+                                    <span>Chat Zalo</span>
+                                </span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </a>
+                            <a href="https://t.me/onichan013" target="_blank"
+                                class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-sky-600/10 hover:bg-sky-600/25 border border-sky-500/20 text-sm font-semibold text-sky-400 hover:text-sky-300 transition duration-200">
+                                <span class="flex items-center space-x-3">
+                                    <i class="fa-brands fa-telegram text-lg"></i>
+                                    <span>Chat Telegram</span>
+                                </span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. VIP SERVICES SECTION -->
+            <div id="section-vip-services" class="space-y-8 hidden">
+                <div class="space-y-4 pb-2">
+                    <h2 class="text-2xl font-semibold text-yellow-500 mb-3">
+                        DỊCH VỤ VIP / HỖ TRỢ CHUYÊN SÂU
+                    </h2>
+                    <p class="text-xs sm:text-sm text-gray-400 font-light max-w-2xl leading-relaxed">
+                        Các dịch vụ xử lý thủ công chuyên sâu từ các chuyên gia hàng đầu. Đảm bảo uy tín, bảo mật thông
+                        tin tuyệt đối.
+                    </p>
+                </div>
+
+                <!-- Platform Category Tabs Menu -->
+                <div class="flex flex-wrap items-center gap-3 border-b border-white/5 pb-4">
+                    <button onclick="filterVipServices('all', this)"
+                        class="vip-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider text-black bg-gradient-to-r from-yellow-500 to-amber-600 border border-amber-500/30 transition duration-200 shadow-lg shadow-amber-500/10">
+                        Toàn Bộ
+                    </button>
+                    <button onclick="filterVipServices('facebook', this)"
+                        class="vip-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-white bg-white/5 border border-white/10 transition duration-200">
+                        Facebook VIP
+                    </button>
+                    <button onclick="filterVipServices('tiktok', this)"
+                        class="vip-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-white bg-white/5 border border-white/10 transition duration-200">
+                        TikTok VIP
+                    </button>
+                    <button onclick="filterVipServices('instagram', this)"
+                        class="vip-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-white bg-white/5 border border-white/10 transition duration-200">
+                        Instagram & Khác
+                    </button>
+                </div>
+
+                <!-- VIP Services Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- FB Card 1 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="facebook">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-unlock-keyhole text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">FACEBOOK</span>
+                            <h3 class="font-heading font-bold text-base text-white">Mở Khóa Siêu Tốc</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Chuyên trị các dạng khóa Checkpoint 282 (két sắt), khóa 956 bắt xác minh, tài khoản bị
+                                vô hiệu hóa do chính sách hoặc bị quét nhầm danh tính.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Mở Khóa Siêu Tốc (FB)')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FB Card 2 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="facebook">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-user-shield text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">FACEBOOK</span>
+                            <h3 class="font-heading font-bold text-base text-white">Cứu Nick Bị Hack</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Hỗ trợ khôi phục tài khoản bị hacker chiếm đoạt, đổi sạch địa chỉ email, số điện thoại
+                                liên kết hoặc bị cài mã xác thực 2 lớp (2FA) lạ.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Cứu Nick Bị Hack (FB)')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FB Card 3 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="facebook">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-award text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">FACEBOOK</span>
+                            <h3 class="font-heading font-bold text-base text-white">Lên Tích Xanh Chính Chủ</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Tư vấn chuẩn bị giấy tờ, gửi yêu cầu xét duyệt cấp tích xanh xác minh danh tính chính
+                                chủ cho Profile người nổi tiếng và thương hiệu doanh nghiệp.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Lên Tích Xanh Chính Chủ (FB)')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FB Card 4 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="facebook">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">FACEBOOK</span>
+                            <h3 class="font-heading font-bold text-base text-white">Kháng Cáo Quảng Cáo</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Chuyên trị kháng nghị các BM tài khoản doanh nghiệp bị hạn chế, gỡ vi phạm chính sách
+                                Ads, khôi phục Fanpage bị khóa/hủy đăng bài.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Kháng Cáo Quảng Cáo (FB)')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TT Card 1 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="tiktok">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-user-xmark text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-pink-500/10 text-pink-400 border border-pink-500/20">TIKTOK</span>
+                            <h3 class="font-heading font-bold text-base text-white">Mở Khóa Tài Khoản</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Cứu lại các tài khoản TikTok bị đình chỉ đột ngột, khóa vĩnh viễn do báo cáo vi phạm
+                                tiêu chuẩn cộng đồng hoặc bị gắn cờ hạn chế.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Mở Khóa Tài Khoản (TikTok)')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TT Card 2 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="tiktok">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-store text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-pink-500/10 text-pink-400 border border-pink-500/20">TIKTOK</span>
+                            <h3 class="font-heading font-bold text-base text-white">Gỡ Gậy Shop / Live</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Hỗ trợ kháng nghị khôi phục quyền Livestream bị cấm, gỡ điểm phạt vi phạm chính sách của
+                                tài khoản TikTok Shop giúp tiếp tục bán hàng.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Gỡ Gậy Shop/Live (TikTok)')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TT Card 3 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="tiktok">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-music text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-pink-500/10 text-pink-400 border border-pink-500/20">TIKTOK</span>
+                            <h3 class="font-heading font-bold text-base text-white">Khôi Phục ID / Bản Quyền</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Khắc phục các video TikTok bị tắt tiếng do vi phạm bản quyền âm thanh, khôi phục ID tài
+                                khoản gốc bị thay đổi ngoài ý muốn.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Khôi Phục ID/Bản Quyền (TikTok)')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- IG Card 1 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="instagram">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-brands fa-instagram text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">INSTAGRAM</span>
+                            <h3 class="font-heading font-bold text-base text-white">Khôi phục Instagram</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Lấy lại các tài khoản Instagram bị report rip, bị quét đình chỉ bản quyền thương hiệu,
+                                bị khóa/vô hiệu hóa bất thường không rõ nguyên nhân.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Khôi Phục Instagram')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- IG Card 2 -->
+                    <div class="vip-service-card glass-card rounded-2xl p-6 border-2 border-amber-500/30 hover:border-amber-400/60 shadow-xl shadow-amber-500/5 hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[350px]"
+                        data-platform="instagram">
+                        <div
+                            class="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none">
+                        </div>
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                <i class="fa-solid fa-shield-halved text-xl"></i>
+                            </div>
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">SYSTEM
+                                SECURITY</span>
+                            <h3 class="font-heading font-bold text-base text-white">Bảo Mật Chống Hack</h3>
+                            <p class="text-xs text-gray-400 leading-relaxed font-light">
+                                Thiết lập hệ thống bảo mật an toàn 3 lớp tối cao, bảo vệ vững chắc tài khoản chống
+                                rip/hack cho các cá nhân KOLs, Celebs và Page lớn.
+                            </p>
+                        </div>
+                        <div class="pt-6 mt-4 border-t border-white/5">
+                            <button onclick="openVipContactModal('Bảo Mật Chống Hack VIP')"
+                                class="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-xs font-bold text-black transition duration-200">
+                                Liên Hệ Ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </main>
+
+    <!-- Vanilla Javascript Logic -->
+    <script>
+        // --- Exchange Rate System ---
+        let exchangeRate = 26162; // Fallback
+
+        async function fetchExchangeRate() {
+            try {
+                const res = await fetch('/api/config/exchange-rate');
+                const data = await res.json();
+                if (data.success && data.rate) {
+                    exchangeRate = data.rate;
+                    const rateDisp = document.getElementById('rate-display');
+                    if (rateDisp) {
+                        rateDisp.textContent = exchangeRate.toLocaleString('vi-VN');
+                    }
+                    updateVndBalanceDisplays();
+                }
+            } catch (err) {
+                console.error('Lỗi tải tỷ giá nạp tiền:', err);
+            }
+        }
+
+        function calculateUsd() {
+            const vndInput = document.getElementById('deposit-amount-vnd');
+            const usdInput = document.getElementById('deposit-amount');
+            if (vndInput && usdInput) {
+                const vndVal = parseFloat(vndInput.value) || 0;
+                if (vndVal > 0) {
+                    usdInput.value = (vndVal / exchangeRate).toFixed(2);
+                } else {
+                    usdInput.value = '';
+                }
+            }
+        }
+
+        function updateVndBalanceDisplays() {
+            const balBadgeText = document.getElementById('user-balance-top').textContent.replace('$', '').trim();
+            const balStatText = document.getElementById('user-balance-stat').textContent.replace('$', '').trim();
+
+            const balBadgeVal = parseFloat(balBadgeText) || 0;
+            const balStatVal = parseFloat(balStatText) || 0;
+
+            const badgeVnd = Math.round(balBadgeVal * exchangeRate);
+            const statVnd = Math.round(balStatVal * exchangeRate);
+
+            const balVnd1 = document.getElementById('user-display-balance-vnd');
+            const balVnd2 = document.getElementById('stat-balance-vnd');
+
+            if (balVnd1) balVnd1.textContent = `~ ${badgeVnd.toLocaleString('vi-VN')} đ`;
+            if (balVnd2) balVnd2.textContent = `~ ${statVnd.toLocaleString('vi-VN')} đ`;
+        }
+
+        // --- 1. Database-backed Dropdowns & Calculator ---
+        let databaseServices = [];
+
+        async function fetchServicesFromDb() {
+            try {
+                const res = await fetch('/api/services');
+                const data = await res.json();
+                console.log('SMM Services Fetch Response:', data); // In log kiểm tra dữ liệu thật ra console log
+                
+                if (data.success && data.data) {
+                    databaseServices = data.data;
+                } else {
+                    databaseServices = [];
+                }
+            } catch (err) {
+                console.error('Lỗi nạp dịch vụ từ cơ sở dữ liệu thật:', err);
+                databaseServices = [];
+            } finally {
+                updateServices();
+            }
+        }
+
+        // --- 2. Mobile Sidebar Drawer Logic ---
+        const openSidebarBtn = document.getElementById('open-sidebar-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+        function toggleSidebar(isOpen) {
+            if (isOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarBackdrop.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                sidebarBackdrop.classList.add('hidden');
+            }
+        }
+
+        openSidebarBtn.addEventListener('click', () => toggleSidebar(true));
+        closeSidebarBtn.addEventListener('click', () => toggleSidebar(false));
+        sidebarBackdrop.addEventListener('click', () => toggleSidebar(false));
+
+        // --- 3. Notification Dropdown Toggle ---
+        const notifBtn = document.getElementById('notif-btn');
+        const notifDropdown = document.getElementById('notif-dropdown');
+
+        notifBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifDropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!notifDropdown.classList.contains('hidden') && !notifDropdown.contains(e.target) && e.target !== notifBtn) {
+                notifDropdown.classList.add('hidden');
+            }
+        });
+
+        function clearNotifications() {
+            document.getElementById('notif-list').innerHTML = `
+                <div class="py-6 text-center text-xs text-gray-500">
+                    <i class="fa-solid fa-bell-slash mb-2 text-lg block"></i>
+                    Không có thông báo mới
+                </div>
+            `;
+            const badge = notifBtn.querySelector('.flex');
+            if (badge) badge.remove();
+        }
+
+        // --- 4. Dropdown filtering by Platform ---
+        function updateServices() {
+            const platform = document.getElementById('order-platform').value.toLowerCase();
+            const serviceSelect = document.getElementById('order-service');
+
+            const filtered = databaseServices.filter(s => {
+                const name = s.name.toLowerCase();
+                const category = (s.category || '').toLowerCase();
+                if (platform === 'facebook') return name.includes('facebook') || name.includes('fb') || name.includes('like') || name.includes('sub') || category.includes('facebook') || category.includes('fb');
+                if (platform === 'tiktok') return name.includes('tiktok') || name.includes('tt') || name.includes('tim') || category.includes('tiktok') || category.includes('tt');
+                if (platform === 'instagram') return name.includes('instagram') || name.includes('ig') || category.includes('instagram') || category.includes('ig');
+                if (platform === 'youtube') return name.includes('youtube') || name.includes('yt') || category.includes('youtube') || category.includes('yt');
+                return false;
+            });
+
+            serviceSelect.innerHTML = '';
+            if (filtered.length === 0) {
+                const option = document.createElement('option');
+                option.textContent = 'Không tìm thấy dịch vụ tương ứng...';
+                option.value = '';
+                serviceSelect.appendChild(option);
+            } else {
+                filtered.forEach((service, index) => {
+                    const option = document.createElement('option');
+                    option.value = service._id || service.id || service.serviceId;
+                    const price = service.sellingPrice || service.selling_price || service.rate || 0;
+                    option.textContent = `${service.name} - $${parseFloat(price).toFixed(2)} / 1K`;
+                    option.dataset.rate = price;
+                    option.dataset.min = service.min || 100;
+                    option.dataset.max = service.max || 50000;
+                    option.dataset.speed = service.speed || 'Nhanh';
+                    option.dataset.start = service.start || '10p';
+                    option.dataset.warranty = service.warranty || 'Không';
+                    if (index === 0) option.selected = true;
+                    serviceSelect.appendChild(option);
+                });
+            }
+
+            updateServiceInfo();
+        }
+
+        function updateServiceInfo() {
+            const serviceSelect = document.getElementById('order-service');
+            if (!serviceSelect || serviceSelect.selectedIndex < 0) return;
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            if (!selectedOption || !selectedOption.value) return;
+
+            const min = selectedOption.dataset.min;
+            const max = selectedOption.dataset.max;
+            document.getElementById('limit-min-max').textContent = `Tối thiểu: ${parseInt(min).toLocaleString('en-US')} - Tối đa: ${parseInt(max).toLocaleString('en-US')}`;
+
+            const quantityInput = document.getElementById('order-quantity');
+            quantityInput.min = min;
+            quantityInput.max = max;
+
+            document.getElementById('spec-speed').textContent = selectedOption.dataset.speed;
+            document.getElementById('spec-start').textContent = selectedOption.dataset.start;
+            document.getElementById('spec-warranty').textContent = selectedOption.dataset.warranty;
+            document.getElementById('spec-rate').textContent = `$${parseFloat(selectedOption.dataset.rate).toFixed(2)}`;
+
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const serviceSelect = document.getElementById('order-service');
+            if (!serviceSelect || serviceSelect.selectedIndex < 0) return;
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            if (!selectedOption || !selectedOption.value) {
+                document.getElementById('order-charge').textContent = '$0.00';
+                return;
+            }
+
+            const rate = parseFloat(selectedOption.dataset.rate);
+            const quantityInput = document.getElementById('order-quantity');
+            const quantity = parseInt(quantityInput.value) || 0;
+
+            const totalCharge = (rate / 1000) * quantity;
+            document.getElementById('order-charge').textContent = `$${totalCharge.toFixed(2)}`;
+        }
+
+        // --- 5. Place Order Action Handler (REAL API) ---
+        async function placeOrder(event) {
+            event.preventDefault();
+            const serviceSelect = document.getElementById('order-service');
+            if (!serviceSelect || serviceSelect.selectedIndex < 0) {
+                alert('Vui lòng chọn một dịch vụ hợp lệ!');
+                return;
+            }
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            const serviceId = selectedOption.value;
+            const link = document.getElementById('order-link').value.trim();
+            const quantity = parseInt(document.getElementById('order-quantity').value);
+            const token = localStorage.getItem('bitpaw_token');
+
+            if (!serviceId) {
+                alert('Vui lòng chọn dịch vụ hợp lệ!');
+                return;
+            }
+            if (!link || quantity <= 0) {
+                alert('Vui lòng điền link bài viết và số lượng hợp lệ!');
+                return;
+            }
+            if (!token) {
+                alert('Vui lòng đăng nhập lại để tiếp tục.');
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ serviceId, link, quantity })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alert('Đặt đơn hàng thành công!');
+                    document.getElementById('order-link').value = '';
+                    document.getElementById('order-quantity').value = 1000;
+
+                    const storedUser = localStorage.getItem('bitpaw_user');
+                    if (storedUser) {
+                        const user = JSON.parse(storedUser);
+                        user.balance = data.data.newBalance;
+                        localStorage.setItem('bitpaw_user', JSON.stringify(user));
+
+                        document.getElementById('user-balance-top').textContent = `$${parseFloat(user.balance).toFixed(2)}`;
+                        document.getElementById('user-balance-stat').textContent = `$${parseFloat(user.balance).toFixed(2)}`;
+                    }
+
+                    fetchUserOrders();
+                } else {
+                    alert('Lỗi đặt đơn hàng: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Gặp sự cố kết nối khi gửi đơn hàng.');
+            }
+        }
+
+        // --- 6. Tab Switching Logic ---
+        function switchDashboardTab(tab) {
+            document.getElementById('section-dashboard').classList.add('hidden');
+            document.getElementById('section-add-funds').classList.add('hidden');
+            document.getElementById('section-api-docs').classList.add('hidden');
+            document.getElementById('section-support').classList.add('hidden');
+            document.getElementById('section-vip-services').classList.add('hidden');
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150";
+                const icon = item.querySelector('i');
+                if (icon) {
+                    icon.className = icon.className.replace('text-neon-cyan', '');
+                    icon.className = icon.className.replace('text-amber-400', '');
+                }
+            });
+
+            if (tab === 'dashboard' || tab === 'new-order' || tab === 'orders') {
+                document.getElementById('section-dashboard').classList.remove('hidden');
+
+                if (tab === 'dashboard') {
+                    const item = document.getElementById('nav-dashboard');
+                    item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150";
+                    item.querySelector('i').classList.add('text-neon-cyan');
+                } else if (tab === 'new-order') {
+                    const item = document.getElementById('nav-new-order');
+                    item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150";
+                    document.getElementById('new-order').scrollIntoView({ behavior: 'smooth' });
+                } else if (tab === 'orders') {
+                    const item = document.getElementById('nav-orders');
+                    item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150";
+                    document.getElementById('order-history').scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (tab === 'add-funds') {
+                document.getElementById('section-add-funds').classList.remove('hidden');
+                const item = document.getElementById('nav-add-funds');
+                item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150";
+                item.querySelector('i').classList.add('text-neon-cyan');
+            } else if (tab === 'api-docs') {
+                document.getElementById('section-api-docs').classList.remove('hidden');
+                const item = document.getElementById('nav-api-docs');
+                item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150";
+                item.querySelector('i').classList.add('text-neon-cyan');
+            } else if (tab === 'vip-services') {
+                document.getElementById('section-vip-services').classList.remove('hidden');
+                const item = document.getElementById('nav-vip-services');
+                item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150";
+                item.querySelector('i').classList.add('text-amber-400');
+            } else if (tab === 'support') {
+                document.getElementById('section-support').classList.remove('hidden');
+                const item = document.getElementById('nav-support');
+                item.className = "nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-neon-blue/20 to-neon-cyan/5 border-l-4 border-neon-cyan transition-all duration-150";
+                item.querySelector('i').classList.add('text-neon-cyan');
+            }
+
+            toggleSidebar(false);
+        }
+
+        // --- 7. Copy Clipboard Helper ---
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-circle-check text-green-400 text-xs"></i> <span class="text-[10px] text-green-400 font-bold">Copied</span>`;
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        // --- 8. Submit Manual Deposit Request ---
+        async function submitDepositRequest(e) {
+            e.preventDefault();
+            const amount = document.getElementById('deposit-amount').value;
+            const transactionId = document.getElementById('deposit-txid').value.trim();
+            const messageBox = document.getElementById('deposit-message');
+            const token = localStorage.getItem('bitpaw_token');
+
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/payments/request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ amount, transactionId, paymentMethod: 'Vikki Bank' })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    messageBox.className = "p-3.5 rounded-xl text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20 mb-4";
+                    messageBox.textContent = data.message;
+                    messageBox.classList.remove('hidden');
+
+                    document.getElementById('deposit-amount-vnd').value = '';
+                    document.getElementById('deposit-amount').value = '';
+                    document.getElementById('deposit-txid').value = '';
+
+                    fetchUserDeposits();
+                } else {
+                    messageBox.className = "p-3.5 rounded-xl text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 mb-4";
+                    messageBox.textContent = data.message;
+                    messageBox.classList.remove('hidden');
+                }
+            } catch (err) {
+                messageBox.className = "p-3.5 rounded-xl text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 mb-4";
+                messageBox.textContent = 'Lỗi kết nối mạng, vui lòng thử lại sau.';
+                messageBox.classList.remove('hidden');
+            }
+        }
+
+        // --- 9. Fetch User Transactions (Deposits) ---
+        async function fetchUserDeposits() {
+            const tableBody = document.getElementById('user-deposits-table-body');
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/user/transactions', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.data.length > 0) {
+                    tableBody.innerHTML = '';
+                    data.data.forEach(tx => {
+                        const row = document.createElement('tr');
+                        row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5 text-xs text-gray-300";
+
+                        let statusBadge = '';
+                        if (tx.status === 'Success') {
+                            statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold bg-green-500/10 text-green-400 border border-green-500/20">Thành công</span>`;
+                        } else if (tx.status === 'Pending') {
+                            statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">Đang duyệt</span>`;
+                        } else {
+                            statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold bg-red-500/10 text-red-400 border border-red-500/20">Từ chối</span>`;
+                        }
+
+                        const d = new Date(tx.createdAt);
+                        const dateFormatted = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+
+                        row.innerHTML = `
+                            <td class="p-2 pl-0 font-mono text-[10px] text-gray-500" title="${tx.transactionId}">${tx.transactionId.length > 10 ? tx.transactionId.slice(0, 10) + '...' : tx.transactionId}</td>
+                            <td class="p-2 text-[10px] text-gray-400">${dateFormatted}</td>
+                            <td class="p-2 text-right text-white font-bold">$${parseFloat(tx.amount).toFixed(2)}</td>
+                            <td class="p-2 text-center pr-0">${statusBadge}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = `
+                        <tr id="empty-deposits-row">
+                            <td colspan="4" class="p-6 text-center text-gray-500 text-xs">
+                                <i class="fa-solid fa-receipt text-lg mb-1.5 block text-gray-600"></i>
+                                Bạn chưa gửi yêu cầu nạp tiền nào.
+                            </td>
+                        </tr>
+                    `;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // --- 10. Fetch User Orders (History & Stats) ---
+        async function fetchUserOrders() {
+            const tableBody = document.getElementById('recent-orders-table');
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.data.length > 0) {
+                    tableBody.innerHTML = '';
+
+                    let totalOrders = data.data.length;
+                    let totalSpent = 0;
+
+                    data.data.forEach(order => {
+                        totalSpent += parseFloat(order.charge);
+
+                        const row = document.createElement('tr');
+                        row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5";
+
+                        let statusBadge = '';
+                        if (order.status === 'Completed') {
+                            statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-500/10 text-green-400 border border-green-500/20"><i class="fa-solid fa-circle-check mr-1 text-[9px]"></i> Hoàn thành</span>`;
+                        } else if (order.status === 'Processing') {
+                            statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-neon-blue/10 text-neon-blue border border-neon-blue/20"><i class="fa-solid fa-circle-notch fa-spin mr-1 text-[9px]"></i> Đang xử lý</span>`;
+                        } else if (order.status === 'Canceled') {
+                            statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-red-500/10 text-red-400 border border-red-500/20"><i class="fa-solid fa-circle-xmark mr-1 text-[9px]"></i> Hủy đơn</span>`;
+                        } else {
+                            statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"><i class="fa-solid fa-circle-notch fa-spin mr-1 text-[9px]"></i> Đang xử lý</span>`;
+                        }
+
+                        const d = new Date(order.createdAt);
+                        const dateFormatted = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+
+                        row.innerHTML = `
+                            <td class="p-4 pl-6 font-mono text-xs text-gray-500">#${order._id.slice(-6).toUpperCase()}</td>
+                            <td class="p-4 text-xs text-gray-400">${dateFormatted}</td>
+                            <td class="p-4 text-xs font-bold text-white">${order.serviceId ? order.serviceId.name : 'Dịch vụ hệ thống'}</td>
+                            <td class="p-4 text-xs text-neon-cyan max-w-[200px] truncate"><a href="${order.link}" target="_blank" class="hover:underline">${order.link}</a></td>
+                            <td class="p-4 text-xs text-right font-mono">${parseInt(order.quantity).toLocaleString()}</td>
+                            <td class="p-4 text-xs text-right text-white font-bold">$${parseFloat(order.charge).toFixed(2)}</td>
+                            <td class="p-4 text-center">${statusBadge}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+
+                    document.getElementById('stat-total-orders').textContent = totalOrders;
+                    document.getElementById('stat-total-spent').textContent = `$${totalSpent.toFixed(2)}`;
+                    let processingCount = data.data.filter(o => o.status === 'Processing' || o.status === 'Pending').length;
+                    document.getElementById('stat-processing-orders').innerHTML = `${processingCount} <span class="text-xs font-normal text-gray-400">đơn hàng</span>`;
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-gray-500 text-xs sm:text-sm">
+                                <i class="fa-solid fa-folder-open text-2xl mb-2 block text-gray-600"></i>
+                                Bạn chưa có đơn hàng nào.
+                            </td>
+                        </tr>
+                    `;
+                    document.getElementById('stat-total-orders').textContent = '0';
+                    document.getElementById('stat-total-spent').textContent = '$0.00';
+                    document.getElementById('stat-processing-orders').innerHTML = `0 <span class="text-xs font-normal text-gray-400">đơn hàng</span>`;
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                const icon = document.getElementById('stat-processing-icon');
+                if (icon) {
+                    icon.classList.remove('fa-spin');
+                    // Thay đổi icon thành clock-rotate-left để biểu thị đang xử lý tĩnh
+                    icon.className = "fa-solid fa-clock-rotate-left text-xl";
+                }
+            }
+        }
+
+        function toggleSupportDropdown() {
+            const submenu = document.getElementById('support-submenu');
+            const arrow = document.getElementById('support-arrow');
+            submenu.classList.toggle('hidden');
+            if (submenu.classList.contains('hidden')) {
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        async function fetchUserProfile() {
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/auth/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.user) {
+                    localStorage.setItem('bitpaw_user', JSON.stringify(data.user));
+
+                    document.getElementById('user-display-name').textContent = data.user.username;
+                    document.getElementById('user-display-id').textContent = `ID: #${data.user.id.slice(-6).toUpperCase()}`;
+                    document.getElementById('user-balance-top').textContent = `$${parseFloat(data.user.balance).toFixed(2)}`;
+                    document.getElementById('user-balance-stat').textContent = `$${parseFloat(data.user.balance).toFixed(2)}`;
+                    updateVndBalanceDisplays();
+
+                    // Sync bank memo with username
+                    const memo = document.getElementById('bank-memo');
+                    if (memo) memo.textContent = `BITPAW ${data.user.username.toUpperCase()}`;
+                }
+            } catch (err) {
+                console.error('Lỗi tải thông tin tài khoản:', err);
+            }
+        }
+
+        // --- 10.1 VIP Contact Modal Logic ---
+        function openVipContactModal(serviceName) {
+            const modal = document.getElementById('vip-contact-modal');
+            const display = document.getElementById('vip-service-name-display');
+            if (modal && display) {
+                display.textContent = `Yêu cầu dịch vụ: ${serviceName}`;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeVipContactModal() {
+            const modal = document.getElementById('vip-contact-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // --- 10.2 Filter VIP Services by platform Category ---
+        function filterVipServices(platform, btn) {
+            // Đặt lại style mặc định cho tất cả các tab buttons
+            document.querySelectorAll('.vip-tab-btn').forEach(b => {
+                b.className = "vip-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-white bg-white/5 border border-white/10 transition duration-200";
+            });
+            // Tô màu vàng Gold chủ đạo cho tab đang chọn
+            btn.className = "vip-tab-btn px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider text-black bg-gradient-to-r from-yellow-500 to-amber-600 border border-amber-500/30 transition duration-200 shadow-lg shadow-amber-500/10";
+
+            // Lọc ẩn/hiện các cards
+            document.querySelectorAll('.vip-service-card').forEach(card => {
+                if (platform === 'all' || card.dataset.platform === platform) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+
+
+        // --- 11. Profile Sync & Initial loading ---
+        window.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('bitpaw_token');
+            const viaShopLink = document.getElementById('nav-via-shop');
+            if (viaShopLink && token) {
+                viaShopLink.href = `http://localhost:4000?token=${encodeURIComponent(token)}`;
+            }
+
+            // Render local storage cache first to avoid layout shift
+            const storedUser = localStorage.getItem('bitpaw_user');
+            if (storedUser) {
+                try {
+                    const user = JSON.parse(storedUser);
+                    document.getElementById('user-display-name').textContent = user.username;
+                    document.getElementById('user-display-id').textContent = `ID: #${user.id.slice(-6).toUpperCase()}`;
+                    document.getElementById('user-balance-top').textContent = `$${parseFloat(user.balance).toFixed(2)}`;
+                    document.getElementById('user-balance-stat').textContent = `$${parseFloat(user.balance).toFixed(2)}`;
+                    document.getElementById('bank-memo').textContent = `BITPAW ${user.username.toUpperCase()}`;
+                } catch (e) {
+                    console.error('Lỗi phân tích thông tin user lưu trữ:', e);
+                }
+            }
+
+            // Gọi đồng loạt tất cả các API để tải dữ liệu, ngăn ngừa tình trạng F5 bị reset về 0
+            await Promise.all([
+                fetchExchangeRate(),
+                fetchServicesFromDb(),
+                fetchUserProfile(),
+                fetchUserDeposits(),
+                fetchUserOrders()
+            ]).catch(err => console.error('Lỗi khi tải dữ liệu khởi chạy Dashboard:', err));
+        });
+    </script>
+    <!-- VIP Contact Modal -->
+    <div id="vip-contact-modal"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm hidden transition-opacity duration-300">
+        <div
+            class="glass-sidebar w-full max-w-[450px] rounded-3xl p-6 relative border border-amber-500/30 shadow-2xl mx-4">
+            <button onclick="closeVipContactModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white p-1.5 rounded-lg bg-white/5 border border-white/10 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center space-y-4 pt-4">
+                <div
+                    class="w-16 h-16 rounded-full bg-amber-500/10 border-2 border-amber-500/40 flex items-center justify-center text-amber-400 mx-auto">
+                    <i class="fa-solid fa-crown text-3xl"></i>
+                </div>
+                <h3 class="font-heading font-extrabold text-xl text-white">Kết Nối Với Chuyên Gia VIP</h3>
+                <p class="text-xs text-amber-400 font-semibold uppercase tracking-wider" id="vip-service-name-display">
+                    Dịch vụ: Cứu Tài Khoản Hack</p>
+                <p class="text-xs text-gray-400 font-light leading-relaxed px-4">
+                    Kỹ thuật viên chuyên trách sẽ tư vấn và báo giá trực tiếp theo hiện trạng thực tế của tài khoản/kênh
+                    của bạn.
+                </p>
+                <div class="space-y-3 pt-2">
+                    <a href="tel:0559583034"
+                        class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-sm font-semibold text-amber-400 transition duration-200">
+                        <span class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>Hotline/Zalo: 0559583034</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </a>
+                    <a href="https://www.facebook.com/chuyhieuhong/" target="_blank"
+                        class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-sm font-semibold text-blue-400 transition duration-200">
+                        <span class="flex items-center space-x-3">
+                            <i class="fa-brands fa-facebook"></i>
+                            <span>Chuyên viên Facebook</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

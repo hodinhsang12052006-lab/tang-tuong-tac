@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMO Reseller Shop - Tổng Kho Nguyên Liệu Via, Clone Hàng Đầu</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                <!-- Brand Logo (Left) -->
+                <a href="index.html" class="flex items-center space-x-2.5 flex-shrink-0">
+                    <img src="cho1.jpg" alt="MMO Reseller Logo" class="h-10 w-10 rounded-full object-cover border border-blue-200 shadow-sm">
+                    <span class="font-bold text-xl tracking-tight text-gray-900 flex flex-col">
+                        <span class="text-blue-600 leading-tight">MMO Reseller</span>
+                        <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Winvia Reseller API</span>
+                    </span>
+                </a>
+
+                <!-- Central Search Bar (Center) -->
+                <div class="hidden md:flex flex-1 max-w-md relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    </div>
+                    <input type="text" id="search-input" oninput="filterProducts()" placeholder="Tìm kiếm Via Việt, Via Cổ, Clone US, BM..." class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none transition duration-200">
+                </div>
+
+                <!-- Right Menu Links & Profile -->
+                <div class="flex items-center space-x-6 flex-shrink-0">
+                    <nav class="hidden lg:flex items-center space-x-6">
+                        <a href="index.html" class="text-blue-600 font-semibold text-sm">Cửa Hàng</a>
+                        <a href="dashboard.html" class="text-gray-600 hover:text-blue-600 font-medium text-sm transition">Nạp Tiền</a>
+                        <a href="dashboard.html?tab=history" class="text-gray-600 hover:text-blue-600 font-medium text-sm transition">Lịch Sử Mua</a>
+                        <a href="admin.html" class="text-gray-600 hover:text-blue-600 font-medium text-sm transition"><i class="fa-solid fa-sliders mr-1"></i> Admin</a>
+                    </nav>
+
+                    <!-- Account Info Widget -->
+                    <div id="account-widget" class="flex items-center space-x-3 bg-gray-50 border border-gray-100 rounded-full px-4 py-1.5">
+                        <i class="fa-solid fa-circle-user text-blue-500 text-lg"></i>
+                        <div class="text-left">
+                            <span id="widget-username" class="text-xs font-bold block text-gray-800">Khách</span>
+                            <span id="widget-balance" class="text-[10px] font-semibold text-blue-600 block">$0.00</span>
+                        </div>
+                        <button onclick="handleAuthClick()" id="auth-btn" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1 rounded-full transition">Đăng Nhập</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        <!-- Search bar for mobile screens -->
+        <div class="block md:hidden mb-6 relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <i class="fa-solid fa-magnifying-glass text-sm"></i>
+            </div>
+            <input type="text" id="search-input-mobile" oninput="filterProducts()" placeholder="Tìm kiếm Via, Clone, BM..." class="w-full bg-white border border-gray-200 focus:border-blue-500 rounded-full pl-10 pr-4 py-2.5 text-sm focus:outline-none transition duration-200">
+        </div>
+
+        <!-- Banner thông báo bo góc đẹp mắt (Chính sách bảo hành, Hỗ trợ) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-gradient-to-r from-blue-50 to-sky-100 border border-blue-200/50 p-6 rounded-2xl flex items-start space-x-4 shadow-sm">
+                <div class="bg-blue-500 text-white p-3 rounded-xl shadow-md flex-shrink-0">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="font-bold text-gray-900 text-sm sm:text-base">Chính Sách Bảo Hành Ưu Việt</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed font-light">
+                        Bảo hành sai pass, sai mã 2FA trong vòng 24 giờ kể từ thời điểm mua hàng. Vui lòng check thông tin tài khoản ngay sau khi hệ thống bàn giao file.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-emerald-50 to-green-100 border border-emerald-200/50 p-6 rounded-2xl flex items-start space-x-4 shadow-sm">
+                <div class="bg-emerald-500 text-white p-3 rounded-xl shadow-md flex-shrink-0">
+                    <i class="fa-solid fa-headset text-xl"></i>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="font-bold text-gray-900 text-sm sm:text-base">Dịch Vụ Hỗ Trợ 24/7</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed font-light">
+                        Liên hệ trực tiếp qua Zalo / Hotline hỗ trợ kỹ thuật nhanh trong 15-30 phút nếu gặp trục trặc khi đăng nhập hoặc tích hợp Reseller API.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex items-center space-x-3 mb-6 overflow-x-auto pb-2 whitespace-nowrap" id="category-tabs">
+            <button onclick="selectCategory('ALL', this)" class="category-btn bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow transition">Toàn Bộ</button>
+            <button onclick="selectCategory('VIA VIỆT', this)" class="category-btn bg-white hover:bg-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full border border-gray-200 transition">Via Việt</button>
+            <button onclick="selectCategory('VIA NGOẠI', this)" class="category-btn bg-white hover:bg-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full border border-gray-200 transition">Via Ngoại</button>
+            <button onclick="selectCategory('BUSINESS MANAGER', this)" class="category-btn bg-white hover:bg-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full border border-gray-200 transition">Business Manager (BM)</button>
+            <button onclick="selectCategory('CLONE', this)" class="category-btn bg-white hover:bg-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full border border-gray-200 transition">Clone</button>
+        </div>
+
+        <!-- Via & Clone Products Table -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-50 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-layer-group text-blue-500"></i>
+                    <h2 class="font-bold text-gray-900 text-base">Danh Sách Nguyên Liệu Khả Dụng</h2>
+                </div>
+                <span class="text-xs text-gray-500 font-medium">Markup Reseller tự động: <span id="markup-display" class="font-bold text-blue-600">0%</span></span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead class="bg-gray-50 text-gray-500 font-semibold border-b border-gray-100">
+                        <tr>
+                            <th class="p-4 pl-6 text-xs uppercase tracking-wider">Tên Loại Tài Khoản</th>
+                            <th class="p-4 text-xs uppercase tracking-wider">Quốc Gia</th>
+                            <th class="p-4 text-xs uppercase tracking-wider text-center">Bạn Bè</th>
+                            <th class="p-4 text-xs uppercase tracking-wider text-center">Số Lượng</th>
+                            <th class="p-4 text-xs uppercase tracking-wider text-right">Đơn Giá (USD)</th>
+                            <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-gray-700" id="products-table-body">
+                        <!-- Loaded dynamically via API -->
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-gray-400">
+                                <i class="fa-solid fa-circle-notch fa-spin text-xl mb-2 text-blue-500 block"></i>
+                                Đang tải danh sách tài nguyên mảng Reseller...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Buy Product Modal -->
+    <div id="buy-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 hidden backdrop-blur-xs">
+        <div class="bg-white w-full max-w-[450px] rounded-3xl p-6 relative border border-gray-100 shadow-2xl mx-4">
+            <button onclick="closeBuyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 rounded-full bg-gray-50 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="space-y-4">
+                <h3 class="font-bold text-lg text-gray-900 border-b border-gray-50 pb-2">Xác Nhận Mua Tài Nguyên</h3>
+                
+                <div class="space-y-3 text-xs sm:text-sm">
+                    <div>
+                        <span class="text-gray-400 block">Loại sản phẩm:</span>
+                        <span id="buy-product-name" class="font-bold text-gray-800">Via Việt Cổ</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <div>
+                            <span class="text-gray-400 block">Đơn giá:</span>
+                            <span id="buy-product-price" class="font-bold text-blue-600">$0.00</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Còn trong kho:</span>
+                            <span id="buy-product-stock" class="font-semibold text-gray-800">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1.5">Số Lượng Cần Mua</label>
+                        <input type="number" id="buy-quantity" value="1" min="1" oninput="calculateModalTotal()" class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none transition">
+                    </div>
+
+                    <div class="p-3.5 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-between mt-3">
+                        <div>
+                            <span class="text-xs text-blue-600 block leading-none font-semibold mb-1">Tổng cộng phí thanh toán</span>
+                            <span class="text-xl font-bold text-blue-700" id="buy-total-charge">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3 pt-4 border-t border-gray-100">
+                    <button onclick="closeBuyModal()" class="w-1/2 text-center py-2.5 rounded-xl border border-gray-200 text-gray-600 text-xs font-bold hover:bg-gray-50 transition">Hủy Bỏ</button>
+                    <button onclick="submitPurchase()" class="w-1/2 text-center py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md transition">Xác Nhận Mua</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchased Raw Material Delivery Modal -->
+    <div id="delivery-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 hidden backdrop-blur-xs">
+        <div class="bg-white w-full max-w-[550px] rounded-3xl p-6 relative border border-gray-100 shadow-2xl mx-4">
+            <button onclick="closeDeliveryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 rounded-full bg-gray-50 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="space-y-4">
+                <div class="text-center space-y-1">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 mx-auto mb-2 text-xl">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-900">Bàn Giao Nguyên Liệu Thành Công!</h3>
+                    <p class="text-xs text-gray-500">Đơn hàng của bạn đã hoàn tất. Vui lòng copy thông tin tài khoản bên dưới.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Định dạng file nhận: ID|PASS|2FA|COOKIE</label>
+                    <textarea id="delivery-textarea" readonly rows="8" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 font-mono text-xs text-gray-800 focus:outline-none resize-none"></textarea>
+                </div>
+
+                <div class="flex space-x-3 pt-3">
+                    <button onclick="copyDeliveryData()" class="w-full text-center py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition">
+                        <i class="fa-regular fa-copy mr-1"></i> Sao Chép Toàn Bộ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 hidden backdrop-blur-xs">
+        <div class="bg-white w-full max-w-[400px] rounded-3xl p-6 relative border border-gray-100 shadow-2xl mx-4">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 rounded-full bg-gray-50 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="space-y-4">
+                <div class="text-center">
+                    <h3 class="font-bold text-lg text-gray-900">Đăng Nhập Hệ Thống</h3>
+                    <p class="text-xs text-gray-500">Nhập số điện thoại để đăng nhập không cần mật khẩu</p>
+                </div>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Số điện thoại liên hệ</label>
+                        <input type="text" id="login-phone" placeholder="Ví dụ: 0559583034" class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none transition">
+                    </div>
+                </div>
+
+                <button onclick="submitLogin()" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition">Bắt Đầu Mua Hàng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-6" id="footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2.5">
+                <img src="cho1.jpg" alt="MMO Reseller Logo" class="h-6 w-6 rounded-full object-cover">
+                <span class="text-xs text-gray-500">© 2026 MMO Reseller Shop. Lấy nguồn qua Winvia API tự động.</span>
+            </div>
+            <div class="flex items-center space-x-6 text-xs text-gray-400">
+                <span>Hotline/Zalo: 0559583034</span>
+                <a href="https://www.facebook.com/chuyhieuhong/" target="_blank" class="hover:text-blue-500">Hỗ trợ Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main Client Script -->
+    <script>
+        let currentCategory = 'ALL';
+        let activeUserPhone = localStorage.getItem('mmo_user_phone') || '';
+        let allProducts = [];
+        let selectedProduct = null;
+
+        async function init() {
+            if (activeUserPhone) {
+                await fetchUserProfile();
+            }
+            await fetchProducts();
+        }
+
+        // Đăng nhập
+        function handleAuthClick() {
+            if (activeUserPhone) {
+                // Đăng xuất
+                localStorage.removeItem('mmo_user_phone');
+                activeUserPhone = '';
+                document.getElementById('widget-username').textContent = 'Khách';
+                document.getElementById('widget-balance').textContent = '$0.00';
+                document.getElementById('auth-btn').textContent = 'Đăng Nhập';
+                location.reload();
+            } else {
+                document.getElementById('login-modal').classList.remove('hidden');
+            }
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        async function submitLogin() {
+            const phone = document.getElementById('login-phone').value.trim();
+            if (!phone) {
+                alert('Vui lòng nhập số điện thoại');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem('mmo_user_phone', phone);
+                    activeUserPhone = phone;
+                    closeLoginModal();
+                    await fetchUserProfile();
+                    await fetchProducts();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Lỗi kết nối tới Server');
+            }
+        }
+
+        // Tải profile user
+        async function fetchUserProfile() {
+            try {
+                const res = await fetch(`/api/user/profile?phone=${activeUserPhone}`);
+                const data = await res.json();
+                if (data.success && data.user) {
+                    document.getElementById('widget-username').textContent = data.user.username;
+                    document.getElementById('widget-balance').textContent = `$${parseFloat(data.user.balance).toFixed(2)}`;
+                    document.getElementById('auth-btn').textContent = 'Đăng Xuất';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Tải sản phẩm
+        async function fetchProducts() {
+            try {
+                const res = await fetch('/api/products');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    allProducts = data.data;
+                    document.getElementById('markup-display').textContent = `${data.markup_percent}%`;
+                    renderProducts();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Render bảng sản phẩm
+        function renderProducts() {
+            const tbody = document.getElementById('products-table-body');
+            const query = (document.getElementById('search-input').value || document.getElementById('search-input-mobile').value || '').toLowerCase().trim();
+            
+            const filtered = allProducts.filter(p => {
+                const matchesCategory = (currentCategory === 'ALL' || p.category === currentCategory);
+                const matchesSearch = (p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query) || p.country.toLowerCase().includes(query));
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-gray-400">
+                            Không có nguyên liệu nào khớp với từ khóa tìm kiếm.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            filtered.forEach(p => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50/50 transition duration-150 border-b border-gray-100 text-xs sm:text-sm";
+                
+                const stockBadge = p.stock > 0 
+                    ? `<span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold border border-emerald-100">${p.stock} cái</span>`
+                    : `<span class="bg-red-50 text-red-600 px-2 py-0.5 rounded-full font-bold border border-red-100">Hết hàng</span>`;
+
+                row.innerHTML = `
+                    <td class="p-4 pl-6 font-semibold text-gray-900">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-blue-500"><i class="fa-solid fa-id-card text-base"></i></span>
+                            <div class="flex flex-col">
+                                <span>${p.name}</span>
+                                <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wide mt-0.5">${p.category}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-gray-600 font-medium">
+                        <span class="mr-1.5 text-base">${p.flag}</span> ${p.country}
+                    </td>
+                    <td class="p-4 text-center text-gray-500 font-mono">${p.friends}</td>
+                    <td class="p-4 text-center">${stockBadge}</td>
+                    <td class="p-4 text-right font-bold text-blue-600 font-mono">$${p.selling_price.toFixed(2)}</td>
+                    <td class="p-4 text-center pr-6">
+                        <button onclick="openBuyModal('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shadow-sm hover:shadow transition ${p.stock <= 0 ? 'opacity-40 cursor-not-allowed' : ''}">
+                            Mua Ngay
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Chọn danh mục sản phẩm
+        function selectCategory(category, btn) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.className = "category-btn bg-white hover:bg-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full border border-gray-200 transition";
+            });
+            btn.className = "category-btn bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow transition";
+            renderProducts();
+        }
+
+        // Lọc theo search input
+        function filterProducts() {
+            renderProducts();
+        }
+
+        // Modal mua hàng
+        function openBuyModal(productId) {
+            if (!activeUserPhone) {
+                alert('Vui lòng Đăng Nhập bằng số điện thoại trước khi mua!');
+                document.getElementById('login-modal').classList.remove('hidden');
+                return;
+            }
+
+            selectedProduct = allProducts.find(p => p.id === productId);
+            if (!selectedProduct) return;
+
+            document.getElementById('buy-product-name').textContent = selectedProduct.name;
+            document.getElementById('buy-product-price').textContent = `$${selectedProduct.selling_price.toFixed(2)}`;
+            document.getElementById('buy-product-stock').textContent = selectedProduct.stock;
+            document.getElementById('buy-quantity').value = 1;
+            calculateModalTotal();
+
+            document.getElementById('buy-modal').classList.remove('hidden');
+        }
+
+        function closeBuyModal() {
+            document.getElementById('buy-modal').classList.add('hidden');
+        }
+
+        function calculateModalTotal() {
+            if (!selectedProduct) return;
+            const qty = parseInt(document.getElementById('buy-quantity').value) || 0;
+            const total = qty * selectedProduct.selling_price;
+            document.getElementById('buy-total-charge').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Submit mua hàng lên Backend API
+        async function submitPurchase() {
+            const qty = parseInt(document.getElementById('buy-quantity').value);
+            if (!qty || qty <= 0) {
+                alert('Số lượng không hợp lệ');
+                return;
+            }
+
+            if (qty > selectedProduct.stock) {
+                alert('Số lượng mua vượt quá số lượng trong kho!');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/buy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        phone: activeUserPhone,
+                        productId: selectedProduct.id,
+                        quantity: qty
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success && data.purchase) {
+                    closeBuyModal();
+                    // Hiển thị modal bàn giao nguyên liệu
+                    document.getElementById('delivery-textarea').value = data.purchase.accounts.join('\n');
+                    document.getElementById('delivery-modal').classList.remove('hidden');
+                    // Cập nhật lại số dư widget
+                    await fetchUserProfile();
+                    await fetchProducts();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Lỗi kết nối khi gửi yêu cầu mua!');
+            }
+        }
+
+        // Close/Copy bàn giao
+        function closeDeliveryModal() {
+            document.getElementById('delivery-modal').classList.add('hidden');
+        }
+
+        function copyDeliveryData() {
+            const textarea = document.getElementById('delivery-textarea');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Đã copy danh sách tài nguyên vào clipboard!');
+        }
+
+        // Khởi động
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

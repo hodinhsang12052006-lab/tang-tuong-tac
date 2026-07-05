@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị Hệ Thống - MMO Reseller Shop</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo (Left) -->
+                <a href="index.html" class="flex items-center space-x-2.5">
+                    <img src="cho1.jpg" alt="MMO Reseller Logo" class="h-10 w-10 rounded-full object-cover border border-blue-200 shadow-sm">
+                    <span class="font-bold text-xl tracking-tight text-gray-900 flex flex-col">
+                        <span class="text-blue-600 leading-tight">MMO Reseller</span>
+                        <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Hệ Thống Admin Reseller</span>
+                    </span>
+                </a>
+
+                <!-- Right Menu Links & Profile -->
+                <div class="flex items-center space-x-6">
+                    <nav class="flex items-center space-x-6">
+                        <a href="index.html" class="text-gray-600 hover:text-blue-600 font-medium text-sm transition">Cửa Hàng</a>
+                        <a href="dashboard.html" class="text-gray-600 hover:text-blue-600 font-medium text-sm transition">Nạp Tiền</a>
+                        <a href="dashboard.html?tab=history" class="text-gray-600 hover:text-blue-600 font-medium text-sm transition">Lịch Sử Mua</a>
+                        <a href="admin.html" class="text-blue-600 font-semibold text-sm"><i class="fa-solid fa-sliders mr-1"></i> Admin</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Summary Stats Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <!-- Total Reseller Orders -->
+            <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 text-xl shadow-inner">
+                    <i class="fa-solid fa-shopping-bag"></i>
+                </div>
+                <div>
+                    <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block">Tổng Đơn Hàng</span>
+                    <h3 id="stat-total-orders" class="font-heading font-extrabold text-2xl text-gray-900 mt-1">0</h3>
+                </div>
+            </div>
+
+            <!-- Total Revenue -->
+            <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 text-xl shadow-inner">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div>
+                    <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block">Tổng Doanh Thu</span>
+                    <h3 id="stat-total-revenue" class="font-heading font-extrabold text-2xl text-gray-900 mt-1">$0.00</h3>
+                </div>
+            </div>
+
+            <!-- Net Profit -->
+            <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 text-xl shadow-inner">
+                    <i class="fa-solid fa-chart-line-up">💸</i>
+                </div>
+                <div>
+                    <span class="text-xs text-gray-400 font-bold uppercase tracking-wider block">Lợi Nhuận Thuần</span>
+                    <h3 id="stat-total-profit" class="font-heading font-extrabold text-2xl text-emerald-600 mt-1">$0.00</h3>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Side: Reseller Config -->
+            <div class="lg:col-span-4 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
+                <h3 class="font-bold text-sm text-gray-900 flex items-center space-x-2 border-b border-gray-50 pb-2">
+                    <i class="fa-solid fa-gears text-blue-500"></i>
+                    <span>Cấu Hình Reseller API</span>
+                </h3>
+                
+                <form onsubmit="updateConfig(event)" class="space-y-4 text-xs sm:text-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">API Key Nguồn (shopwinvia.com)</label>
+                        <input type="text" id="config-api-key" required placeholder="MOCK_API_KEY_WINVIA" class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-xl px-4 py-2.5 text-sm text-gray-900 focus:outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tỷ Lệ Cộng Thêm Lợi Nhuận (%)</label>
+                        <div class="relative">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">%</span>
+                            <input type="number" id="config-markup" required min="0" max="100" placeholder="Ví dụ: 15" class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-xl pl-4 pr-8 py-2.5 text-sm text-gray-900 focus:outline-none transition">
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1">Hệ thống sẽ lấy giá gốc từ nguồn về rồi cộng thêm % này để bán ra cho khách.</p>
+                    </div>
+
+                    <button type="submit" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md transition">Lưu Thay Đổi</button>
+                </form>
+            </div>
+
+            <!-- Right Side: Pending deposits -->
+            <div class="lg:col-span-8 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="px-6 py-5 border-b border-gray-50">
+                    <h3 class="font-bold text-gray-900 text-base flex items-center space-x-2">
+                        <i class="fa-solid fa-receipt text-blue-500"></i>
+                        <span>Duyệt Yêu Cầu Nạp Tiền Khách Hàng</span>
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead class="bg-gray-50 text-gray-500 font-semibold border-b border-gray-100 text-xs">
+                            <tr>
+                                <th class="p-4 pl-6">Khách Hàng</th>
+                                <th class="p-4">Mã GD (TxID)</th>
+                                <th class="p-4 text-right">Số Tiền (VNĐ)</th>
+                                <th class="p-4 text-right">Số USD Cộng</th>
+                                <th class="p-4 pr-6 text-center">Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deposits-table-body" class="text-xs sm:text-sm text-gray-600 divide-y divide-gray-50">
+                            <tr>
+                                <td colspan="5" class="p-6 text-center text-gray-400">Không có yêu cầu nạp tiền nào đang chờ duyệt.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sold Reseller Items List -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-50">
+                <h3 class="font-bold text-gray-900 text-base flex items-center space-x-2">
+                    <i class="fa-solid fa-file-invoice-dollar text-blue-500"></i>
+                    <span>Lịch Sử Đơn Hàng Reseller Bán Ra</span>
+                </h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse whitespace-nowrap">
+                    <thead class="bg-gray-50 text-gray-500 font-semibold border-b border-gray-100 text-xs">
+                        <tr>
+                            <th class="p-4 pl-6">Mã Đơn</th>
+                            <th class="p-4">Khách Hàng</th>
+                            <th class="p-4">Loại Via / Clone</th>
+                            <th class="p-4 text-center">Số Lượng</th>
+                            <th class="p-4 text-right">Giá Gốc</th>
+                            <th class="p-4 text-right">Giá Bán</th>
+                            <th class="p-4 text-right">Lợi Nhuận</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stats-table-body" class="text-xs sm:text-sm text-gray-600 divide-y divide-gray-50">
+                        <tr>
+                            <td colspan="7" class="p-6 text-center text-gray-400">Chưa có đơn hàng nào được bán ra.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-6" id="footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2.5">
+                <img src="cho1.jpg" alt="MMO Reseller Logo" class="h-6 w-6 rounded-full object-cover">
+                <span class="text-xs text-gray-500">© 2026 MMO Reseller Shop. Lấy nguồn qua Winvia API tự động.</span>
+            </div>
+            <div class="flex items-center space-x-6 text-xs text-gray-400">
+                <span>Hotline/Zalo: 0559583034</span>
+                <a href="https://www.facebook.com/chuyhieuhong/" target="_blank" class="hover:text-blue-500">Hỗ trợ Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main Client Script -->
+    <script>
+        async function init() {
+            await fetchConfig();
+            await fetchStats();
+            await fetchPendingDeposits();
+        }
+
+        // Tải cấu hình
+        async function fetchConfig() {
+            try {
+                const res = await fetch('/api/config');
+                const data = await res.json();
+                if (data.success && data.config) {
+                    document.getElementById('config-api-key').value = data.config.api_key;
+                    document.getElementById('config-markup').value = data.config.markup_percent;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Cập nhật cấu hình
+        async function updateConfig(e) {
+            e.preventDefault();
+            const apiKey = document.getElementById('config-api-key').value.trim();
+            const markup = parseFloat(document.getElementById('config-markup').value);
+
+            if (markup === undefined || isNaN(markup)) {
+                alert('Tỷ lệ phần trăm lợi nhuận không hợp lệ');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        api_key: apiKey,
+                        markup_percent: markup
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Lưu cấu hình thành công!');
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Lỗi kết nối tới máy chủ');
+            }
+        }
+
+        // Tải các yêu cầu nạp tiền chờ duyệt
+        async function fetchPendingDeposits() {
+            try {
+                const res = await fetch('/api/admin/deposits');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    renderPendingDeposits(data.data.filter(d => d.status === 'Pending'));
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Render yêu cầu nạp tiền
+        function renderPendingDeposits(deposits) {
+            const tbody = document.getElementById('deposits-table-body');
+            if (deposits.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="p-6 text-center text-gray-400">Không có yêu cầu nạp tiền nào đang chờ duyệt.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            deposits.forEach(d => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50/50 border-b border-gray-50";
+
+                row.innerHTML = `
+                    <td class="p-4 pl-6 font-bold text-gray-900">${d.phone}</td>
+                    <td class="p-4 font-mono font-semibold text-gray-700">${d.txid}</td>
+                    <td class="p-4 text-right font-mono text-gray-800">${d.amountVnd.toLocaleString('vi-VN')} đ</td>
+                    <td class="p-4 text-right font-mono font-bold text-blue-600">$${d.amountUsd.toFixed(2)}</td>
+                    <td class="p-4 text-center pr-6">
+                        <button onclick="approveDeposit('${d.phone}', '${d.txid}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-1.5 rounded-xl shadow-sm hover:shadow transition">
+                            Duyệt Nạp
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Phê duyệt nạp tiền
+        async function approveDeposit(phone, txid) {
+            if (!confirm(`Xác nhận duyệt nạp tiền cho số điện thoại ${phone}?`)) return;
+
+            try {
+                const res = await fetch('/api/admin/approve-deposit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, txid })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alert('Duyệt nạp tiền thành công!');
+                    await init();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Lỗi kết nối tới máy chủ');
+            }
+        }
+
+        // Tải thống kê doanh số & đơn hàng đã bán
+        async function fetchStats() {
+            try {
+                const res = await fetch('/api/admin/stats');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('stat-total-orders').textContent = data.stats.totalOrders;
+                    document.getElementById('stat-total-revenue').textContent = `$${data.stats.totalRevenue.toFixed(2)}`;
+                    document.getElementById('stat-total-profit').textContent = `$${data.stats.totalProfit.toFixed(2)}`;
+                    
+                    renderStatsTable(data.purchases || []);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Render lịch sử bán được
+        function renderStatsTable(purchases) {
+            const tbody = document.getElementById('stats-table-body');
+            if (purchases.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="p-6 text-center text-gray-400">Chưa có đơn hàng nào được bán ra.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            purchases.forEach(p => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50/50 border-b border-gray-50";
+
+                row.innerHTML = `
+                    <td class="p-4 pl-6 font-mono font-semibold text-gray-500">${p.purchaseId}</td>
+                    <td class="p-4 font-bold text-gray-800">${p.phone}</td>
+                    <td class="p-4 font-semibold text-gray-900">${p.productName}</td>
+                    <td class="p-4 text-center font-mono">${p.quantity} cái</td>
+                    <td class="p-4 text-right font-mono text-gray-500">$${(p.originalUnitPrice * p.quantity).toFixed(2)}</td>
+                    <td class="p-4 text-right font-mono font-bold text-blue-600">$${p.totalCharge.toFixed(2)}</td>
+                    <td class="p-4 text-right font-mono font-bold text-emerald-600">+$${p.profit.toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
