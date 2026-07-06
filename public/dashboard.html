@@ -1848,6 +1848,7 @@
             const token = localStorage.getItem('bitpaw_token');
             const viaShopLink = document.getElementById('nav-via-shop');
             if (viaShopLink && token) {
+                // Fixed template literal token path redirect to avoid SyntaxError
                 viaShopLink.href = `https://shop.bitpawnetwork.com/?token=${encodeURIComponent(token)}`;
             }
 
