@@ -293,13 +293,16 @@ async function getServices(req, res) {
             console.warn('[Get Services] Database không ở trạng thái Connected (ReadyState !== 1). Đọc trực tiếp từ file cấu hình services_config.json.');
             try {
                 const configPath = path.join(__dirname, 'services_config.json');
-                const raw = fs.readFileSync(configPath, 'utf8');
-                const services = JSON.parse(raw);
-                return res.status(200).json({ success: true, data: services });
+                if (fs.existsSync(configPath)) {
+                    const raw = fs.readFileSync(configPath, 'utf8');
+                    const services = JSON.parse(raw);
+                    return res.status(200).json({ success: true, data: services });
+                }
             } catch (jsonErr) {
                 console.error('[Get Services] Lỗi đọc file cấu hình dự phòng:', jsonErr.message);
-                return res.status(500).json({ success: false, message: 'Lỗi máy chủ khi nạp cấu hình dịch vụ.' });
             }
+            // Trả về mảng rỗng thay vì báo lỗi 500
+            return res.status(200).json({ success: true, data: [] });
         }
 
         // 2. Nếu DB kết nối bình thường, kiểm tra cache trước
@@ -313,19 +316,26 @@ async function getServices(req, res) {
         }
 
         // 3. Tìm tất cả các dịch vụ đang Active từ Database
-        let services = await Service.find({ status: true }).sort({ serviceId: 1 });
+        let services = [];
+        try {
+            services = await Service.find({ status: true }).sort({ serviceId: 1 });
+        } catch (dbFindErr) {
+            console.error('[Get Services] Lỗi truy vấn DB:', dbFindErr.message);
+        }
         
         // 4. Nếu Database trống rỗng (0 dịch vụ), tự động nạp (seed) dịch vụ từ file cấu hình vào DB
         if (services.length === 0) {
             console.log('[Get Services] Database trống. Tiến hành nạp (seed) dịch vụ từ services_config.json vào Database...');
             try {
                 const configPath = path.join(__dirname, 'services_config.json');
-                const raw = fs.readFileSync(configPath, 'utf8');
-                const defaultServices = JSON.parse(raw);
-                
-                await Service.insertMany(defaultServices);
-                services = await Service.find({ status: true }).sort({ serviceId: 1 });
-                console.log(`[Get Services] Đã seed thành công ${services.length} dịch vụ vào Database.`);
+                if (fs.existsSync(configPath)) {
+                    const raw = fs.readFileSync(configPath, 'utf8');
+                    const defaultServices = JSON.parse(raw);
+                    
+                    await Service.insertMany(defaultServices);
+                    services = await Service.find({ status: true }).sort({ serviceId: 1 });
+                    console.log(`[Get Services] Đã seed thành công ${services.length} dịch vụ vào Database.`);
+                }
             } catch (seedErr) {
                 console.error('[Get Services] Lỗi tự động seed dịch vụ từ cấu hình:', seedErr.message);
             }
@@ -343,7 +353,8 @@ async function getServices(req, res) {
         });
     } catch (error) {
         console.error('[Get Services Error]', error);
-        return res.status(500).json({ success: false, message: 'Lỗi máy chủ khi lấy danh sách dịch vụ.' });
+        // Trả về mảng rỗng thay vì sập server hoặc báo lỗi 500
+        return res.status(200).json({ success: true, data: [] });
     }
 }
 

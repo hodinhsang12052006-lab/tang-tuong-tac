@@ -1263,12 +1263,30 @@
 
     <!-- Vanilla Javascript Logic -->
     <script>
+        // --- Fetch with Timeout Helper ---
+        async function fetchWithTimeout(resource, options = {}) {
+            const { timeout = 8000 } = options;
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            try {
+                const response = await fetch(resource, {
+                    ...options,
+                    signal: controller.signal
+                });
+                clearTimeout(id);
+                return response;
+            } catch (error) {
+                clearTimeout(id);
+                throw error;
+            }
+        }
+
         // --- Exchange Rate System ---
         let exchangeRate = 26162; // Fallback
 
         async function fetchExchangeRate() {
             try {
-                const res = await fetch('/api/config/exchange-rate');
+                const res = await fetchWithTimeout('/api/config/exchange-rate');
                 const data = await res.json();
                 if (data.success && data.rate) {
                     exchangeRate = data.rate;
@@ -1318,7 +1336,7 @@
 
         async function fetchServicesFromDb() {
             try {
-                const res = await fetch('/api/services');
+                const res = await fetchWithTimeout('/api/services');
                 const data = await res.json();
                 console.log('SMM Services Fetch Response:', data); // In log kiểm tra dữ liệu thật ra console log
 
@@ -1490,7 +1508,7 @@
             }
 
             try {
-                const res = await fetch('/api/orders', {
+                const res = await fetchWithTimeout('/api/orders', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1605,7 +1623,7 @@
             if (!token) return;
 
             try {
-                const res = await fetch('/api/payments/request', {
+                const res = await fetchWithTimeout('/api/payments/request', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1644,7 +1662,7 @@
             if (!token) return;
 
             try {
-                const res = await fetch('/api/user/transactions', {
+                const res = await fetchWithTimeout('/api/user/transactions', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -1696,7 +1714,7 @@
             if (!token) return;
 
             try {
-                const res = await fetch('/api/orders', {
+                const res = await fetchWithTimeout('/api/orders', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -1783,7 +1801,7 @@
             if (!token) return;
 
             try {
-                const res = await fetch('/api/auth/me', {
+                const res = await fetchWithTimeout('/api/auth/me', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();

@@ -980,6 +980,24 @@
 
     <!-- Vanilla Javascript Logic -->
     <script>
+        // --- Fetch with Timeout Helper ---
+        async function fetchWithTimeout(resource, options = {}) {
+            const { timeout = 8000 } = options;
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            try {
+                const response = await fetch(resource, {
+                    ...options,
+                    signal: controller.signal
+                });
+                clearTimeout(id);
+                return response;
+            } catch (error) {
+                clearTimeout(id);
+                throw error;
+            }
+        }
+
         // --- 1. Dynamic Data Structure for Services (Tabs & Calculator) ---
         const servicesData = {
             facebook: [
@@ -1183,7 +1201,7 @@
             const messageBox = document.getElementById('auth-message');
 
             try {
-                const res = await fetch('/api/auth/login', {
+                const res = await fetchWithTimeout('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ emailOrPhone: identifier, password })
@@ -1244,7 +1262,7 @@
             }
 
             try {
-                const res = await fetch('/api/auth/register', {
+                const res = await fetchWithTimeout('/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ fullName, username, email, phone, password, confirmPassword })
