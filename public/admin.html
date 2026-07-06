@@ -1040,6 +1040,33 @@
                 fetchAdminOrders(),
                 fetchPendingDeposits()
             ]).catch(err => console.error('Lỗi khi tải trước dữ liệu Admin:', err));
+
+            // Mobile Sidebar toggle logic
+            const openSidebarBtn = document.getElementById('open-sidebar-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+            if (openSidebarBtn && sidebar && sidebarBackdrop) {
+                openSidebarBtn.addEventListener('click', () => {
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebarBackdrop.classList.remove('hidden');
+                });
+            }
+
+            if (closeSidebarBtn && sidebar && sidebarBackdrop) {
+                closeSidebarBtn.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebarBackdrop.classList.add('hidden');
+                });
+            }
+
+            if (sidebarBackdrop && sidebar) {
+                sidebarBackdrop.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebarBackdrop.classList.add('hidden');
+                });
+            }
         });
     </script>
 </body>

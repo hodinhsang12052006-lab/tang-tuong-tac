@@ -147,8 +147,10 @@ mongoose.connect(MONGO_URI, {
     // Tự động seed dịch vụ mặc định
     await seedDefaultServices();
     
-    // Khởi động tiến trình kiểm tra đơn hàng tự động chạy ngầm ngay sau khi kết nối DB thành công
-    initStatusCronJob();
+    // Khởi động tiến trình kiểm tra đơn hàng tự động chạy ngầm (chỉ chạy khi không ở môi trường Vercel Serverless)
+    if (!process.env.VERCEL) {
+        initStatusCronJob();
+    }
 })
 .catch((err) => {
     console.error('[Database Error] Không thể kết nối tới MongoDB:', err.message);
@@ -236,13 +238,15 @@ app.get('/api/health', (req, res) => {
 // ==========================================
 // 5. KHỞI CHẠY MÁY CHỦ EXPRESS SERVER
 // ==========================================
-app.listen(PORT, () => {
-    console.log(`===========================================================`);
-    console.log(`🚀 Bitpawnetwork Server đang chạy trên cổng: ${PORT}`);
-    console.log(`🔗 Trang chủ (Landing Page): http://localhost:${PORT}`);
-    console.log(`🔗 Khách hàng (User Dashboard): http://localhost:${PORT}/dashboard`);
-    console.log(`🔗 Quản trị viên (Admin Dashboard): http://localhost:${PORT}/admin`);
-    console.log(`===========================================================`);
-});
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`===========================================================`);
+        console.log(`🚀 Bitpawnetwork Server đang chạy trên cổng: ${PORT}`);
+        console.log(`🔗 Trang chủ (Landing Page): http://localhost:${PORT}`);
+        console.log(`🔗 Khách hàng (User Dashboard): http://localhost:${PORT}/dashboard`);
+        console.log(`🔗 Quản trị viên (Admin Dashboard): http://localhost:${PORT}/admin`);
+        console.log(`===========================================================`);
+    });
+}
 
 module.exports = app;
