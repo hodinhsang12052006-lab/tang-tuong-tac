@@ -191,18 +191,18 @@
                     </a>
                 </nav>
 
-                <!-- Authentication Buttons (Desktop) -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-gray-300 hover:text-white font-semibold transition-colors duration-200 px-4 py-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10">
+                <!-- Authentication Buttons (Always show Login, show Register on sm and up) -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-gray-300 hover:text-white font-semibold transition-colors duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 text-xs sm:text-sm">
                         Đăng Nhập
                     </a>
-                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="btn-neon-glow font-semibold text-white px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-sm tracking-wide">
+                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="hidden sm:inline-block btn-neon-glow font-semibold text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-xs sm:text-sm tracking-wide">
                         Đăng Ký Ngay
                     </a>
                 </div>
 
                 <!-- Hamburger Button (Mobile) -->
-                <div class="md:hidden flex items-center">
+                <div class="md:hidden flex items-center ml-2">
                     <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 rounded-lg bg-white/5 border border-white/10" aria-label="Toggle Menu">
                         <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
                     </button>
@@ -1298,15 +1298,6 @@
             switchTab('facebook');
             // Load calculator services
             updateCalcServices();
-
-            // Mobile menu toggle
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                });
-            }
         });
     </script>
 </body>
