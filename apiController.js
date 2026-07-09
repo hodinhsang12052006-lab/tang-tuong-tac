@@ -153,18 +153,14 @@ async function placeOrder(req, res) {
             return res.status(400).json({ success: false, message: 'Dịch vụ này hiện đang tạm đóng' });
         }
 
-        // 3. Tính toán tổng chi phí đơn hàng của khách dựa trên tỉ lệ Markup từ cấu hình Admin
-        let globalMarkup = 50; // Giá trị mặc định
-        try {
-            const config = await SystemConfig.findOne({ key: 'global_markup' }).session(session);
-            if (config && config.value !== undefined) {
-                globalMarkup = parseFloat(config.value);
-            }
-        } catch (dbErr) {
-            console.error('[Place Order] Lỗi tải global_markup:', dbErr.message);
+        // 3. Tính toán tổng chi phí đơn hàng dựa trên logic giá phân tầng (USD)
+        const original = service.originalPrice;
+        let calculatedSellingPrice;
+        if (original < 0.4) {
+            calculatedSellingPrice = parseFloat((original * 2).toFixed(4));
+        } else {
+            calculatedSellingPrice = parseFloat((original * 1.4).toFixed(4));
         }
-
-        const calculatedSellingPrice = parseFloat((service.originalPrice + (service.originalPrice * globalMarkup / 100)).toFixed(4));
         const totalCharge = parseFloat(((calculatedSellingPrice / 1000) * quantity).toFixed(4));
 
         // 4. Tìm kiếm khách hàng và kiểm tra số dư (balance)
@@ -299,20 +295,7 @@ async function getServices(req, res) {
     try {
         const now = Date.now();
 
-        // 1. Lấy phần trăm chênh lệch (markup) từ Database
-        let globalMarkup = 50; // Giá trị mặc định
-        try {
-            if (mongoose.connection.readyState === 1) {
-                const config = await SystemConfig.findOne({ key: 'global_markup' });
-                if (config && config.value !== undefined) {
-                    globalMarkup = parseFloat(config.value);
-                }
-            }
-        } catch (dbErr) {
-            console.error('[Get Services] Lỗi tải global_markup:', dbErr.message);
-        }
-
-        // 2. Kiểm tra nếu DB không kết nối, nạp trực tiếp từ file cấu hình JSON để chống sập
+        // 1. Kiểm tra nếu DB không kết nối, nạp trực tiếp từ file cấu hình JSON để chống sập
         if (mongoose.connection.readyState !== 1) {
             console.warn('[Get Services] Database không ở trạng thái Connected (ReadyState !== 1). Đọc trực tiếp từ file cấu hình services_config.json.');
             try {
@@ -320,13 +303,21 @@ async function getServices(req, res) {
                 if (fs.existsSync(configPath)) {
                     const raw = fs.readFileSync(configPath, 'utf8');
                     const services = JSON.parse(raw);
-                    // Áp dụng công thức: Giá_bán = Giá_gốc + (Giá_gốc * Phần_trăm_chênh_lệch / 100)
+                    // Áp dụng công thức giá phân tầng (USD)
                     const servicesWithBump = services.map(s => {
                         const obj = { ...s };
                         const original = obj.originalPrice !== undefined ? obj.originalPrice : (obj.original_price || 0);
-                        const sellingPrice = parseFloat((original + (original * globalMarkup / 100)).toFixed(4));
+                        let sellingPrice;
+                        let markupPercent;
+                        if (original < 0.4) {
+                            sellingPrice = parseFloat((original * 2).toFixed(4));
+                            markupPercent = 100;
+                        } else {
+                            sellingPrice = parseFloat((original * 1.4).toFixed(4));
+                            markupPercent = 40;
+                        }
                         obj.sellingPrice = sellingPrice;
-                        obj.markupPercent = globalMarkup;
+                        obj.markupPercent = markupPercent;
                         if (obj.selling_price !== undefined) obj.selling_price = sellingPrice;
                         if (obj.rate !== undefined) obj.rate = sellingPrice;
                         if (obj.price !== undefined) obj.price = sellingPrice;
@@ -341,7 +332,7 @@ async function getServices(req, res) {
             return res.status(200).json({ success: true, data: [] });
         }
 
-        // 3. Nếu DB kết nối bình thường, kiểm tra cache trước
+        // 2. Nếu DB kết nối bình thường, kiểm tra cache trước
         if (servicesCache && (now - cacheTime < CACHE_TTL)) {
             res.setHeader('X-Cache', 'HIT');
             res.setHeader('Cache-Control', 'public, max-age=300'); // Trình duyệt cũng được cache 5 phút
@@ -351,7 +342,7 @@ async function getServices(req, res) {
             });
         }
 
-        // 4. Tìm tất cả các dịch vụ đang Active từ Database
+        // 3. Tìm tất cả các dịch vụ đang Active từ Database
         let services = [];
         try {
             services = await Service.find({ status: true }).sort({ serviceId: 1 });
@@ -359,7 +350,7 @@ async function getServices(req, res) {
             console.error('[Get Services] Lỗi truy vấn DB:', dbFindErr.message);
         }
         
-        // 5. Nếu Database trống rỗng (0 dịch vụ), tự động nạp (seed) dịch vụ từ file cấu hình vào DB
+        // 4. Nếu Database trống rỗng (0 dịch vụ), tự động nạp (seed) dịch vụ từ file cấu hình vào DB
         if (services.length === 0) {
             console.log('[Get Services] Database trống. Tiến hành nạp (seed) dịch vụ từ services_config.json vào Database...');
             try {
@@ -377,13 +368,21 @@ async function getServices(req, res) {
             }
         }
 
-        // Áp dụng công thức: Giá_bán = Giá_gốc + (Giá_gốc * Phần_trăm_chênh_lệch / 100)
+        // Áp dụng công thức giá phân tầng (USD)
         const servicesWithBump = services.map(s => {
             const obj = s.toObject ? s.toObject() : s;
             const original = obj.originalPrice !== undefined ? obj.originalPrice : (obj.original_price || 0);
-            const sellingPrice = parseFloat((original + (original * globalMarkup / 100)).toFixed(4));
+            let sellingPrice;
+            let markupPercent;
+            if (original < 0.4) {
+                sellingPrice = parseFloat((original * 2).toFixed(4));
+                markupPercent = 100;
+            } else {
+                sellingPrice = parseFloat((original * 1.4).toFixed(4));
+                markupPercent = 40;
+            }
             obj.sellingPrice = sellingPrice;
-            obj.markupPercent = globalMarkup;
+            obj.markupPercent = markupPercent;
             if (obj.selling_price !== undefined) obj.selling_price = sellingPrice;
             if (obj.rate !== undefined) obj.rate = sellingPrice;
             if (obj.price !== undefined) obj.price = sellingPrice;
@@ -612,10 +611,17 @@ async function syncViaProducts(req, res) {
 async function getViaProducts(req, res) {
     try {
         const products = await ViaProduct.find({ status: true }).sort({ category: 1, sellingPrice: 1 });
-        // Quét qua mảng sản phẩm và nhân thuộc tính giá với 1.35 trước khi trả về
+        // Quét qua mảng sản phẩm và nhân giá theo phân khúc (USD)
         const mappedProducts = products.map(p => {
             const obj = p.toObject ? p.toObject() : p;
-            if (obj.sellingPrice !== undefined) obj.sellingPrice = parseFloat((obj.sellingPrice * 1.35).toFixed(2));
+            const original = obj.originalPrice !== undefined ? obj.originalPrice : 0;
+            let sellingPrice;
+            if (original < 0.4) {
+                sellingPrice = parseFloat((original * 2).toFixed(2));
+            } else {
+                sellingPrice = parseFloat((original * 1.4).toFixed(2));
+            }
+            obj.sellingPrice = sellingPrice;
             return obj;
         });
         return res.status(200).json({ success: true, data: mappedProducts });
@@ -659,8 +665,15 @@ async function buyVia(req, res) {
             return res.status(400).json({ success: false, message: 'Số lượng hàng trong kho không đủ.' });
         }
 
-        // Đảm bảo logic tính tổng tiền cũng nhân với 1.35
-        const totalCharge = parseFloat((product.sellingPrice * qty * 1.35).toFixed(2));
+        // Đảm bảo logic tính tổng tiền cũng theo logic giá phân tầng (USD)
+        const original = product.originalPrice !== undefined ? product.originalPrice : 0;
+        let calculatedSellingPrice;
+        if (original < 0.4) {
+            calculatedSellingPrice = parseFloat((original * 2).toFixed(2));
+        } else {
+            calculatedSellingPrice = parseFloat((original * 1.4).toFixed(2));
+        }
+        const totalCharge = parseFloat((calculatedSellingPrice * qty).toFixed(2));
 
         if (user.balance < totalCharge) {
             await session.abortTransaction();

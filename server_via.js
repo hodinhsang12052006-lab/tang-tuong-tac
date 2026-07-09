@@ -103,7 +103,12 @@ app.get('/api/get-via-products', async (req, res) => {
         const structuredCategories = data.categories.map(category => {
             const products = (category.products || []).map(p => {
                 const originalPrice = parseFloat(p.price || 0);
-                const sellingPriceVND = originalPrice * 1.4 * 1.35; // Markup 40% * 1.35 (logic tăng giá 35%)
+                let sellingPriceVND;
+                if (originalPrice < 10000) {
+                    sellingPriceVND = originalPrice * 2; // Tăng giá 100% nếu dưới 10.000đ
+                } else {
+                    sellingPriceVND = originalPrice * 1.4; // Tăng giá 40% nếu từ 10.000đ trở lên
+                }
                 const sellingPriceUSD = parseFloat((sellingPriceVND / EXCHANGE_RATE).toFixed(3)); // Quy đổi USD
 
                 return {
@@ -192,7 +197,12 @@ app.post('/api/buy-via', verifyUser, async (req, res) => {
         }
 
         const originalPriceVND = parseFloat(targetProduct.price || 0);
-        const sellingPriceVND = originalPriceVND * 1.4 * 1.35; // Markup 40% * 1.35 (logic tăng giá 35%)
+        let sellingPriceVND;
+        if (originalPriceVND < 10000) {
+            sellingPriceVND = originalPriceVND * 2;
+        } else {
+            sellingPriceVND = originalPriceVND * 1.4;
+        }
         const totalChargeUSD = parseFloat(((sellingPriceVND * qty) / EXCHANGE_RATE).toFixed(2));
 
         // Đối chiếu số dư ví
