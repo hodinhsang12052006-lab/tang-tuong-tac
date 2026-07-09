@@ -1207,8 +1207,16 @@
                     body: JSON.stringify({ emailOrPhone: identifier, password })
                 });
 
-                const data = await res.json();
-                if (data.success) {
+                let data;
+                const contentType = res.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    data = await res.json();
+                } else {
+                    const text = await res.text();
+                    throw new Error(`Server status ${res.status}: ${text.substring(0, 150)}`);
+                }
+
+                if (res.ok && data.success) {
                     messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-green-500/10 text-green-400 border border-green-500/20";
                     messageBox.textContent = "Đăng nhập thành công! Đang chuyển hướng...";
                     messageBox.classList.remove('hidden');
@@ -1226,12 +1234,13 @@
                     }, 1000);
                 } else {
                     messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
-                    messageBox.textContent = data.message;
+                    messageBox.textContent = data.message || `Lỗi đăng nhập (Mã: ${res.status})`;
                     messageBox.classList.remove('hidden');
                 }
             } catch (err) {
+                console.error('[Login Failure Details]', err);
                 messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
-                messageBox.textContent = "Lỗi kết nối mạng, vui lòng thử lại sau.";
+                messageBox.textContent = `Lỗi kết nối mạng: ${err.message || err}`;
                 messageBox.classList.remove('hidden');
             }
         }
@@ -1268,8 +1277,16 @@
                     body: JSON.stringify({ fullName, username, email, phone, password, confirmPassword })
                 });
 
-                const data = await res.json();
-                if (data.success) {
+                let data;
+                const contentType = res.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    data = await res.json();
+                } else {
+                    const text = await res.text();
+                    throw new Error(`Server status ${res.status}: ${text.substring(0, 150)}`);
+                }
+
+                if (res.ok && data.success) {
                     messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-green-500/10 text-green-400 border border-green-500/20";
                     messageBox.textContent = data.message + " Đang chuyển hướng...";
                     messageBox.classList.remove('hidden');
@@ -1282,12 +1299,13 @@
                     }, 1500);
                 } else {
                     messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
-                    messageBox.textContent = data.message;
+                    messageBox.textContent = data.message || `Lỗi đăng ký (Mã: ${res.status})`;
                     messageBox.classList.remove('hidden');
                 }
             } catch (err) {
+                console.error('[Register Failure Details]', err);
                 messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
-                messageBox.textContent = "Lỗi kết nối mạng, vui lòng thử lại sau.";
+                messageBox.textContent = `Lỗi kết nối mạng: ${err.message || err}`;
                 messageBox.classList.remove('hidden');
             }
         }
