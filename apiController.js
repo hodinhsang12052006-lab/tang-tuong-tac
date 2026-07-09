@@ -8,7 +8,7 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
-const { User, Service, Order, Transaction, ViaProduct, ViaOrder } = require('./models');
+const { User, Service, Order, Transaction, ViaProduct, ViaOrder, SystemConfig } = require('./models');
 
 // Bộ nhớ đệm (Cache) cho API lấy danh sách dịch vụ (được làm mới sau 5 phút)
 let servicesCache = null;
@@ -153,8 +153,19 @@ async function placeOrder(req, res) {
             return res.status(400).json({ success: false, message: 'Dịch vụ này hiện đang tạm đóng' });
         }
 
-        // 3. Tính toán tổng chi phí đơn hàng của khách (sellingPrice tính theo 1,000 lượt) - Nhân 1.35 logic tăng giá 35%
-        const totalCharge = parseFloat(((service.sellingPrice / 1000) * quantity * 1.35).toFixed(4));
+        // 3. Tính toán tổng chi phí đơn hàng của khách dựa trên tỉ lệ Markup từ cấu hình Admin
+        let globalMarkup = 50; // Giá trị mặc định
+        try {
+            const config = await SystemConfig.findOne({ key: 'global_markup' }).session(session);
+            if (config && config.value !== undefined) {
+                globalMarkup = parseFloat(config.value);
+            }
+        } catch (dbErr) {
+            console.error('[Place Order] Lỗi tải global_markup:', dbErr.message);
+        }
+
+        const calculatedSellingPrice = parseFloat((service.originalPrice + (service.originalPrice * globalMarkup / 100)).toFixed(4));
+        const totalCharge = parseFloat(((calculatedSellingPrice / 1000) * quantity).toFixed(4));
 
         // 4. Tìm kiếm khách hàng và kiểm tra số dư (balance)
         const user = await User.findById(activeUserId).session(session);
@@ -288,7 +299,20 @@ async function getServices(req, res) {
     try {
         const now = Date.now();
 
-        // 1. Kiểm tra nếu DB không kết nối, nạp trực tiếp từ file cấu hình JSON để chống sập
+        // 1. Lấy phần trăm chênh lệch (markup) từ Database
+        let globalMarkup = 50; // Giá trị mặc định
+        try {
+            if (mongoose.connection.readyState === 1) {
+                const config = await SystemConfig.findOne({ key: 'global_markup' });
+                if (config && config.value !== undefined) {
+                    globalMarkup = parseFloat(config.value);
+                }
+            }
+        } catch (dbErr) {
+            console.error('[Get Services] Lỗi tải global_markup:', dbErr.message);
+        }
+
+        // 2. Kiểm tra nếu DB không kết nối, nạp trực tiếp từ file cấu hình JSON để chống sập
         if (mongoose.connection.readyState !== 1) {
             console.warn('[Get Services] Database không ở trạng thái Connected (ReadyState !== 1). Đọc trực tiếp từ file cấu hình services_config.json.');
             try {
@@ -296,13 +320,16 @@ async function getServices(req, res) {
                 if (fs.existsSync(configPath)) {
                     const raw = fs.readFileSync(configPath, 'utf8');
                     const services = JSON.parse(raw);
-                    // Quét qua mảng dịch vụ và nhân thuộc tính giá với 1.35
+                    // Áp dụng công thức: Giá_bán = Giá_gốc + (Giá_gốc * Phần_trăm_chênh_lệch / 100)
                     const servicesWithBump = services.map(s => {
                         const obj = { ...s };
-                        if (obj.sellingPrice !== undefined) obj.sellingPrice = parseFloat((obj.sellingPrice * 1.35).toFixed(4));
-                        if (obj.selling_price !== undefined) obj.selling_price = parseFloat((obj.selling_price * 1.35).toFixed(4));
-                        if (obj.rate !== undefined) obj.rate = parseFloat((obj.rate * 1.35).toFixed(4));
-                        if (obj.price !== undefined) obj.price = parseFloat((obj.price * 1.35).toFixed(4));
+                        const original = obj.originalPrice !== undefined ? obj.originalPrice : (obj.original_price || 0);
+                        const sellingPrice = parseFloat((original + (original * globalMarkup / 100)).toFixed(4));
+                        obj.sellingPrice = sellingPrice;
+                        obj.markupPercent = globalMarkup;
+                        if (obj.selling_price !== undefined) obj.selling_price = sellingPrice;
+                        if (obj.rate !== undefined) obj.rate = sellingPrice;
+                        if (obj.price !== undefined) obj.price = sellingPrice;
                         return obj;
                     });
                     return res.status(200).json({ success: true, data: servicesWithBump });
@@ -314,7 +341,7 @@ async function getServices(req, res) {
             return res.status(200).json({ success: true, data: [] });
         }
 
-        // 2. Nếu DB kết nối bình thường, kiểm tra cache trước
+        // 3. Nếu DB kết nối bình thường, kiểm tra cache trước
         if (servicesCache && (now - cacheTime < CACHE_TTL)) {
             res.setHeader('X-Cache', 'HIT');
             res.setHeader('Cache-Control', 'public, max-age=300'); // Trình duyệt cũng được cache 5 phút
@@ -324,7 +351,7 @@ async function getServices(req, res) {
             });
         }
 
-        // 3. Tìm tất cả các dịch vụ đang Active từ Database
+        // 4. Tìm tất cả các dịch vụ đang Active từ Database
         let services = [];
         try {
             services = await Service.find({ status: true }).sort({ serviceId: 1 });
@@ -332,7 +359,7 @@ async function getServices(req, res) {
             console.error('[Get Services] Lỗi truy vấn DB:', dbFindErr.message);
         }
         
-        // 4. Nếu Database trống rỗng (0 dịch vụ), tự động nạp (seed) dịch vụ từ file cấu hình vào DB
+        // 5. Nếu Database trống rỗng (0 dịch vụ), tự động nạp (seed) dịch vụ từ file cấu hình vào DB
         if (services.length === 0) {
             console.log('[Get Services] Database trống. Tiến hành nạp (seed) dịch vụ từ services_config.json vào Database...');
             try {
@@ -350,13 +377,16 @@ async function getServices(req, res) {
             }
         }
 
-        // Quét qua mảng dịch vụ và nhân thuộc tính giá với 1.35
+        // Áp dụng công thức: Giá_bán = Giá_gốc + (Giá_gốc * Phần_trăm_chênh_lệch / 100)
         const servicesWithBump = services.map(s => {
             const obj = s.toObject ? s.toObject() : s;
-            if (obj.sellingPrice !== undefined) obj.sellingPrice = parseFloat((obj.sellingPrice * 1.35).toFixed(4));
-            if (obj.selling_price !== undefined) obj.selling_price = parseFloat((obj.selling_price * 1.35).toFixed(4));
-            if (obj.rate !== undefined) obj.rate = parseFloat((obj.rate * 1.35).toFixed(4));
-            if (obj.price !== undefined) obj.price = parseFloat((obj.price * 1.35).toFixed(4));
+            const original = obj.originalPrice !== undefined ? obj.originalPrice : (obj.original_price || 0);
+            const sellingPrice = parseFloat((original + (original * globalMarkup / 100)).toFixed(4));
+            obj.sellingPrice = sellingPrice;
+            obj.markupPercent = globalMarkup;
+            if (obj.selling_price !== undefined) obj.selling_price = sellingPrice;
+            if (obj.rate !== undefined) obj.rate = sellingPrice;
+            if (obj.price !== undefined) obj.price = sellingPrice;
             return obj;
         });
 
@@ -711,6 +741,44 @@ async function getAllViaOrders(req, res) {
     }
 }
 
+// Cấu hình lưu/lấy cấu hình Admin
+async function saveSettings(req, res) {
+    try {
+        const { key, value } = req.body;
+        if (!key || value === undefined) {
+            return res.status(400).json({ success: false, message: 'Dữ liệu cấu hình không hợp lệ.' });
+        }
+        await SystemConfig.findOneAndUpdate(
+            { key },
+            { key, value },
+            { upsert: true, new: true }
+        );
+        if (key === 'global_markup') {
+            // Xóa cache dịch vụ để lần sau load lại tính toán theo tỉ lệ mới
+            servicesCache = null;
+            cacheTime = 0;
+        }
+        return res.status(200).json({ success: true, message: 'Lưu cấu hình thành công.' });
+    } catch (error) {
+        console.error('[Save Settings Error]', error);
+        return res.status(500).json({ success: false, message: 'Lỗi máy chủ khi lưu cấu hình.' });
+    }
+}
+
+async function getSetting(req, res) {
+    try {
+        const { key } = req.params;
+        const config = await SystemConfig.findOne({ key });
+        return res.status(200).json({
+            success: true,
+            data: config ? config.value : null
+        });
+    } catch (error) {
+        console.error('[Get Setting Error]', error);
+        return res.status(500).json({ success: false, message: 'Lỗi máy chủ khi lấy cấu hình.' });
+    }
+}
+
 module.exports = {
     syncAndMarkup,
     placeOrder,
@@ -724,5 +792,7 @@ module.exports = {
     getViaProducts,
     buyVia,
     getMyViaOrders,
-    getAllViaOrders
+    getAllViaOrders,
+    saveSettings,
+    getSetting
 };

@@ -1028,6 +1028,59 @@
         }
 
 
+        // --- 12.1. Cài đặt Markup Toàn cục ---
+        async function applyGlobalMarkup() {
+            const markupInput = document.getElementById('global-markup');
+            const markup = parseFloat(markupInput.value);
+            if (isNaN(markup) || markup < 0) {
+                alert('Tỉ lệ markup không hợp lệ.');
+                return;
+            }
+
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) {
+                alert('Vui lòng đăng nhập lại.');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ key: 'global_markup', value: markup })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Lưu tỉ lệ chênh lệch giá (markup) thành công!');
+                    fetchServices(); // Cập nhật lại danh sách giá hiển thị
+                } else {
+                    alert('Lỗi khi áp dụng markup: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Lỗi kết nối khi lưu cài đặt.');
+            }
+        }
+
+        async function fetchSettings() {
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+            try {
+                const res = await fetch('/api/admin/settings/global_markup', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.data !== null && data.data !== undefined) {
+                    document.getElementById('global-markup').value = data.data;
+                }
+            } catch (err) {
+                console.error('Lỗi khi tải cấu hình:', err);
+            }
+        }
+
 
         // --- 13. Initialization on Load ---
         window.addEventListener('DOMContentLoaded', async () => {
@@ -1038,7 +1091,8 @@
                 fetchServices(),
                 fetchAdminUsers(),
                 fetchAdminOrders(),
-                fetchPendingDeposits()
+                fetchPendingDeposits(),
+                fetchSettings()
             ]).catch(err => console.error('Lỗi khi tải trước dữ liệu Admin:', err));
 
             // Mobile Sidebar toggle logic

@@ -16,7 +16,7 @@ const rateLimit = require('express-rate-limit');
 // Import các Module Backend tự thiết lập ở các giai đoạn trước
 const { User, Service } = require('./models');
 const { verifyUser, verifyAdmin } = require('./authMiddleware');
-const { syncAndMarkup, placeOrder, getMyOrders, getAllOrders, getServices, getAllUsers, updateOrderStatus, getAdminStats, syncViaProducts, getViaProducts, buyVia, getMyViaOrders, getAllViaOrders } = require('./apiController');
+const { syncAndMarkup, placeOrder, getMyOrders, getAllOrders, getServices, getAllUsers, updateOrderStatus, getAdminStats, syncViaProducts, getViaProducts, buyVia, getMyViaOrders, getAllViaOrders, saveSettings, getSetting } = require('./apiController');
 const { requestDeposit, approveDeposit, rejectDeposit, getUserTransactions, getAllPendingTransactions } = require('./paymentController');
 const { register, login, getProfile } = require('./authController');
 const { initStatusCronJob } = require('./cronJob');
@@ -217,6 +217,10 @@ app.get('/api/admin/via-orders', verifyUser, verifyAdmin, getAllViaOrders);
 // Tuyến đồng bộ API và Markup giá: Yêu cầu quyền Admin (được bảo vệ kép)
 // POST /api/admin/sync-services
 app.post('/api/admin/sync-services', verifyUser, verifyAdmin, syncAndMarkup);
+
+// Cấu hình Hệ thống (Admin settings)
+app.post('/api/admin/settings', verifyUser, verifyAdmin, saveSettings);
+app.get('/api/admin/settings/:key', verifyUser, getSetting);
 
 // Tuyến tỷ giá USD/VND (Binance + 3% markup)
 app.get('/api/config/exchange-rate', (req, res) => {

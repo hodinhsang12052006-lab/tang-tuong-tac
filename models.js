@@ -316,6 +316,30 @@ const Transaction = mongoose.model('Transaction', TransactionSchema);
 const ViaProduct = mongoose.model('ViaProduct', ViaProductSchema);
 const ViaOrder = mongoose.model('ViaOrder', ViaOrderSchema);
 
+const SystemConfigSchema = new mongoose.Schema({
+    key: {
+        type: String,
+        required: [true, 'Khóa cấu hình là bắt buộc'],
+        unique: true,
+        trim: true
+    },
+    value: {
+        type: mongoose.Schema.Types.Mixed,
+        required: [true, 'Giá trị cấu hình là bắt buộc']
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+SystemConfigSchema.pre('save', function(next) {
+    this.updatedAt = Date.now();
+    next();
+});
+
+const SystemConfig = mongoose.model('SystemConfig', SystemConfigSchema);
+
 // Xuất các thực thể models
 module.exports = {
     User,
@@ -323,5 +347,6 @@ module.exports = {
     Order,
     Transaction,
     ViaProduct,
-    ViaOrder
+    ViaOrder,
+    SystemConfig
 };
