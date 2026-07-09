@@ -54,9 +54,9 @@ async function runTests() {
                 console.log(`   - Giá bán đã Markup 40% (VND): ${firstProduct.priceVND} đ`);
                 console.log(`   - Giá quy đổi USD: $${firstProduct.priceUSD}`);
                 
-                const expectedMarkupPrice = firstProduct.originalPriceVND * 1.4;
+                const expectedMarkupPrice = firstProduct.originalPriceVND * 1.4 * 1.35;
                 if (Math.abs(firstProduct.priceVND - expectedMarkupPrice) < 0.01) {
-                    console.log('🎉 CÔNG THỨC MARKUP 40% ĐẠT TIÊU CHUẨN XÁC THỰC!');
+                    console.log('🎉 CÔNG THỨC MARKUP 40% * 1.35 ĐẠT TIÊU CHUẨN XÁC THỰC!');
                 } else {
                     console.error('❌ Tính toán Markup sai lệch!');
                 }
@@ -146,9 +146,9 @@ async function runTests() {
             console.log(`   - Giá bán đã Markup (VND): ${firstProduct.priceVND} đ`);
             console.log(`   - Giá quy đổi USD: $${firstProduct.priceUSD}`);
             
-            const expectedMarkupPrice = firstProduct.originalPriceVND * 1.4;
+            const expectedMarkupPrice = firstProduct.originalPriceVND * 1.4 * 1.35;
             if (Math.abs(firstProduct.priceVND - expectedMarkupPrice) < 0.01) {
-                console.log('🎉 CÔNG THỨC MARKUP 40% ĐẠT CHUẨN XÁC CHÍNH XÁC!');
+                console.log('🎉 CÔNG THỨC MARKUP 40% * 1.35 ĐẠT CHUẨN XÁC CHÍNH XÁC!');
             } else {
                 throw new Error('Tính toán Markup sai lệch!');
             }

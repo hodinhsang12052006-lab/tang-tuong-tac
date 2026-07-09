@@ -153,8 +153,8 @@ async function placeOrder(req, res) {
             return res.status(400).json({ success: false, message: 'Dịch vụ này hiện đang tạm đóng' });
         }
 
-        // 3. Tính toán tổng chi phí đơn hàng của khách (sellingPrice tính theo 1,000 lượt)
-        const totalCharge = parseFloat(((service.sellingPrice / 1000) * quantity).toFixed(4));
+        // 3. Tính toán tổng chi phí đơn hàng của khách (sellingPrice tính theo 1,000 lượt) - Nhân 1.35 logic tăng giá 35%
+        const totalCharge = parseFloat(((service.sellingPrice / 1000) * quantity * 1.35).toFixed(4));
 
         // 4. Tìm kiếm khách hàng và kiểm tra số dư (balance)
         const user = await User.findById(activeUserId).session(session);
@@ -174,7 +174,7 @@ async function placeOrder(req, res) {
 
         // Bước b: Trừ tiền khách hàng (an toàn trong transaction session)
         user.balance = parseFloat((user.balance - totalCharge).toFixed(4));
-        await user.save({ session });
+        await user.save({ session, validateBeforeSave: false });
 
         // Tạo bản ghi đơn hàng tạm thời trong Database cục bộ
         const localOrder = new Order({
@@ -296,7 +296,16 @@ async function getServices(req, res) {
                 if (fs.existsSync(configPath)) {
                     const raw = fs.readFileSync(configPath, 'utf8');
                     const services = JSON.parse(raw);
-                    return res.status(200).json({ success: true, data: services });
+                    // Quét qua mảng dịch vụ và nhân thuộc tính giá với 1.35
+                    const servicesWithBump = services.map(s => {
+                        const obj = { ...s };
+                        if (obj.sellingPrice !== undefined) obj.sellingPrice = parseFloat((obj.sellingPrice * 1.35).toFixed(4));
+                        if (obj.selling_price !== undefined) obj.selling_price = parseFloat((obj.selling_price * 1.35).toFixed(4));
+                        if (obj.rate !== undefined) obj.rate = parseFloat((obj.rate * 1.35).toFixed(4));
+                        if (obj.price !== undefined) obj.price = parseFloat((obj.price * 1.35).toFixed(4));
+                        return obj;
+                    });
+                    return res.status(200).json({ success: true, data: servicesWithBump });
                 }
             } catch (jsonErr) {
                 console.error('[Get Services] Lỗi đọc file cấu hình dự phòng:', jsonErr.message);
@@ -341,15 +350,25 @@ async function getServices(req, res) {
             }
         }
 
+        // Quét qua mảng dịch vụ và nhân thuộc tính giá với 1.35
+        const servicesWithBump = services.map(s => {
+            const obj = s.toObject ? s.toObject() : s;
+            if (obj.sellingPrice !== undefined) obj.sellingPrice = parseFloat((obj.sellingPrice * 1.35).toFixed(4));
+            if (obj.selling_price !== undefined) obj.selling_price = parseFloat((obj.selling_price * 1.35).toFixed(4));
+            if (obj.rate !== undefined) obj.rate = parseFloat((obj.rate * 1.35).toFixed(4));
+            if (obj.price !== undefined) obj.price = parseFloat((obj.price * 1.35).toFixed(4));
+            return obj;
+        });
+
         // Cập nhật bộ nhớ đệm
-        servicesCache = services;
+        servicesCache = servicesWithBump;
         cacheTime = now;
 
         res.setHeader('X-Cache', 'MISS');
         res.setHeader('Cache-Control', 'public, max-age=300');
         return res.status(200).json({
             success: true,
-            data: services
+            data: servicesWithBump
         });
     } catch (error) {
         console.error('[Get Services Error]', error);
@@ -563,7 +582,13 @@ async function syncViaProducts(req, res) {
 async function getViaProducts(req, res) {
     try {
         const products = await ViaProduct.find({ status: true }).sort({ category: 1, sellingPrice: 1 });
-        return res.status(200).json({ success: true, data: products });
+        // Quét qua mảng sản phẩm và nhân thuộc tính giá với 1.35 trước khi trả về
+        const mappedProducts = products.map(p => {
+            const obj = p.toObject ? p.toObject() : p;
+            if (obj.sellingPrice !== undefined) obj.sellingPrice = parseFloat((obj.sellingPrice * 1.35).toFixed(2));
+            return obj;
+        });
+        return res.status(200).json({ success: true, data: mappedProducts });
     } catch (error) {
         console.error('[Get Via Products Error]', error);
         return res.status(500).json({ success: false, message: 'Lỗi máy chủ khi lấy danh sách sản phẩm Via.' });
@@ -604,7 +629,8 @@ async function buyVia(req, res) {
             return res.status(400).json({ success: false, message: 'Số lượng hàng trong kho không đủ.' });
         }
 
-        const totalCharge = parseFloat((product.sellingPrice * qty).toFixed(2));
+        // Đảm bảo logic tính tổng tiền cũng nhân với 1.35
+        const totalCharge = parseFloat((product.sellingPrice * qty * 1.35).toFixed(2));
 
         if (user.balance < totalCharge) {
             await session.abortTransaction();
@@ -614,7 +640,7 @@ async function buyVia(req, res) {
 
         // Trừ tiền user
         user.balance = parseFloat((user.balance - totalCharge).toFixed(2));
-        await user.save({ session });
+        await user.save({ session, validateBeforeSave: false });
 
         // Trừ kho
         product.stock -= qty;

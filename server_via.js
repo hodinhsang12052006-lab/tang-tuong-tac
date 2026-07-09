@@ -103,7 +103,7 @@ app.get('/api/get-via-products', async (req, res) => {
         const structuredCategories = data.categories.map(category => {
             const products = (category.products || []).map(p => {
                 const originalPrice = parseFloat(p.price || 0);
-                const sellingPriceVND = originalPrice * 1.4; // Markup 40%
+                const sellingPriceVND = originalPrice * 1.4 * 1.35; // Markup 40% * 1.35 (logic tăng giá 35%)
                 const sellingPriceUSD = parseFloat((sellingPriceVND / EXCHANGE_RATE).toFixed(3)); // Quy đổi USD
 
                 return {
@@ -192,7 +192,7 @@ app.post('/api/buy-via', verifyUser, async (req, res) => {
         }
 
         const originalPriceVND = parseFloat(targetProduct.price || 0);
-        const sellingPriceVND = originalPriceVND * 1.4;
+        const sellingPriceVND = originalPriceVND * 1.4 * 1.35; // Markup 40% * 1.35 (logic tăng giá 35%)
         const totalChargeUSD = parseFloat(((sellingPriceVND * qty) / EXCHANGE_RATE).toFixed(2));
 
         // Đối chiếu số dư ví
@@ -204,7 +204,7 @@ app.post('/api/buy-via', verifyUser, async (req, res) => {
 
         // Trừ tiền
         user.balance = parseFloat((user.balance - totalChargeUSD).toFixed(2));
-        await user.save({ session });
+        await user.save({ session, validateBeforeSave: false });
 
         // Tạo định dạng tài khoản bàn giao giả lập UID|Pass|2FA|Cookie
         const accounts = [];
