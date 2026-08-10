@@ -466,13 +466,13 @@
                         <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple">
                             <i class="fa-solid fa-code text-xl"></i>
                         </div>
-                        <h3 class="font-heading font-bold text-lg text-white">API Tích Hợp Mạnh Mẽ</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light">
-                            Cung cấp tài liệu API toàn diện với tốc độ xử lý nhanh, ổn định cho các đối tác muốn tự xây dựng SMM Panel.
+                        <h3 class="font-heading font-bold text-lg text-white" data-i18n="feature3.title">Powerful API integration</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="feature3.desc">
+                            Comprehensive API support with fast processing for partners building their own panel stack.
                         </p>
                     </div>
                     <div class="pt-6 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-neon-purple font-semibold">
-                        <span>Tài liệu API</span>
+                        <span data-i18n="feature3.link">API docs</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </div>
                 </div>
@@ -483,13 +483,13 @@
                         <div class="w-12 h-12 rounded-xl bg-neon-pink/10 border border-neon-pink/20 flex items-center justify-center text-neon-pink">
                             <i class="fa-solid fa-headset text-xl"></i>
                         </div>
-                        <h3 class="font-heading font-bold text-lg text-white">Hỗ Trợ Chuyên Nghiệp 24/7</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light">
-                            Đội ngũ chuyên viên giàu kinh nghiệm trực tuyến xuyên suốt để xử lý mọi thắc mắc và vấn đề kỹ thuật của khách hàng.
+                        <h3 class="font-heading font-bold text-lg text-white" data-i18n="feature4.title">Professional 24/7 support</h3>
+                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="feature4.desc">
+                            Experienced specialists stay available to help with operational questions and technical issues.
                         </p>
                     </div>
                     <div class="pt-6 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-neon-pink font-semibold">
-                        <span>Tạo ticket hỗ trợ</span>
+                        <span data-i18n="feature4.link">Open support ticket</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </div>
                 </div>
@@ -1249,10 +1249,23 @@
                 const key = element.getAttribute('data-i18n');
                 const value = translations[locale][key];
                 if (!value) return;
-                if (value.includes('<i')) {
-                    element.innerHTML = value;
-                } else {
-                    element.textContent = value;
+                element.innerHTML = value;
+            });
+
+            const placeholderMap = {
+                'login-identifier': 'auth.login.identifierPlaceholder',
+                'register-fullname': 'auth.register.fullnamePlaceholder',
+                'register-username': 'auth.register.usernamePlaceholder',
+                'register-email': 'auth.register.emailPlaceholder',
+                'register-phone': 'auth.register.phonePlaceholder',
+                'register-password': 'auth.register.passwordPlaceholder',
+                'register-confirm-password': 'auth.register.confirmPasswordPlaceholder'
+            };
+
+            Object.entries(placeholderMap).forEach(([id, key]) => {
+                const input = document.getElementById(id);
+                if (input && translations[locale][key]) {
+                    input.placeholder = translations[locale][key];
                 }
             });
 
