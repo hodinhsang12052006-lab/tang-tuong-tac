@@ -498,75 +498,83 @@
     </section>
 
     <!-- How It Works Section -->
-    <section id="how-it-works" class="py-24 md:py-32 relative z-10 bg-dark-900/40 border-y border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center space-y-4 mb-16">
-                <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neon-purple/10 border border-neon-purple/30 text-xs font-semibold tracking-wider text-neon-purple uppercase">
-                    Quy Trình Sử Dụng
+    <section id="how-it-works" class="py-24 md:py-32 relative z-10 bg-dark-900/40 border-y border-white/5 overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-16 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-neon-blue/8 blur-3xl rounded-full"></div>
+            <div class="absolute bottom-0 right-0 w-72 h-72 bg-neon-purple/10 blur-3xl rounded-full"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center space-y-5 mb-16 md:mb-20 max-w-3xl mx-auto reveal-on-scroll">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neon-purple/10 border border-neon-purple/25 text-[11px] font-semibold tracking-[0.22em] text-neon-purple uppercase">
+                    <span class="w-2 h-2 rounded-full bg-neon-purple shadow-[0_0_12px_rgba(168,85,247,0.85)]"></span>
+                    How It Works
                 </div>
-                <h2 class="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight">
-                    Chỉ 3 Bước Đơn Giản <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">Để Bắt Đầu</span>
+                <h2 class="font-heading font-extrabold text-4xl sm:text-5xl md:text-6xl text-white tracking-[-0.03em] leading-[1.05]">
+                    Start in <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500">3 Simple Steps</span>
                 </h2>
-                <p class="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
-                    Thiết lập chiến dịch truyền thông của bạn chưa bao giờ dễ dàng và nhanh chóng như thế.
+                <p class="text-gray-300/88 text-base sm:text-lg md:text-[19px] leading-8 max-w-2xl mx-auto font-normal">
+                    Launch your media campaign instantly with a streamlined onboarding flow built for speed, clarity, and professional execution.
                 </p>
             </div>
 
             <div class="relative">
-                <!-- Connective dotted line (Desktop) -->
-                <div class="hidden lg:block absolute top-1/2 left-[15%] right-[15%] h-0.5 border-t border-dashed border-white/25 transform -translate-y-1/2 z-0"></div>
+                <div class="hidden xl:block absolute left-[16%] right-[16%] top-[72px] h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
-                    <!-- Step 1 -->
-                    <div class="flex flex-col items-center text-center space-y-4 group">
-                        <div class="relative">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-neon-blue to-neon-purple p-[2px] shadow-lg shadow-neon-blue/20 group-hover:scale-105 transition-all duration-300">
-                                <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center text-white text-2xl font-bold">
-                                    01
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 xl:gap-8 relative z-10">
+                    <article class="process-card reveal-on-scroll group rounded-[28px] border border-white/10 bg-white/[0.04] backdrop-blur-xl p-7 md:p-8 shadow-[0_24px_80px_rgba(0,0,0,0.32)] transition-all duration-500 hover:-translate-y-2 hover:border-neon-blue/45 hover:shadow-[0_30px_90px_rgba(56,189,248,0.16)]">
+                        <div class="flex items-center justify-between gap-4 mb-7">
+                            <div class="relative">
+                                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-neon-blue via-sky-400 to-neon-purple p-[1.5px] shadow-[0_0_30px_rgba(59,130,246,0.28)]">
+                                    <div class="w-full h-full rounded-[22px] bg-dark-950/95 flex items-center justify-center">
+                                        <span class="font-heading text-[26px] font-extrabold tracking-[-0.03em] text-white">01</span>
+                                    </div>
                                 </div>
+                                <div class="absolute -inset-3 rounded-[30px] border border-neon-blue/15 opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"></div>
                             </div>
-                            <!-- Ring overlay -->
-                            <div class="absolute -inset-2 rounded-3xl border border-neon-blue/20 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"></div>
+                            <span class="text-[11px] uppercase tracking-[0.24em] text-neon-blue/85 font-semibold">Account setup</span>
                         </div>
-                        <h3 class="font-heading font-bold text-xl text-white mt-4">Đăng Ký Tài Khoản</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xs font-light">
-                            Tạo tài khoản nhanh chóng chỉ trong 30 giây bằng cách điền các thông tin cơ bản, bảo mật tuyệt đối.
+                        <h3 class="font-heading text-[28px] leading-[1.1] tracking-[-0.03em] font-bold text-white mb-4">Create Account</h3>
+                        <p class="text-[15px] leading-7 text-gray-300/82 max-w-md">
+                            Create your secure account in under 30 seconds with basic details. Total privacy assured.
                         </p>
-                    </div>
+                    </article>
 
-                    <!-- Step 2 -->
-                    <div class="flex flex-col items-center text-center space-y-4 group">
-                        <div class="relative">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-neon-cyan to-neon-blue p-[2px] shadow-lg shadow-neon-cyan/20 group-hover:scale-105 transition-all duration-300">
-                                <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center text-white text-2xl font-bold">
-                                    02
+                    <article class="process-card reveal-on-scroll group rounded-[28px] border border-white/10 bg-white/[0.04] backdrop-blur-xl p-7 md:p-8 shadow-[0_24px_80px_rgba(0,0,0,0.32)] transition-all duration-500 hover:-translate-y-2 hover:border-neon-cyan/45 hover:shadow-[0_30px_90px_rgba(34,211,238,0.16)] xl:mt-10" style="transition-delay: 120ms;">
+                        <div class="flex items-center justify-between gap-4 mb-7">
+                            <div class="relative">
+                                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-neon-cyan via-sky-400 to-neon-blue p-[1.5px] shadow-[0_0_30px_rgba(34,211,238,0.28)]">
+                                    <div class="w-full h-full rounded-[22px] bg-dark-950/95 flex items-center justify-center">
+                                        <span class="font-heading text-[26px] font-extrabold tracking-[-0.03em] text-white">02</span>
+                                    </div>
                                 </div>
+                                <div class="absolute -inset-3 rounded-[30px] border border-neon-cyan/15 opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"></div>
                             </div>
-                            <!-- Ring overlay -->
-                            <div class="absolute -inset-2 rounded-3xl border border-neon-cyan/20 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"></div>
+                            <span class="text-[11px] uppercase tracking-[0.24em] text-neon-cyan/85 font-semibold">Payments</span>
                         </div>
-                        <h3 class="font-heading font-bold text-xl text-white mt-4">Nạp Tiền Thông Minh</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xs font-light">
-                            Nạp tiền tự động 100% qua Ngân hàng, Ví MoMo hoặc tiền mã hóa (USDT). Tích điểm thưởng lớn cho mỗi lần nạp.
+                        <h3 class="font-heading text-[28px] leading-[1.1] tracking-[-0.03em] font-bold text-white mb-4">Smart Deposits</h3>
+                        <p class="text-[15px] leading-7 text-gray-300/82 max-w-md">
+                            Automated deposits via Bank, MoMo, or Cryptocurrencies (USDT). Earn reward points with every top-up.
                         </p>
-                    </div>
+                    </article>
 
-                    <!-- Step 3 -->
-                    <div class="flex flex-col items-center text-center space-y-4 group">
-                        <div class="relative">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-neon-purple to-neon-pink p-[2px] shadow-lg shadow-neon-pink/20 group-hover:scale-105 transition-all duration-300">
-                                <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center text-white text-2xl font-bold">
-                                    03
+                    <article class="process-card reveal-on-scroll group rounded-[28px] border border-white/10 bg-white/[0.04] backdrop-blur-xl p-7 md:p-8 shadow-[0_24px_80px_rgba(0,0,0,0.32)] transition-all duration-500 hover:-translate-y-2 hover:border-neon-pink/45 hover:shadow-[0_30px_90px_rgba(236,72,153,0.16)]">
+                        <div class="flex items-center justify-between gap-4 mb-7">
+                            <div class="relative">
+                                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-neon-purple via-fuchsia-400 to-neon-pink p-[1.5px] shadow-[0_0_30px_rgba(217,70,239,0.26)]">
+                                    <div class="w-full h-full rounded-[22px] bg-dark-950/95 flex items-center justify-center">
+                                        <span class="font-heading text-[26px] font-extrabold tracking-[-0.03em] text-white">03</span>
+                                    </div>
                                 </div>
+                                <div class="absolute -inset-3 rounded-[30px] border border-neon-pink/15 opacity-0 scale-95 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"></div>
                             </div>
-                            <!-- Ring overlay -->
-                            <div class="absolute -inset-2 rounded-3xl border border-neon-pink/20 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"></div>
+                            <span class="text-[11px] uppercase tracking-[0.24em] text-neon-pink/85 font-semibold">Activation</span>
                         </div>
-                        <h3 class="font-heading font-bold text-xl text-white mt-4">Đặt Đơn & Trải Nghiệm</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-xs font-light">
-                            Lựa chọn dịch vụ phù hợp, nhập đường link và số lượng. Hệ thống sẽ ngay lập tức tự động chạy đơn hàng cho bạn.
+                        <h3 class="font-heading text-[28px] leading-[1.1] tracking-[-0.03em] font-bold text-white mb-4">Place Orders & Activate</h3>
+                        <p class="text-[15px] leading-7 text-gray-300/82 max-w-md">
+                            Choose your service, enter the link and quantity. Our system instantly and automatically processes your order.
                         </p>
-                    </div>
+                    </article>
                 </div>
             </div>
         </div>
