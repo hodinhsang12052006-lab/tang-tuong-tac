@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "smm-panel",
+      "url": "http://localhost:3005",
+      "port": 3005
+    }
+  ]
+}

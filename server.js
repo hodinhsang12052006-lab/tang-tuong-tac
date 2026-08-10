@@ -117,7 +117,15 @@ const globalLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-const authPaymentLimiter = rateLimit({
+const authLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 phút
+    max: 20,
+    message: { success: false, message: 'Too many authentication attempts. Please wait 1 minute and try again.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+const paymentLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 phút
     max: 10,
     message: { success: false, message: 'Bạn đang gửi yêu cầu quá nhanh. Vui lòng thử lại sau 1 phút.' },
@@ -181,12 +189,12 @@ app.get('/admin', (req, res) => {
 // ==========================================
 
 // Tuyến xác thực người dùng (Auth Register & Login)
-app.post('/api/auth/register', authPaymentLimiter, register);
-app.post('/api/auth/login', authPaymentLimiter, login);
+app.post('/api/auth/register', authLimiter, register);
+app.post('/api/auth/login', authLimiter, login);
 app.get('/api/auth/me', verifyUser, getProfile);
 
 // Tuyến nạp tiền thủ công (Gửi yêu cầu & Lịch sử cá nhân)
-app.post('/api/payments/request', authPaymentLimiter, verifyUser, requestDeposit);
+app.post('/api/payments/request', paymentLimiter, verifyUser, requestDeposit);
 app.get('/api/payments/my-transactions', verifyUser, getUserTransactions);
 app.get('/api/user/transactions', verifyUser, getUserTransactions);
 

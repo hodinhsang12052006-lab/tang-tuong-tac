@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitpawnetwork - Nền Tảng SMM Panel Tự Động Hàng Đầu</title>
+    <title>Bitpawnetwork - Professional SMM Growth Platform</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -169,40 +169,44 @@
 
                 <!-- Desktop Navigation Menu -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#hero" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
-                        Trang Chủ
+                    <a href="#hero" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2" data-i18n="nav.home">
+                        Home
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#features" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
-                        Dịch Vụ
+                    <a href="#features" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2" data-i18n="nav.services">
+                        Services
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#how-it-works" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
-                        Cách Hoạt Động
+                    <a href="#how-it-works" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2" data-i18n="nav.howItWorks">
+                        How it works
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#live-preview" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
-                        Bảng Giá
+                    <a href="#live-preview" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2" data-i18n="nav.pricing">
+                        Pricing
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#footer" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2">
-                        Liên Hệ
+                    <a href="#footer" class="text-gray-300 hover:text-white font-medium transition duration-200 relative group py-2" data-i18n="nav.contact">
+                        Contact
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-blue transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 </nav>
 
                 <!-- Authentication Buttons (Always show Login, show Register on sm and up) -->
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-gray-300 hover:text-white font-semibold transition-colors duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 text-xs sm:text-sm">
-                        Đăng Nhập
+                <div class="hidden md:flex items-center space-x-2 sm:space-x-4">
+                    <button id="lang-toggle" type="button" class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border border-white/10 bg-white/5 text-gray-200 hover:text-white hover:border-neon-cyan/40 text-xs sm:text-sm font-semibold transition-all duration-200">
+                        VI
+                    </button>
+                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-gray-300 hover:text-white font-semibold transition-colors duration-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 text-xs sm:text-sm" data-i18n="nav.login">
+                        Login
                     </a>
-                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="hidden sm:inline-block btn-neon-glow font-semibold text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-xs sm:text-sm tracking-wide">
-                        Đăng Ký Ngay
+                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="hidden sm:inline-block btn-neon-glow font-semibold text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-xs sm:text-sm tracking-wide" data-i18n="nav.register">
+                        Create account
                     </a>
                 </div>
 
                 <!-- Hamburger Button (Mobile) -->
-                <div class="md:hidden flex items-center ml-2">
+                <div class="md:hidden flex items-center ml-2 gap-2">
+                    <button id="mobile-lang-toggle" type="button" class="text-gray-200 hover:text-white focus:outline-none px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-semibold">VI</button>
                     <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 rounded-lg bg-white/5 border border-white/10" aria-label="Toggle Menu">
                         <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
                     </button>
@@ -213,17 +217,17 @@
         <!-- Mobile Menu Slider -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-white/10 bg-dark-950/95 backdrop-blur-xl transition-all duration-300">
             <div class="px-4 pt-2 pb-6 space-y-3">
-                <a href="#hero" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Trang Chủ</a>
-                <a href="#features" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Dịch Vụ</a>
-                <a href="#how-it-works" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Cách Hoạt Động</a>
-                <a href="#live-preview" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Bảng Giá</a>
-                <a href="#footer" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Liên Hệ</a>
+                <a href="#hero" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200" data-i18n="nav.home">Home</a>
+                <a href="#features" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200" data-i18n="nav.services">Services</a>
+                <a href="#how-it-works" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200" data-i18n="nav.howItWorks">How it works</a>
+                <a href="#live-preview" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200" data-i18n="nav.pricing">Pricing</a>
+                <a href="#footer" class="block px-3 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200" data-i18n="nav.contact">Contact</a>
                 <div class="pt-4 flex flex-col space-y-3 px-3">
-                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-center font-semibold text-gray-300 hover:text-white py-2.5 rounded-xl border border-white/10 hover:bg-white/5 transition duration-200">
-                        Đăng Nhập
+                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-center font-semibold text-gray-300 hover:text-white py-2.5 rounded-xl border border-white/10 hover:bg-white/5 transition duration-200" data-i18n="nav.login">
+                        Login
                     </a>
-                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="text-center font-semibold text-white py-2.5 rounded-xl bg-gradient-to-r from-neon-blue to-neon-cyan shadow-lg shadow-neon-blue/20">
-                        Đăng Ký Ngay
+                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="text-center font-semibold text-white py-2.5 rounded-xl bg-gradient-to-r from-neon-blue to-neon-cyan shadow-lg shadow-neon-blue/20" data-i18n="nav.register">
+                        Create account
                     </a>
                 </div>
             </div>
@@ -236,35 +240,50 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <!-- Left Side: Copywriting -->
                 <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full glass-panel border border-neon-cyan/20 text-xs font-semibold tracking-wider text-neon-cyan uppercase animate-pulse-slow">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full glass-panel border border-neon-cyan/20 text-xs font-semibold tracking-wider text-neon-cyan uppercase animate-pulse-slow" data-i18n="hero.badge">
                         <span class="flex h-2 w-2 relative">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
                           <span class="relative inline-flex rounded-full h-2 w-2 bg-neon-cyan"></span>
                         </span>
-                        <span>Đã kích hoạt hệ thống tự động V2.0</span>
+                        <span>Automation system V2.0 is live</span>
                     </div>
 
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 drop-shadow-md">
-                        Nền Tảng <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">SMM Panel</span> <br />
-                        Tự Động Hàng Đầu
+                        <span data-i18n="hero.title.prefix">Professional</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">SMM Panel</span> <br />
+                        <span data-i18n="hero.title.suffix">for modern growth teams</span>
                     </h1>
 
-                    <p class="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-                        Tăng trưởng nhanh chóng lượt Like, View, Follow và tương tác trên tất cả các nền tảng mạng xã hội: Facebook, TikTok, Instagram, Youtube. Hệ thống an toàn, bảo mật tuyệt đối, hoạt động 24/7/365.
+                    <p class="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light" data-i18n="hero.description">
+                        Scale likes, views, followers, and social proof across Facebook, TikTok, Instagram, and YouTube with a secure platform built for speed, stability, and 24/7 operations.
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="#how-it-works" class="w-full sm:w-auto btn-neon-glow text-center font-bold text-white px-8 py-4 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple shadow-lg shadow-neon-blue/20">
-                            Bắt Đầu Ngay <i class="fa-solid fa-arrow-trend-up ml-2"></i>
+                        <a href="#how-it-works" class="w-full sm:w-auto btn-neon-glow text-center font-bold text-white px-8 py-4 rounded-xl bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple shadow-lg shadow-neon-blue/20" data-i18n="hero.ctaPrimary">
+                            Get started <i class="fa-solid fa-arrow-trend-up ml-2"></i>
                         </a>
-                        <a href="#live-preview" class="w-full sm:w-auto text-center font-bold text-gray-300 hover:text-white px-8 py-4 rounded-xl border border-white/10 hover:border-neon-cyan/40 bg-white/5 hover:bg-white/10 transition-all duration-300 backdrop-blur-md">
-                            Xem Bảng Giá <i class="fa-solid fa-list ml-2"></i>
+                        <a href="#live-preview" class="w-full sm:w-auto text-center font-bold text-gray-300 hover:text-white px-8 py-4 rounded-xl border border-white/10 hover:border-neon-cyan/40 bg-white/5 hover:bg-white/10 transition-all duration-300 backdrop-blur-md" data-i18n="hero.ctaSecondary">
+                            View pricing <i class="fa-solid fa-list ml-2"></i>
                         </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto lg:mx-0">
+                        <div class="glass-panel border border-white/10 rounded-2xl px-4 py-4 text-left">
+                            <div class="text-xl font-bold text-white">24/7</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="hero.metrics.ops">Operations</div>
+                        </div>
+                        <div class="glass-panel border border-white/10 rounded-2xl px-4 py-4 text-left">
+                            <div class="text-xl font-bold text-white">Multi‑Platform</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="hero.metrics.channels">Facebook · TikTok · IG · YouTube</div>
+                        </div>
+                        <div class="glass-panel border border-white/10 rounded-2xl px-4 py-4 text-left">
+                            <div class="text-xl font-bold text-white">Secure</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="hero.metrics.security">Encrypted workflows</div>
+                        </div>
                     </div>
 
                     <!-- Client Trust Icons -->
                     <div class="pt-6 border-t border-white/5 flex flex-wrap items-center justify-center lg:justify-start gap-6 opacity-75">
-                        <span class="text-xs font-semibold tracking-widest text-gray-400 uppercase">Đối tác tin cậy:</span>
+                        <span class="text-xs font-semibold tracking-widest text-gray-400 uppercase" data-i18n="hero.trustedBy">Trusted channels:</span>
                         <div class="flex items-center space-x-6 text-xl text-gray-400">
                             <i class="fa-brands fa-tiktok hover:text-neon-cyan transition duration-200"></i>
                             <i class="fa-brands fa-facebook hover:text-neon-blue transition duration-200"></i>
@@ -998,6 +1017,74 @@
             }
         }
 
+        const translations = {
+            en: {
+                'nav.home': 'Home',
+                'nav.services': 'Services',
+                'nav.howItWorks': 'How it works',
+                'nav.pricing': 'Pricing',
+                'nav.contact': 'Contact',
+                'nav.login': 'Login',
+                'nav.register': 'Create account',
+                'hero.badge': 'Automation system V2.0 is live',
+                'hero.title.prefix': 'Professional',
+                'hero.title.suffix': 'for modern growth teams',
+                'hero.description': 'Scale likes, views, followers, and social proof across Facebook, TikTok, Instagram, and YouTube with a secure platform built for speed, stability, and 24/7 operations.',
+                'hero.ctaPrimary': 'Get started <i class="fa-solid fa-arrow-trend-up ml-2"></i>',
+                'hero.ctaSecondary': 'View pricing <i class="fa-solid fa-list ml-2"></i>',
+                'hero.metrics.ops': 'Operations',
+                'hero.metrics.channels': 'Facebook · TikTok · IG · YouTube',
+                'hero.metrics.security': 'Encrypted workflows',
+                'hero.trustedBy': 'Trusted channels:'
+            },
+            vi: {
+                'nav.home': 'Trang Chủ',
+                'nav.services': 'Dịch Vụ',
+                'nav.howItWorks': 'Cách Hoạt Động',
+                'nav.pricing': 'Bảng Giá',
+                'nav.contact': 'Liên Hệ',
+                'nav.login': 'Đăng Nhập',
+                'nav.register': 'Đăng Ký Ngay',
+                'hero.badge': 'Đã kích hoạt hệ thống tự động V2.0',
+                'hero.title.prefix': 'Nền Tảng',
+                'hero.title.suffix': 'tự động hàng đầu',
+                'hero.description': 'Tăng trưởng nhanh chóng lượt Like, View, Follow và tương tác trên tất cả các nền tảng mạng xã hội: Facebook, TikTok, Instagram, Youtube. Hệ thống an toàn, bảo mật tuyệt đối, hoạt động 24/7/365.',
+                'hero.ctaPrimary': 'Bắt Đầu Ngay <i class="fa-solid fa-arrow-trend-up ml-2"></i>',
+                'hero.ctaSecondary': 'Xem Bảng Giá <i class="fa-solid fa-list ml-2"></i>',
+                'hero.metrics.ops': 'Vận hành 24/7',
+                'hero.metrics.channels': 'Facebook · TikTok · IG · YouTube',
+                'hero.metrics.security': 'Luồng xử lý mã hóa',
+                'hero.trustedBy': 'Đối tác tin cậy:'
+            }
+        };
+
+        function applyLanguage(lang) {
+            const locale = translations[lang] ? lang : 'en';
+            document.documentElement.lang = locale;
+            localStorage.setItem('bitpaw_lang', locale);
+
+            document.querySelectorAll('[data-i18n]').forEach((element) => {
+                const key = element.getAttribute('data-i18n');
+                const value = translations[locale][key];
+                if (!value) return;
+                if (value.includes('<i')) {
+                    element.innerHTML = value;
+                } else {
+                    element.textContent = value;
+                }
+            });
+
+            const langToggle = document.getElementById('lang-toggle');
+            const mobileLangToggle = document.getElementById('mobile-lang-toggle');
+            if (langToggle) langToggle.textContent = locale === 'en' ? 'VI' : 'EN';
+            if (mobileLangToggle) mobileLangToggle.textContent = locale === 'en' ? 'VI' : 'EN';
+        }
+
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('bitpaw_lang') || 'en';
+            applyLanguage(currentLang === 'en' ? 'vi' : 'en');
+        }
+
         // --- 1. Dynamic Data Structure for Services (Tabs & Calculator) ---
         const servicesData = {
             facebook: [
@@ -1194,11 +1281,30 @@
             }
         }
 
+        let isLoginSubmitting = false;
+
         async function handleLogin(e) {
             e.preventDefault();
-            const identifier = document.getElementById('login-identifier').value;
+            if (isLoginSubmitting) return;
+
+            const identifier = document.getElementById('login-identifier').value.trim();
             const password = document.getElementById('login-password').value;
             const messageBox = document.getElementById('auth-message');
+            const form = document.getElementById('login-form');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonContent = submitButton.innerHTML;
+
+            if (!identifier || !password) {
+                messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
+                messageBox.textContent = "Please enter your email/phone and password.";
+                messageBox.classList.remove('hidden');
+                return;
+            }
+
+            isLoginSubmitting = true;
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-70', 'cursor-not-allowed');
+            submitButton.innerHTML = 'Signing in...';
 
             try {
                 const res = await fetchWithTimeout('/api/auth/login', {
@@ -1218,10 +1324,9 @@
 
                 if (res.ok && data.success) {
                     messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-green-500/10 text-green-400 border border-green-500/20";
-                    messageBox.textContent = "Đăng nhập thành công! Đang chuyển hướng...";
+                    messageBox.textContent = "Login successful. Redirecting...";
                     messageBox.classList.remove('hidden');
-                    
-                    // Save JWT token
+
                     localStorage.setItem('bitpaw_token', data.token);
                     localStorage.setItem('bitpaw_user', JSON.stringify(data.user));
 
@@ -1234,14 +1339,21 @@
                     }, 1000);
                 } else {
                     messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
-                    messageBox.textContent = data.message || `Lỗi đăng nhập (Mã: ${res.status})`;
+                    messageBox.textContent = res.status === 429
+                        ? 'Too many login attempts. Please wait 1 minute and try again.'
+                        : (data.message || `Login failed (Code: ${res.status})`);
                     messageBox.classList.remove('hidden');
                 }
             } catch (err) {
                 console.error('[Login Failure Details]', err);
                 messageBox.className = "mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-red-500/10 text-red-400 border border-red-500/20";
-                messageBox.textContent = `Lỗi kết nối mạng: ${err.message || err}`;
+                messageBox.textContent = `Network error: ${err.message || err}`;
                 messageBox.classList.remove('hidden');
+            } finally {
+                isLoginSubmitting = false;
+                submitButton.disabled = false;
+                submitButton.classList.remove('opacity-70', 'cursor-not-allowed');
+                submitButton.innerHTML = originalButtonContent;
             }
         }
 
@@ -1312,6 +1424,14 @@
 
         // --- 7. Initialization on Page Load ---
         window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('bitpaw_lang') || 'en';
+            applyLanguage(savedLang);
+
+            const langToggle = document.getElementById('lang-toggle');
+            const mobileLangToggle = document.getElementById('mobile-lang-toggle');
+            if (langToggle) langToggle.addEventListener('click', toggleLanguage);
+            if (mobileLangToggle) mobileLangToggle.addEventListener('click', toggleLanguage);
+
             // Load default SMM panel table
             switchTab('facebook');
             // Load calculator services
