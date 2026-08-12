@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitpawnetwork - Professional SMM Growth Platform</title>
+    <title>Bitpawnetwork - Premium Interactive SMM Growth Platform</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,11 +18,11 @@
                 extend: {
                     colors: {
                         dark: {
-                            950: '#030712',
-                            900: '#080e1e',
-                            800: '#0f172a',
-                            700: '#1e293b',
-                            600: '#334155'
+                            950: '#02050e',
+                            900: '#050a18',
+                            800: '#0a1024',
+                            700: '#121a36',
+                            600: '#222f5c'
                         },
                         neon: {
                             cyan: '#06b6d4',
@@ -41,12 +41,12 @@
                         'float-delayed': 'float 6s ease-in-out infinite 3s',
                         'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'glow': 'glow 3s ease-in-out infinite',
-                        'spin-slow': 'spin 15s linear infinite',
+                        'spin-slow': 'spin 20s linear infinite',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-15px)' },
+                            '50%': { transform: 'translateY(-12px)' },
                         }
                     }
                 }
@@ -55,7 +55,7 @@
     </script>
     <style type="text/css">
         body {
-            background-color: #030712;
+            background-color: #02050e;
             color: #f3f4f6;
             overflow-x: hidden;
             font-family: 'Inter', sans-serif;
@@ -64,42 +64,55 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
         
-        /* Modern Cyber Grid Background */
+        /* Interactive Background Grid */
         .cyber-grid {
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 50px 50px;
+                linear-gradient(rgba(255, 255, 255, 0.008) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.008) 1px, transparent 1px);
+            background-size: 60px 60px;
         }
 
-        /* Glassmorphism Panels */
+        /* Glassmorphism Panels with border glow */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.35);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(10, 16, 36, 0.45);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .glass-panel-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .glass-panel-hover:hover {
-            background: rgba(15, 23, 42, 0.55);
-            border-color: rgba(6, 182, 212, 0.4);
-            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.1);
-            transform: translateY(-8px);
+            background: rgba(10, 16, 36, 0.65);
+            border-color: rgba(6, 182, 212, 0.35);
+            box-shadow: 0 25px 50px rgba(6, 182, 212, 0.08);
+            transform: translateY(-5px);
         }
 
         .glass-navbar {
-            background: rgba(3, 7, 18, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(2, 5, 14, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* 3D tilt styles */
+        .tilt-container {
+            perspective: 1200px;
+        }
+        .tilt-card {
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s;
+            transform-style: preserve-3d;
+        }
+        .tilt-inner {
+            transform: translateZ(50px);
         }
 
         /* Glowing texts & buttons */
         .text-neon-glow {
-            text-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+            text-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
         }
         
         .btn-premium {
@@ -110,8 +123,19 @@
         }
         .btn-premium:hover {
             background-position: right center;
-            box-shadow: 0 12px 30px rgba(6, 182, 212, 0.5);
-            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(6, 182, 212, 0.4);
+            transform: scale(1.015);
+        }
+
+        /* Scroll reveal effects */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Hide scrollbars & customize style */
@@ -119,24 +143,24 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #030712;
+            background: #02050e;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+            background: #121a36;
             border-radius: 9999px;
-            border: 2px solid #030712;
+            border: 2px solid #02050e;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+            background: #222f5c;
         }
 
         .glow-blob {
             position: absolute;
             border-radius: 50%;
-            filter: blur(120px);
+            filter: blur(140px);
             z-index: 0;
             pointer-events: none;
-            opacity: 0.15;
+            opacity: 0.12;
             mix-blend-mode: plus-lighter;
         }
 
@@ -159,6 +183,9 @@
 
     <!-- Cyber Background Mesh -->
     <div class="fixed inset-0 z-0 pointer-events-none cyber-grid"></div>
+
+    <!-- Generative Motion Canvas Background (Replaces static videos/images) -->
+    <canvas id="canvas-particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
     <!-- Cosmic Glow Blobs -->
     <div class="glow-blob bg-neon-blue w-[500px] h-[500px] top-[-150px] left-[-150px]"></div>
@@ -245,13 +272,13 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="relative pt-32 pb-20 md:pt-40 md:pb-32 flex items-center min-h-[95vh] z-10">
+    <!-- Hero Section with interactive 3D Card and Canvas Particle motion -->
+    <section id="hero" class="relative pt-32 pb-20 md:pt-40 md:pb-32 flex items-center min-h-[98vh] z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <!-- Left Side: SMM Copywriting -->
                 <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel border border-neon-cyan/20 text-xs font-semibold tracking-wider text-neon-cyan uppercase animate-pulse-slow">
+                    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel border border-neon-cyan/25 text-xs font-semibold tracking-wider text-neon-cyan uppercase animate-pulse-slow">
                         <span class="flex h-2.5 w-2.5 relative">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
                           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-neon-cyan"></span>
@@ -260,7 +287,7 @@
                     </div>
 
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
-                        <span data-i18n="hero.title.prefix" class="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-400">Professional</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-neon-glow">SMM Panel</span> <br />
+                        <span data-i18n="hero.title.prefix" class="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-350">Professional</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-purple text-neon-glow">SMM Panel</span> <br />
                         <span data-i18n="hero.title.suffix" class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-300">for modern growth teams</span>
                     </h1>
 
@@ -279,7 +306,7 @@
 
                     <!-- Client Trust Icons -->
                     <div class="pt-6 border-t border-white/5 flex flex-wrap items-center justify-center lg:justify-start gap-6 opacity-80">
-                        <span class="text-xs font-semibold tracking-widest text-gray-400 uppercase" data-i18n="hero.trustedBy">Trusted channels:</span>
+                        <span class="text-xs font-semibold tracking-widest text-gray-450 uppercase" data-i18n="hero.trustedBy">Trusted channels:</span>
                         <div class="flex items-center space-x-6 text-xl text-gray-400">
                             <i class="fa-brands fa-tiktok hover:text-white transition duration-200"></i>
                             <i class="fa-brands fa-facebook hover:text-neon-blue transition duration-200"></i>
@@ -290,92 +317,76 @@
                     </div>
                 </div>
 
-                <!-- Right Side: Cyber Art & Floating UI Graph -->
-                <div class="lg:col-span-5 relative flex justify-center items-center">
-                    <div class="w-full max-w-[460px] aspect-square relative animate-float">
-                        <!-- Circle behind graphics -->
-                        <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-neon-blue/10 via-neon-purple/10 to-transparent border border-white/5 flex items-center justify-center">
-                            <div class="w-3/4 h-3/4 rounded-full bg-gradient-to-tr from-neon-cyan/5 to-transparent border border-neon-cyan/10"></div>
-                        </div>
-
-                        <!-- Floating Component 1: Order Status Card -->
-                        <div class="absolute top-[8%] left-[-5%] w-[270px] glass-panel rounded-2xl p-4 shadow-2xl border-white/10 backdrop-blur-xl">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-2 h-2 rounded-full bg-neon-emerald animate-ping"></div>
-                                    <span class="text-[10px] font-semibold text-neon-emerald uppercase tracking-widest">Processing</span>
-                                </div>
-                                <span class="text-[10px] text-gray-400">Order #73849</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-2.5">
-                                    <div class="w-8 h-8 rounded-lg bg-neon-blue/25 flex items-center justify-center">
-                                        <i class="fa-brands fa-tiktok text-neon-blue"></i>
+                <!-- Right Side: Interactive 3D Perspective Card (Dynamically tilts on mouse hover) -->
+                <div class="lg:col-span-5 relative flex justify-center items-center tilt-container">
+                    <div class="w-full max-w-[460px] aspect-square relative tilt-card p-1 rounded-[36px] bg-gradient-to-tr from-neon-cyan/15 via-transparent to-neon-purple/20">
+                        <div class="w-full h-full glass-panel rounded-[34px] p-6 relative overflow-hidden flex flex-col justify-between border-white/10">
+                            
+                            <!-- Internal Card Content: High Tech Dashboard Simulation -->
+                            <div class="tilt-inner space-y-5">
+                                <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-neon-emerald animate-ping"></div>
+                                        <span class="text-xs font-extrabold text-white tracking-widest uppercase" data-i18n="hero.badge">System Live</span>
                                     </div>
-                                    <div>
-                                        <h4 class="text-xs font-bold text-white">TikTok Likes Growth</h4>
-                                        <p class="text-[9px] text-gray-400">Quantity: 10,000</p>
+                                    <div class="text-[10px] text-gray-500 font-mono">NODE_US_EAST // 2026</div>
+                                </div>
+
+                                <!-- Floating Status Metric -->
+                                <div class="p-4 bg-white/5 rounded-2xl border border-white/5 space-y-3">
+                                    <div class="flex justify-between items-center text-xs">
+                                        <span class="text-gray-455 font-medium">Automatic delivery speed</span>
+                                        <span class="text-neon-cyan font-bold font-mono">99.85%</span>
+                                    </div>
+                                    <div class="w-full bg-dark-950 rounded-full h-2 overflow-hidden">
+                                        <div class="bg-gradient-to-r from-neon-blue via-neon-cyan to-neon-emerald h-full rounded-full w-[94%]"></div>
                                     </div>
                                 </div>
-                                <span class="text-xs font-semibold text-neon-cyan">+10.0k</span>
-                            </div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5 mt-3 overflow-hidden">
-                                <div class="bg-gradient-to-r from-neon-blue to-neon-cyan h-full rounded-full w-[78%]"></div>
-                            </div>
-                        </div>
 
-                        <!-- Floating Component 2: Performance Circular Chart -->
-                        <div class="absolute bottom-[12%] right-[-5%] w-[190px] glass-panel rounded-2xl p-4 shadow-2xl border-white/10 backdrop-blur-xl flex flex-col items-center">
-                            <div class="relative w-16 h-16 flex items-center justify-center">
-                                <svg class="w-full h-full transform -rotate-90">
-                                    <circle cx="32" cy="32" r="26" stroke="rgba(255,255,255,0.05)" stroke-width="4" fill="transparent"/>
-                                    <circle cx="32" cy="32" r="26" stroke="url(#cyan-purple-grad)" stroke-width="4" fill="transparent" stroke-dasharray="163" stroke-dashoffset="20" class="animate-pulse-slow"/>
-                                    <defs>
-                                        <linearGradient id="cyan-purple-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stop-color="#06b6d4" />
-                                            <stop offset="100%" stop-color="#8b5cf6" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                                <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                    <span class="text-xs font-bold text-white">99.9%</span>
+                                <!-- Growth chart placeholder (Vector UI drawing) -->
+                                <div class="relative py-4">
+                                    <svg class="w-full h-24 stroke-neon-cyan" viewBox="0 0 300 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Grid lines -->
+                                        <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                                        <line x1="0" y1="50" x2="300" y2="50" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                                        <line x1="0" y1="80" x2="300" y2="80" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                                        
+                                        <!-- Glowing path -->
+                                        <path d="M 0,90 Q 50,70 90,80 T 170,40 T 230,20 T 300,10" stroke="url(#card-glow-grad)" stroke-width="2.5" stroke-linecap="round" />
+                                        
+                                        <!-- Area fill -->
+                                        <path d="M 0,90 Q 50,70 90,80 T 170,40 T 230,20 T 300,10 L 300,100 L 0,100 Z" fill="url(#card-area-grad)" opacity="0.1" />
+
+                                        <defs>
+                                            <linearGradient id="card-glow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#06b6d4" />
+                                                <stop offset="50%" stop-color="#3b82f6" />
+                                                <stop offset="100%" stop-color="#8b5cf6" />
+                                            </linearGradient>
+                                            <linearGradient id="card-area-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#06b6d4" />
+                                                <stop offset="100%" stop-color="#02050e" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
                                 </div>
                             </div>
-                            <h4 class="text-xs font-bold text-white mt-2.5 text-center">Completed on time</h4>
-                            <p class="text-[9px] text-gray-400 text-center">Lifetime warranty</p>
-                        </div>
 
-                        <!-- Floating Icons -->
-                        <div class="absolute top-[40%] right-[3%] w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-neon-pink shadow-xl animate-float-delayed border-white/10">
-                            <i class="fa-solid fa-heart text-lg"></i>
-                        </div>
-                        <div class="absolute bottom-[40%] left-[3%] w-14 h-14 rounded-xl glass-panel flex items-center justify-center text-neon-cyan shadow-xl animate-float border-white/10">
-                            <i class="fa-solid fa-thumbs-up text-xl animate-pulse"></i>
-                        </div>
+                            <!-- Bottom panel showing active orders -->
+                            <div class="flex items-center justify-between pt-4 border-t border-white/5 text-[10px] text-gray-500">
+                                <span class="flex items-center"><i class="fa-solid fa-server mr-1.5 text-neon-blue"></i> API online</span>
+                                <span class="flex items-center"><i class="fa-solid fa-shield-halved mr-1.5 text-neon-purple"></i> Secure proxy</span>
+                            </div>
 
-                        <!-- Vector Lines inside grid -->
-                        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M 90, 160 L 200, 100 L 330, 200 L 250, 310 Z" stroke="url(#line-grad)" stroke-width="1.5" stroke-dasharray="8,4" class="opacity-60" />
-                            <circle cx="200" cy="100" r="4" fill="#06b6d4" />
-                            <circle cx="330" cy="200" r="4" fill="#8b5cf6" />
-                            <circle cx="250" cy="310" r="4" fill="#3b82f6" />
-                            <circle cx="90" cy="160" r="4" fill="#ec4899" />
-                            <defs>
-                                <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#06b6d4" />
-                                    <stop offset="50%" stop-color="#3b82f6" />
-                                    <stop offset="100%" stop-color="#8b5cf6" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Counter Section -->
-    <section class="py-12 relative z-10">
+    <!-- Stats Counter Section (Slide up scroll-reveal) -->
+    <section class="py-12 relative z-10 reveal">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="glass-panel rounded-[32px] p-8 sm:p-10 border-white/10 shadow-2xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-40 h-40 bg-neon-blue/10 rounded-full blur-3xl"></div>
@@ -383,19 +394,19 @@
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
                     <div class="space-y-2 border-r border-white/5 last:border-0 pr-4">
-                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight">5M+</h3>
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight animate-pulse-slow">5M+</h3>
                         <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-semibold" data-i18n="hero.metrics.ops">Completed Orders</p>
                     </div>
                     <div class="space-y-2 border-r border-white/5 md:border-r last:border-0 px-4">
-                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue tracking-tight">150K+</h3>
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue tracking-tight animate-pulse-slow">150K+</h3>
                         <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-semibold" data-i18n="hero.metrics.channels">Active Customers</p>
                     </div>
                     <div class="space-y-2 border-r border-white/5 last:border-0 px-4">
-                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple tracking-tight">2,500+</h3>
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple tracking-tight animate-pulse-slow">2,500+</h3>
                         <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-semibold" data-i18n="hero.metrics.security">Active Services</p>
                     </div>
                     <div class="space-y-2 last:border-0 pl-4">
-                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight">&lt; 0.1s</h3>
+                        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight animate-pulse-slow">&lt; 0.1s</h3>
                         <p class="text-[10px] sm:text-xs text-gray-400 uppercase tracking-widest font-semibold">Activation Time</p>
                     </div>
                 </div>
@@ -403,8 +414,8 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-24 md:py-32 relative z-10">
+    <!-- Features Section (Slide up scroll-reveal) -->
+    <section id="features" class="py-24 md:py-32 relative z-10 reveal">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center space-y-4 mb-16">
                 <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neon-blue/10 border border-neon-blue/30 text-xs font-semibold tracking-wider text-neon-blue uppercase" data-i18n="features.badge">
@@ -420,13 +431,13 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Feature Card 1 -->
-                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between border-white/5">
                     <div class="space-y-4">
                         <div class="w-12 h-12 rounded-xl bg-neon-cyan/10 border border-neon-cyan/20 flex items-center justify-center text-neon-cyan shadow-md shadow-neon-cyan/5">
                             <i class="fa-solid fa-tags text-xl"></i>
                         </div>
                         <h3 class="font-heading font-bold text-lg text-white" data-i18n="feature1.title">Direct wholesale pricing</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="feature1.desc">
+                        <p class="text-xs sm:text-sm text-gray-450 leading-relaxed font-light" data-i18n="feature1.desc">
                             Our direct sourcing model helps you secure more competitive pricing without unnecessary middle layers.
                         </p>
                     </div>
@@ -437,13 +448,13 @@
                 </div>
 
                 <!-- Feature Card 2 -->
-                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between border-white/5">
                     <div class="space-y-4">
                         <div class="w-12 h-12 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center text-neon-blue shadow-md shadow-neon-blue/5">
                             <i class="fa-solid fa-bolt text-xl"></i>
                         </div>
                         <h3 class="font-heading font-bold text-lg text-white" data-i18n="feature2.title">100% automated workflow</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="feature2.desc">
+                        <p class="text-xs sm:text-sm text-gray-455 leading-relaxed font-light" data-i18n="feature2.desc">
                             Place orders, monitor progress, and manage balance in seconds with a streamlined automated flow.
                         </p>
                     </div>
@@ -454,13 +465,13 @@
                 </div>
 
                 <!-- Feature Card 3 -->
-                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between border-white/5">
                     <div class="space-y-4">
                         <div class="w-12 h-12 rounded-xl bg-neon-purple/10 border border-neon-purple/20 flex items-center justify-center text-neon-purple shadow-md shadow-neon-purple/5">
                             <i class="fa-solid fa-code text-xl"></i>
                         </div>
                         <h3 class="font-heading font-bold text-lg text-white" data-i18n="feature3.title">Powerful API integration</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="feature3.desc">
+                        <p class="text-xs sm:text-sm text-gray-455 leading-relaxed font-light" data-i18n="feature3.desc">
                             Comprehensive API support with fast processing for partners building their own panel stack.
                         </p>
                     </div>
@@ -471,13 +482,13 @@
                 </div>
 
                 <!-- Feature Card 4 -->
-                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                <div class="glass-panel glass-panel-hover rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between border-white/5">
                     <div class="space-y-4">
                         <div class="w-12 h-12 rounded-xl bg-neon-pink/10 border border-neon-pink/20 flex items-center justify-center text-neon-pink shadow-md shadow-neon-pink/5">
                             <i class="fa-solid fa-headset text-xl"></i>
                         </div>
                         <h3 class="font-heading font-bold text-lg text-white" data-i18n="feature4.title">Professional 24/7 support</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="feature4.desc">
+                        <p class="text-xs sm:text-sm text-gray-455 leading-relaxed font-light" data-i18n="feature4.desc">
                             Experienced specialists stay available to help with operational questions and technical issues.
                         </p>
                     </div>
@@ -490,8 +501,8 @@
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-24 md:py-32 relative z-10 border-y border-white/5 bg-dark-900/50 overflow-hidden">
+    <!-- How It Works Section (Slide up scroll-reveal) -->
+    <section id="how-it-works" class="py-24 md:py-32 relative z-10 border-y border-white/5 bg-dark-900/40 overflow-hidden reveal">
         <div class="absolute inset-0 pointer-events-none">
             <div class="absolute top-16 left-1/2 -translate-x-1/2 w-[520px] h-[520px] bg-neon-blue/5 blur-3xl rounded-full"></div>
             <div class="absolute bottom-0 right-0 w-80 h-80 bg-neon-purple/5 blur-3xl rounded-full"></div>
@@ -529,7 +540,7 @@
                             <span class="text-[10px] uppercase tracking-widest text-neon-blue/85 font-bold" data-i18n="how.step1.title">Create your account</span>
                         </div>
                         <h3 class="font-heading text-xl font-bold text-white mb-3" data-i18n="how.step1.title">Create your account</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="how.step1.desc">
+                        <p class="text-xs sm:text-sm text-gray-450 leading-relaxed font-light" data-i18n="how.step1.desc">
                             Open an account in under 30 seconds with core details and a secure onboarding flow. Total privacy assured.
                         </p>
                     </article>
@@ -547,7 +558,7 @@
                             <span class="text-[10px] uppercase tracking-widest text-neon-cyan/85 font-bold" data-i18n="how.step2.title">Fund your balance</span>
                         </div>
                         <h3 class="font-heading text-xl font-bold text-white mb-3" data-i18n="how.step2.title">Fund your balance</h3>
-                        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed font-light" data-i18n="how.step2.desc">
+                        <p class="text-xs sm:text-sm text-gray-450 leading-relaxed font-light" data-i18n="how.step2.desc">
                             Top up automatically via bank transfer, e-wallet, or crypto for a faster start. Earn reward points with every top-up.
                         </p>
                     </article>
@@ -565,7 +576,7 @@
                             <span class="text-[10px] uppercase tracking-widest text-neon-pink/85 font-bold" data-i18n="how.step3.title">Place and track orders</span>
                         </div>
                         <h3 class="font-heading text-xl font-bold text-white mb-3" data-i18n="how.step3.title">Place and track orders</h3>
-                        <p class="text-xs sm:text-sm text-gray-450 leading-relaxed font-light" data-i18n="how.step3.desc">
+                        <p class="text-xs sm:text-sm text-gray-455 leading-relaxed font-light" data-i18n="how.step3.desc">
                             Choose your service, enter the link and quantity. Our system instantly and automatically processes your order.
                         </p>
                     </article>
@@ -574,8 +585,8 @@
         </div>
     </section>
 
-    <!-- Live Preview & Calculator Section -->
-    <section id="live-preview" class="py-24 md:py-32 relative z-10">
+    <!-- Live Preview & Calculator Section (Slide up scroll-reveal) -->
+    <section id="live-preview" class="py-24 md:py-32 relative z-10 reveal">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                 
@@ -692,15 +703,15 @@
         </div>
     </section>
 
-    <!-- FAQ Accordion Section -->
-    <section id="faq" class="py-24 md:py-32 relative z-10 border-t border-white/5 bg-dark-900/30">
+    <!-- FAQ Accordion Section (Slide up scroll-reveal) -->
+    <section id="faq" class="py-24 md:py-32 relative z-10 border-t border-white/5 bg-dark-900/30 reveal">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center space-y-4 mb-16">
                 <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 text-xs font-semibold tracking-wider text-neon-cyan uppercase" data-i18n="faq.badge">
                     Support answers
                 </div>
                 <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
-                    Frequently <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue text-neon-glow" data-i18n="faq.title">asked questions</span>
+                    Frequently <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue text-neon-glow text-neon-glow">asked questions</span>
                 </h2>
                 <p class="text-gray-400 text-sm sm:text-base" data-i18n="faq.description">
                     Clear answers to the most common questions before you launch a campaign.
@@ -764,8 +775,8 @@
         </div>
     </section>
 
-    <!-- Support CTA Banner Section -->
-    <section class="py-24 md:py-32 relative z-10">
+    <!-- Support CTA Banner Section (Slide up scroll-reveal) -->
+    <section class="py-24 md:py-32 relative z-10 reveal">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="glass-panel rounded-[32px] p-8 sm:p-12 border-white/10 text-center relative overflow-hidden shadow-2xl">
                 <div class="absolute -top-12 -left-12 w-32 h-32 bg-neon-cyan/15 rounded-full blur-2xl"></div>
@@ -791,8 +802,8 @@
         </div>
     </section>
 
-    <!-- Footer Section (Highly Enhanced, Cyber-Accented & Creative) -->
-    <footer id="footer" class="bg-[#030611] border-t border-transparent relative z-10 pt-24 pb-12 overflow-hidden">
+    <!-- Footer Section (Premium, Aligned, Unified Typography) -->
+    <footer id="footer" class="bg-[#030611] border-t border-transparent relative z-10 pt-24 pb-12 overflow-hidden font-sans">
         <!-- Top cyber gradient separator line -->
         <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-neon-cyan/40 via-neon-purple/60 via-neon-pink/40 to-transparent"></div>
         
@@ -801,68 +812,69 @@
         <div class="absolute bottom-[10%] right-[-100px] w-80 h-80 bg-neon-purple/15 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+            <!-- Balances Columns: 4 equal grid slots -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
                 
-                <!-- Grid Col 1: About & Branding -->
-                <div class="lg:col-span-2 space-y-6">
-                    <a href="#" class="flex items-center space-x-4 group">
-                        <!-- High-tech rotating glowing badge around logo -->
+                <!-- Grid Col 1: Brand & Desc -->
+                <div class="space-y-6">
+                    <a href="#" class="flex items-center space-x-3 group">
+                        <!-- Rotating glowing badge around logo -->
                         <div class="relative flex items-center justify-center">
                             <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple opacity-75 blur-[3px] group-hover:opacity-100 transition duration-500 animate-spin-slow"></div>
-                            <img src="cho1.jpg" alt="Bitpawnetwork Logo" class="relative h-12 w-12 rounded-full object-cover border border-white/10 shadow-lg">
+                            <img src="cho1.jpg" alt="Bitpawnetwork Logo" class="relative h-11 w-11 rounded-full object-cover border border-white/10 shadow-lg">
                         </div>
                         <span class="font-heading font-extrabold text-2xl tracking-wider text-white">
                             Bitpaw<span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple text-neon-glow font-extrabold">network</span>
                         </span>
                     </a>
-                    <p class="text-sm text-gray-400 leading-relaxed font-light pr-6" data-i18n="footer.about">
-                        Bitpawnetwork is a professional SMM platform focused on secure, stable, and competitively priced growth services across major social channels.
+                    <p class="text-sm text-gray-400 leading-relaxed font-normal" data-i18n="footer.about">
+                        Bitpawnetwork: A premiere, professional SMM platform delivering secure, stable, and competitively priced growth solutions across all major social media channels.
                     </p>
-                    <!-- Floating Social Circle Buttons -->
-                    <div class="flex items-center space-x-3.5 pt-2">
-                        <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-blue-500 hover:bg-blue-600/10 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] flex items-center justify-center text-gray-400 hover:text-blue-400 transition-all duration-300 hover:-translate-y-1" title="Facebook">
-                            <i class="fa-brands fa-facebook-f text-base"></i>
+                    <!-- Refined smaller, sharper, subtle social icons below -->
+                    <div class="flex items-center space-x-2 pt-1">
+                        <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" class="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:border-white/20 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200" title="Facebook">
+                            <i class="fa-brands fa-facebook-f text-xs"></i>
                         </a>
-                        <a href="https://zalo.me/0559583034" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-cyan-500 hover:bg-cyan-600/10 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] flex items-center justify-center text-gray-400 hover:text-cyan-400 transition-all duration-300 hover:-translate-y-1" title="Zalo Chat">
-                            <i class="fa-solid fa-comment-dots text-base"></i>
+                        <a href="https://zalo.me/0559583034" target="_blank" class="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:border-white/20 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200" title="Zalo Chat">
+                            <i class="fa-solid fa-comment-dots text-xs"></i>
                         </a>
-                        <a href="https://t.me/bitpawsoftware" target="_blank" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-sky-500 hover:bg-sky-600/10 hover:shadow-[0_0_15px_rgba(56,189,248,0.4)] flex items-center justify-center text-gray-400 hover:text-sky-400 transition-all duration-300 hover:-translate-y-1" title="Telegram">
-                            <i class="fa-brands fa-telegram text-base"></i>
+                        <a href="https://t.me/bitpawsoftware" target="_blank" class="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:border-white/20 text-gray-400 hover:text-white flex items-center justify-center transition-all duration-200" title="Telegram">
+                            <i class="fa-brands fa-telegram text-xs"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Grid Col 2: Solutions -->
                 <div class="space-y-6">
-                    <h4 class="font-heading font-extrabold text-xs text-white uppercase tracking-widest relative pl-3.5 border-l-2 border-neon-cyan" data-i18n="footer.solutions">Solutions</h4>
-                    <ul class="space-y-3.5 text-sm text-gray-450 font-light">
+                    <h4 class="font-heading font-bold text-sm text-white uppercase tracking-widest relative pl-3.5 border-l-2 border-neon-cyan" data-i18n="footer.solutions">Solutions</h4>
+                    <ul class="space-y-3.5 text-sm text-gray-400 font-normal">
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-cyan opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-cyan mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.solution.facebook">Facebook services</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-cyan opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-cyan mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.solution.tiktok">TikTok services</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-cyan opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-cyan mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.solution.instagram">Instagram services</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-cyan opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-cyan mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.solution.youtube">YouTube services</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-cyan opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-cyan mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.solution.other">Other platforms</span>
                             </a>
                         </li>
@@ -871,89 +883,70 @@
 
                 <!-- Grid Col 3: Information -->
                 <div class="space-y-6">
-                    <h4 class="font-heading font-extrabold text-xs text-white uppercase tracking-widest relative pl-3.5 border-l-2 border-neon-purple" data-i18n="footer.info">Information</h4>
-                    <ul class="space-y-3.5 text-sm text-gray-450 font-light">
+                    <h4 class="font-heading font-bold text-sm text-white uppercase tracking-widest relative pl-3.5 border-l-2 border-neon-purple" data-i18n="footer.info">Information</h4>
+                    <ul class="space-y-3.5 text-sm text-gray-400 font-normal">
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-purple opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-purple mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.info.terms">Terms of service</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-purple opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-purple mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.info.privacy">Privacy policy</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-purple opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-purple mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.info.refund">Refund policy</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-purple opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-purple mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.info.api">API documentation</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="group/link flex items-center hover:text-white transition duration-200">
-                                <span class="mr-1.5 text-neon-purple opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-0 -translate-x-2 transition-all duration-300 text-xs font-bold font-mono">&gt;</span>
+                                <i class="fa-solid fa-angle-right text-[10px] text-gray-600 group-hover/link:text-neon-purple mr-2 transition-colors duration-200"></i>
                                 <span data-i18n="footer.info.blog">News blog</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                <!-- Grid Col 4: Creative Contact Glass Cards (Highlighted layout) -->
+                <!-- Grid Col 4: Contact (Minimalist list aligned identical to Columns 2 & 3) -->
                 <div class="space-y-6">
-                    <h4 class="font-heading font-extrabold text-xs text-white uppercase tracking-widest relative pl-3.5 border-l-2 border-neon-pink" data-i18n="footer.contact">Contact</h4>
-                    <div class="flex flex-col gap-3.5">
-                        <!-- Telegram Support Pill -->
-                        <a href="https://t.me/bitpawsoftware" target="_blank" class="group flex items-center space-x-3.5 p-3 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-[#0088cc]/10 hover:border-[#0088cc]/35 hover:shadow-[0_8px_20px_rgba(0,136,204,0.12)] hover:-translate-y-0.5 transition-all duration-300">
-                            <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sky-400 group-hover:bg-[#0088cc]/20 group-hover:text-white transition-all duration-300">
-                                <i class="fa-brands fa-telegram text-base"></i>
-                            </div>
-                            <div>
-                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">Telegram Channel</p>
-                                <p class="text-xs text-gray-300 group-hover:text-white font-medium">@bitpawsoftware</p>
-                            </div>
-                        </a>
-
-                        <!-- Zalo Support Pill -->
-                        <a href="https://zalo.me/0559583034" target="_blank" class="group flex items-center space-x-3.5 p-3 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-[#0068ff]/10 hover:border-[#0068ff]/35 hover:shadow-[0_8px_20px_rgba(0,104,255,0.12)] hover:-translate-y-0.5 transition-all duration-300">
-                            <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-cyan-400 group-hover:bg-[#0068ff]/20 group-hover:text-white transition-all duration-300">
-                                <i class="fa-solid fa-comment-dots text-base"></i>
-                            </div>
-                            <div>
-                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">Zalo Support</p>
-                                <p class="text-xs text-gray-300 group-hover:text-white font-medium">0559583034</p>
-                            </div>
-                        </a>
-
-                        <!-- Facebook Support Pill -->
-                        <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" class="group flex items-center space-x-3.5 p-3 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-[#1877f2]/10 hover:border-[#1877f2]/35 hover:shadow-[0_8px_20px_rgba(24,119,242,0.12)] hover:-translate-y-0.5 transition-all duration-300">
-                            <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-500 group-hover:bg-[#1877f2]/20 group-hover:text-white transition-all duration-300">
-                                <i class="fa-brands fa-facebook text-base"></i>
-                            </div>
-                            <div>
-                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">Facebook Page</p>
-                                <p class="text-xs text-gray-300 group-hover:text-white font-medium" data-i18n="footer.facebookSupport">Facebook support</p>
-                            </div>
-                        </a>
-
-                        <!-- Email Support Pill -->
-                        <a href="mailto:support@bitpawnetwork.com" class="group flex items-center space-x-3.5 p-3 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-[#ec4899]/10 hover:border-[#ec4899]/35 hover:shadow-[0_8px_20px_rgba(236,72,153,0.12)] hover:-translate-y-0.5 transition-all duration-300">
-                            <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-neon-pink group-hover:bg-[#ec4899]/20 group-hover:text-white transition-all duration-300">
-                                <i class="fa-solid fa-envelope text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">Email Help Desk</p>
-                                <p class="text-xs text-gray-300 group-hover:text-white font-medium font-mono">support@bitpawnetwork.com</p>
-                            </div>
-                        </a>
-                    </div>
+                    <h4 class="font-heading font-bold text-sm text-white uppercase tracking-widest relative pl-3.5 border-l-2 border-neon-pink" data-i18n="footer.contact">Contact</h4>
+                    <ul class="space-y-3.5 text-sm text-gray-400 font-normal">
+                        <li>
+                            <a href="https://t.me/bitpawsoftware" target="_blank" class="group/link flex items-center hover:text-white transition duration-200">
+                                <i class="fa-brands fa-telegram text-[11px] text-gray-500 group-hover/link:text-[#0088cc] mr-2 transition-colors duration-200"></i>
+                                <span data-i18n="footer.telegramSupport">Telegram Channel: @bitpawsoftware</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://zalo.me/0559583034" target="_blank" class="group/link flex items-center hover:text-white transition duration-200">
+                                <i class="fa-solid fa-comment text-[11px] text-gray-500 group-hover/link:text-[#0068ff] mr-2 transition-colors duration-200"></i>
+                                <span data-i18n="footer.zaloSupport">Zalo Support: +84 559 583 034</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" class="group/link flex items-center hover:text-white transition duration-200">
+                                <i class="fa-brands fa-facebook-f text-[11px] text-gray-500 group-hover/link:text-[#1877f2] mr-2 transition-colors duration-200"></i>
+                                <span data-i18n="footer.facebookSupport">Facebook Support Page: fb.com/bitpawnetwork</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:support@bitpawnetwork.com" class="group/link flex items-center hover:text-white transition duration-200">
+                                <i class="fa-regular fa-envelope text-[11px] text-gray-500 group-hover/link:text-neon-pink mr-2 transition-colors duration-200"></i>
+                                <span data-i18n="footer.emailSupport" class="font-sans">Email Help Desk: support@bitpawnetwork.com</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
             </div>
@@ -963,11 +956,11 @@
                 <p class="text-xs text-gray-500 text-center md:text-left" data-i18n="footer.copyright">
                     &copy; 2026 Bitpawnetwork. All rights reserved. Designed and developed with a premium SMM experience.
                 </p>
-                <div class="flex items-center space-x-5 opacity-40 hover:opacity-100 transition duration-300">
-                    <i class="fa-brands fa-cc-visa text-2xl hover:text-[#f7b600] transition-colors duration-300"></i>
-                    <i class="fa-brands fa-cc-mastercard text-2xl hover:text-[#eb001b] transition-colors duration-300"></i>
-                    <i class="fa-solid fa-wallet text-xl hover:text-[#00c2ff] transition-colors duration-300" title="Momo/E-Wallets"></i>
-                    <i class="fa-brands fa-bitcoin text-2xl hover:text-[#f7931a] transition-colors duration-300" title="Bitcoin/Crypto"></i>
+                <div class="flex items-center space-x-6 text-gray-600">
+                    <i class="fa-brands fa-cc-visa text-xl hover:text-white transition duration-200"></i>
+                    <i class="fa-brands fa-cc-mastercard text-xl hover:text-white transition duration-200"></i>
+                    <i class="fa-solid fa-wallet text-base hover:text-white transition duration-200" title="Momo/E-Wallets"></i>
+                    <i class="fa-brands fa-bitcoin text-xl hover:text-white transition duration-200" title="Bitcoin/Crypto"></i>
                 </div>
             </div>
         </div>
@@ -986,7 +979,7 @@
                 <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-white bg-gradient-to-r from-neon-blue to-neon-purple shadow-lg shadow-neon-blue/30 scale-[1.02]">
                     Login
                 </button>
-                <button id="tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-400 hover:text-white">
+                <button id="tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-450 hover:text-white">
                     Register
                 </button>
             </div>
@@ -1147,7 +1140,7 @@
                 'how.step3.title': 'Place and track orders',
                 'how.step3.desc': 'Choose a service, enter the link and quantity, then let the system process the order automatically.',
                 'pricing.badge': 'Live pricing',
-                'pricing.title': 'Featured <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple">service list</span>',
+                'pricing.title': 'Featured <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple text-neon-glow">service list</span>',
                 'pricing.description': 'Pricing updates dynamically from the service feed.',
                 'table.serviceName': 'Service name',
                 'table.pricePer1k': 'Price per 1,000',
@@ -1178,7 +1171,7 @@
                 'cta.description': 'Create your account today and unlock a faster, more professional SMM workflow.',
                 'cta.primary': 'Create free account',
                 'cta.secondary': 'Technical support',
-                'footer.about': 'Bitpawnetwork is a professional SMM platform focused on secure, stable, and competitively priced growth services across major social channels.',
+                'footer.about': 'Bitpawnetwork: A premiere, professional SMM platform delivering secure, stable, and competitively priced growth solutions across all major social media channels.',
                 'footer.solutions': 'Solutions',
                 'footer.solution.facebook': 'Facebook services',
                 'footer.solution.tiktok': 'TikTok services',
@@ -1192,7 +1185,10 @@
                 'footer.info.api': 'API documentation',
                 'footer.info.blog': 'News blog',
                 'footer.contact': 'Contact',
-                'footer.facebookSupport': 'Facebook support',
+                'footer.telegramSupport': 'Telegram Channel: @bitpawsoftware',
+                'footer.zaloSupport': 'Zalo Support: +84 559 583 034',
+                'footer.facebookSupport': 'Facebook Support Page: fb.com/bitpawnetwork',
+                'footer.emailSupport': 'Email Help Desk: support@bitpawnetwork.com',
                 'footer.copyright': '© 2026 Bitpawnetwork. All rights reserved. Designed and developed with a premium SMM experience.',
                 'auth.tab.login': 'Login',
                 'auth.tab.register': 'Register',
@@ -1288,22 +1284,25 @@
                 'cta.description': 'Đăng ký tài khoản ngay hôm nay để tận hưởng kho dịch vụ SMM tốc độ, uy tín nhất.',
                 'cta.primary': 'Đăng Ký Tài Khoản Miễn Phí',
                 'cta.secondary': 'Liên Hệ Kỹ Thuật',
-                'footer.about': 'Bitpawnetwork là nhà cung cấp giải pháp SMM Panel hàng đầu khu vực, chuyên cung cấp các dịch vụ tăng tương tác tự động cho Facebook, TikTok, Instagram, Youtube. Bảo mật, ổn định và giá sỉ rẻ nhất thị trường.',
+                'footer.about': 'Bitpawnetwork: Nền tảng SMM chuyên nghiệp hàng đầu cung cấp giải pháp tăng trưởng an toàn, ổn định với mức giá cạnh tranh trên tất cả các kênh mạng xã hội lớn.',
                 'footer.solutions': 'Giải Pháp',
-                'footer.solution.facebook': 'Dịch Vụ Facebook',
-                'footer.solution.tiktok': 'Dịch Vụ TikTok',
-                'footer.solution.instagram': 'Dịch Vụ Instagram',
-                'footer.solution.youtube': 'Dịch Vụ YouTube',
-                'footer.solution.other': 'Các Nền Tảng Khác',
+                'footer.solution.facebook': 'Dịch vụ Facebook',
+                'footer.solution.tiktok': 'Dịch vụ TikTok',
+                'footer.solution.instagram': 'Dịch vụ Instagram',
+                'footer.solution.youtube': 'Dịch vụ YouTube',
+                'footer.solution.other': 'Các nền tảng khác',
                 'footer.info': 'Thông Tin',
-                'footer.info.terms': 'Điều Khoản Dịch Vụ',
-                'footer.info.privacy': 'Chính Sách Bảo Mật',
-                'footer.info.refund': 'Chính Sách Hoàn Tiền',
-                'footer.info.api': 'Tài Liệu Hướng Dẫn API',
-                'footer.info.blog': 'Blog Tin Tức',
+                'footer.info.terms': 'Điều khoản dịch vụ',
+                'footer.info.privacy': 'Chính sách bảo mật',
+                'footer.info.refund': 'Chính sách hoàn tiền',
+                'footer.info.api': 'Tài liệu hướng dẫn API',
+                'footer.info.blog': 'Blog tin tức',
                 'footer.contact': 'Liên Hệ',
-                'footer.facebookSupport': 'Hỗ trợ Facebook',
-                'footer.copyright': '© 2026 Bitpawnetwork. Tất cả quyền được bảo lưu. Thiết kế và phát triển với giao diện cao cấp SMM.',
+                'footer.telegramSupport': 'Kênh Telegram: @bitpawsoftware',
+                'footer.zaloSupport': 'Hỗ trợ Zalo: +84 559 583 034',
+                'footer.facebookSupport': 'Hỗ trợ Facebook: fb.com/bitpawnetwork',
+                'footer.emailSupport': 'Bộ phận hỗ trợ Email: support@bitpawnetwork.com',
+                'footer.copyright': '© 2026 Bitpawnetwork. Tất cả các quyền được bảo lưu. Thiết kế và phát triển với giao diện cao cấp SMM.',
                 'auth.tab.login': 'Đăng Nhập',
                 'auth.tab.register': 'Đăng Ký',
                 'auth.login.identifier': 'Email hoặc Số điện thoại',
@@ -1595,12 +1594,12 @@
 
             if (tab === 'login') {
                 loginBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-white bg-gradient-to-r from-neon-blue to-neon-purple shadow-lg shadow-neon-blue/30 scale-[1.02]";
-                registerBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-450 hover:text-white";
+                registerBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-455 hover:text-white";
                 loginForm.classList.remove('hidden');
                 registerForm.classList.add('hidden');
             } else {
                 registerBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-white bg-gradient-to-r from-neon-blue to-neon-purple shadow-lg shadow-neon-blue/30 scale-[1.02]";
-                loginBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-450 hover:text-white";
+                loginBtn.className = "flex-1 text-center py-2.5 rounded-xl font-heading font-semibold text-xs uppercase tracking-wider transition-all duration-300 focus:outline-none z-10 text-gray-455 hover:text-white";
                 registerForm.classList.remove('hidden');
                 loginForm.classList.add('hidden');
             }
@@ -1747,7 +1746,161 @@
             }
         }
 
-        // --- 8. Initialization on Page Load ---
+        // --- 9. Dynamic HTML5 Canvas Particles Node Network (Looping video effect) ---
+        function initCanvasParticles() {
+            const canvas = document.getElementById('canvas-particles');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const maxParticles = 90;
+            let mouseX = null;
+            let mouseY = null;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            window.addEventListener('mouseleave', () => {
+                mouseX = null;
+                mouseY = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.45;
+                    this.vy = (Math.random() - 0.5) * 0.45;
+                    this.radius = Math.random() * 2.5 + 1;
+                    this.color = Math.random() > 0.5 ? 'rgba(6, 182, 212, 0.45)' : 'rgba(139, 92, 246, 0.45)';
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                    if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < maxParticles; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.shadowBlur = 0; // reset shadow for performance
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    p.update();
+                    p.draw();
+
+                    // Connect points close to each other
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 100) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(59, 130, 246, ${0.15 * (1 - dist / 100)})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+
+                    // Pull points to mouse coordinates
+                    if (mouseX !== null && mouseY !== null) {
+                        const mdx = p.x - mouseX;
+                        const mdy = p.y - mouseY;
+                        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                        if (mdist < 140) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(mouseX, mouseY);
+                            ctx.strokeStyle = `rgba(6, 182, 212, ${0.25 * (1 - mdist / 140)})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        // --- 10. Interactive 3D Card Tilting Calculations ---
+        function init3DTiltEffect() {
+            const container = document.querySelector('.tilt-container');
+            const card = document.querySelector('.tilt-card');
+            if (!container || !card) return;
+
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = -((y - centerY) / centerY) * 12; // max tilt 12 degrees
+                const rotateY = ((x - centerX) / centerX) * 12;
+
+                card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                card.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2}px 30px rgba(6, 182, 212, 0.15)`;
+            });
+
+            container.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+            });
+        }
+
+        // --- 11. Scroll Entrance Reveal Observer ---
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observerOptions = {
+                root: null,
+                threshold: 0.12,
+                mouseLocation: null
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            reveals.forEach(element => {
+                observer.observe(element);
+            });
+        }
+
+        // --- Initialization on Page Load ---
         window.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('bitpaw_lang') || 'en';
             applyLanguage(savedLang);
@@ -1759,6 +1912,11 @@
 
             switchTab('facebook');
             updateCalcServices();
+
+            // Run high fidelity canvas network & 3D listener systems
+            initCanvasParticles();
+            init3DTiltEffect();
+            initScrollReveal();
         });
     </script>
 </body>
