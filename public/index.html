@@ -123,9 +123,47 @@
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
             scroll-padding-top: 6rem;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
         }
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Tối ưu hóa cảm ứng & chống delay 300ms trên Mobile */
+        button, a, input, select, textarea, [role="button"] {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Cuộn mượt mà chuẩn iOS momentum scroll */
+        .overflow-y-auto, .overflow-x-auto, .custom-scrollbar {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        /* Tối ưu hóa riêng cho màn hình Mobile (iPhone, Android, iPad) - Chống Lag GPU & Chống Tự Zoom */
+        @media screen and (max-width: 768px) {
+            /* Triệt tiêu lỗi iOS Safari tự động phóng to (auto-zoom) khi chạm vào input */
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+
+            /* Giảm độ nhòe blur để GPU điện thoại chạy mượt mà 60fps - 120fps không bị nóng máy */
+            .glow-blob {
+                filter: blur(50px) !important;
+                opacity: 0.12 !important;
+                mix-blend-mode: normal !important;
+            }
+            .floating-bubble {
+                filter: blur(15px) !important;
+                animation-duration: 12s !important;
+            }
+            .radial-glow-hero {
+                filter: blur(60px) !important;
+                opacity: 0.25 !important;
+            }
         }
         
         /* Interactive Background Grid */
@@ -2952,8 +2990,8 @@
     <!-- ========================================================================= -->
     <!-- AUTHENTICATION MODAL (GIỮ NGUYÊN HOÀN TOÀN CƠ CHẾ ĐĂNG NHẬP / ĐĂNG KÝ)   -->
     <!-- ========================================================================= -->
-    <div id="auth-modal" class="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 backdrop-blur-md hidden transition-opacity duration-300 p-3 sm:p-4">
-        <div class="glass-panel w-full max-w-[540px] max-h-[92vh] overflow-y-auto custom-scrollbar rounded-[28px] pt-8 p-6 sm:p-8 relative z-[100] shadow-2xl border border-white/10 mx-auto font-sans">
+    <div id="auth-modal" class="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 backdrop-blur-md hidden transition-opacity duration-300 p-2.5 sm:p-4">
+        <div class="glass-panel w-full max-w-[540px] max-h-[94vh] sm:max-h-[90vh] overflow-y-auto overscroll-contain custom-scrollbar rounded-2xl sm:rounded-[28px] pt-6 sm:pt-8 p-4 sm:p-8 relative z-[100] shadow-2xl border border-white/10 mx-auto font-sans">
             <!-- Close Button -->
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-xl bg-white/5 border border-white/10 hover:border-neon-pink/40 hover:bg-neon-pink/10 transition duration-200 z-[110]" aria-label="Close Modal">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -3769,13 +3807,17 @@
             }
         }
 
-        // --- Dynamic HTML5 Canvas Particles Node Network ---
+        // --- Dynamic HTML5 Canvas Particles Node Network (Adaptive Mobile/Tablet/Desktop) ---
         function initCanvasParticles() {
             const canvas = document.getElementById('canvas-particles');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             let particles = [];
-            const maxParticles = 75;
+            
+            // Tự động thích ứng: Mobile 18 hạt, iPad 35 hạt, Desktop 65 hạt để đảm bảo 60fps - 120fps siêu mượt
+            const isMobile = window.innerWidth < 768;
+            const isTablet = window.innerWidth >= 768 && window.innerWidth <= 1024;
+            const maxParticles = isMobile ? 18 : (isTablet ? 35 : 65);
             let mouseX = null;
             let mouseY = null;
 
@@ -3787,15 +3829,18 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
+            // Chỉ theo dõi di chuột nếu không phải thiết bị thuần cảm ứng (tiết kiệm CPU di động)
+            if (!('ontouchstart' in window) || window.innerWidth > 1024) {
+                window.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
 
-            window.addEventListener('mouseleave', () => {
-                mouseX = null;
-                mouseY = null;
-            });
+                window.addEventListener('mouseleave', () => {
+                    mouseX = null;
+                    mouseY = null;
+                });
+            }
 
             class Particle {
                 constructor() {

@@ -44,11 +44,30 @@
         }
     </script>
     <style type="text/css">
-        body {
+        html, body {
             background-color: #030712;
             color: #f3f4f6;
             overflow-x: hidden;
             font-family: 'Inter', sans-serif;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Tối ưu hóa cảm ứng & cuộn mượt cho mobile */
+        button, a, input, select, textarea, [role="button"] {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .overflow-y-auto, .overflow-x-auto, .custom-scrollbar {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        @media screen and (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
         }
 
         h1,
@@ -149,9 +168,11 @@
 
 <body class="font-sans antialiased h-screen flex overflow-hidden">
 
-    <!-- Background glow elements -->
-    <div class="glow-blob bg-neon-blue w-[400px] h-[400px] top-[10%] left-[20%]"></div>
-    <div class="glow-blob bg-neon-purple w-[450px] h-[450px] bottom-[10%] right-[10%]"></div>
+    <!-- Background glow elements (Contained to prevent document horizontal overflow on mobile) -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="glow-blob bg-neon-blue w-[400px] h-[400px] top-[10%] left-[20%]"></div>
+        <div class="glow-blob bg-neon-purple w-[450px] h-[450px] bottom-[10%] right-[10%]"></div>
+    </div>
 
     <!-- Mobile Sidebar Backdrop Overlay -->
     <div id="sidebar-backdrop"
