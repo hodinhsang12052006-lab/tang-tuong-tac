@@ -272,6 +272,30 @@ app.get('/api/health', (req, res) => {
 });
 
 // ==========================================
+// 4.5. BỘ XỬ LÝ LỖI TOÀN CỤC & CHỐNG SẬP MÁY CHỦ (ANTI-CRASH)
+// ==========================================
+app.use((err, req, res, next) => {
+    // Tuyệt đối không để lộ stack trace hoặc cấu trúc thư mục ra ngoài client
+    console.error('[Protected Error Handler]', err.message || err);
+    if (err.type === 'entity.parse.failed' || err.status === 400) {
+        return res.status(400).json({ success: false, message: 'Dữ liệu yêu cầu không hợp lệ.' });
+    }
+    return res.status(err.status || 500).json({
+        success: false,
+        message: 'Đã xảy ra lỗi hệ thống nội bộ. Vui lòng thử lại sau.'
+    });
+});
+
+// Chống sập tiến trình Node.js khi gặp lỗi ngoại lệ hoặc unhandled promise
+process.on('uncaughtException', (err) => {
+    console.error('[SECURITY ANTI-CRASH - Uncaught Exception]:', err.message || err);
+});
+
+process.on('unhandledRejection', (reason) => {
+    console.error('[SECURITY ANTI-CRASH - Unhandled Rejection]:', reason);
+});
+
+// ==========================================
 // 5. KHỞI CHẠY MÁY CHỦ EXPRESS SERVER
 // ==========================================
 if (!process.env.VERCEL) {

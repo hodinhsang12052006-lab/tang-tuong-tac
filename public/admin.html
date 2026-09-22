@@ -1135,11 +1135,7 @@ Mục tiêu marketing: ${u.marketingGoal || 'N/A'}`;
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                        providerUrl: 'https://subvip247.com/api/v2',
-                        apiKey: '1d6f5db46046b41ead91e24355330e51'
-                    })
+                    }
                 });
 
                 const data = await res.json();

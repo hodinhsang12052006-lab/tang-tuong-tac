@@ -27,13 +27,15 @@ const PROVIDER_API_URL = process.env.PROVIDER_API_URL || 'https://subvip247.com/
  */
 async function syncAndMarkup(req, res) {
     try {
-        const { providerUrl, apiKey } = req.body;
-        
-        const activeProviderUrl = providerUrl || PROVIDER_API_URL;
-        const activeApiKey = apiKey || PROVIDER_API_KEY;
+        const activeProviderUrl = PROVIDER_API_URL || 'https://subvip247.com/api/v2';
+        const activeApiKey = PROVIDER_API_KEY;
         const activeMarkup = 50; // Áp dụng cứng Markup 50%
 
-        console.log(`[API Sync] Bắt đầu đồng bộ từ: ${activeProviderUrl} với tỉ lệ tăng giá: ${activeMarkup}%`);
+        if (!activeApiKey) {
+            return res.status(500).json({ success: false, message: 'Chưa cấu hình PROVIDER_API_KEY bảo mật trên máy chủ.' });
+        }
+
+        console.log(`[API Sync] Bắt đầu đồng bộ an toàn từ: ${activeProviderUrl} với tỉ lệ tăng giá: ${activeMarkup}%`);
 
         // 1. Xóa sạch toàn bộ dịch vụ cũ (bao gồm dịch vụ giả) trước khi lưu dịch vụ thật
         await Service.deleteMany({});
