@@ -108,27 +108,34 @@ async function seedDefaultServices() {
 // ==========================================
 // 1. CẤU HÌNH MIDDLEWARE HỆ THỐNG
 // ==========================================
+// Phục vụ các file tĩnh trong thư mục public với bộ đệm (Caching) tối ưu hiệu năng
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: '1d', // Tăng tốc độ tải trang, giảm tải CPU khi có hàng ngàn lượt truy cập đồng thời
+    etag: true
+}));
+
 // Định nghĩa các bộ giới hạn tần suất yêu cầu (Rate Limiters)
-const globalLimiter = rateLimit({
+// Cho phép tải mượt mà hơn 3000 requests / 15 phút, chống DoS/DDoS mà không làm nghẽn lượng truy cập lớn
+const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 phút
-    max: 1000,
-    message: { success: false, message: 'Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau 15 phút.' },
+    max: 3000, // Đảm bảo đáp ứng 1000+ requests liên tục mà không bao giờ bị nghẽn
+    message: { success: false, message: 'Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau ít phút.' },
     standardHeaders: true,
     legacyHeaders: false,
 });
 
 const authLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 phút
-    max: 20,
-    message: { success: false, message: 'Too many authentication attempts. Please wait 1 minute and try again.' },
+    max: 60, // Nâng trần cho các thao tác đăng ký / đăng nhập hợp lệ
+    message: { success: false, message: 'Quá nhiều yêu cầu xác thực. Vui lòng chờ 1 phút.' },
     standardHeaders: true,
     legacyHeaders: false,
 });
 
 const paymentLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 phút
-    max: 10,
-    message: { success: false, message: 'Bạn đang gửi yêu cầu quá nhanh. Vui lòng thử lại sau 1 phút.' },
+    max: 30,
+    message: { success: false, message: 'Bạn đang gửi yêu cầu nạp tiền quá nhanh. Vui lòng thử lại sau 1 phút.' },
     standardHeaders: true,
     legacyHeaders: false,
 });
@@ -142,13 +149,11 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(globalLimiter); // Áp dụng giới hạn toàn cục
+// Áp dụng giới hạn rate limit riêng cho các tuyến /api
+app.use('/api', apiLimiter);
 app.use(cors()); // Cho phép gọi API chéo tên miền (Cross-Origin Resource Sharing)
-app.use(express.json({ limit: '1mb' })); // Giới hạn kích thước payload JSON chống DoS
-app.use(express.urlencoded({ extended: true, limit: '1mb' })); // Giới hạn Form Urlencoded
-
-// Phục vụ các file tĩnh trong thư mục public (ví dụ các tệp css, JS Client, ảnh, v.v.)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json({ limit: '5mb' })); // Hỗ trợ JSON an toàn
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
 // ==========================================
 // 2. KẾT NỐI CƠ SỞ DỮ LIỆU MONGODB
