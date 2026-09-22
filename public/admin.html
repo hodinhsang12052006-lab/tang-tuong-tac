@@ -452,16 +452,17 @@
                         <table class="w-full text-left text-sm whitespace-nowrap">
                             <thead class="bg-white/5 text-gray-300 font-semibold border-b border-white/10">
                                 <tr>
-                                    <th class="p-4 pl-6 text-xs uppercase tracking-wider">Họ tên / Tên đăng nhập</th>
-                                    <th class="p-4 text-xs uppercase tracking-wider">Số điện thoại</th>
+                                    <th class="p-4 pl-6 text-xs uppercase tracking-wider">Họ tên / Tài khoản</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Liên hệ (Phone / Email)</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider">Tiệm Nails & Địa chỉ</th>
                                     <th class="p-4 text-xs uppercase tracking-wider text-right">Số dư ví ($)</th>
-                                    <th class="p-4 text-xs uppercase tracking-wider text-center">Ngày tham gia</th>
-                                    <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Hành động</th>
+                                    <th class="p-4 text-xs uppercase tracking-wider text-center">Ngày đăng ký</th>
+                                    <th class="p-4 pr-6 text-xs uppercase tracking-wider text-center">Khảo Sát Khách</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-white/5 text-gray-300" id="admin-users-body">
                                 <tr>
-                                    <td colspan="5" class="p-8 text-center text-gray-500 text-xs">
+                                    <td colspan="6" class="p-8 text-center text-gray-500 text-xs">
                                         <i class="fa-solid fa-spinner fa-spin text-lg mb-2 block text-gray-600"></i>
                                         Đang tải danh sách người dùng...
                                     </td>
@@ -567,6 +568,26 @@
 
     <!-- Vanilla Javascript Logic -->
     <script>
+        // --- XSS & Sanitization Security Helpers ---
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function safeUrl(url) {
+            if (!url || typeof url !== 'string') return '#';
+            const trimmed = url.trim();
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                return escapeHtml(trimmed);
+            }
+            return '#';
+        }
+
         // --- 1. Tab Switching Logic ---
         function switchAdminTab(tab) {
             // Hide all sections
@@ -752,14 +773,14 @@
                         `;
 
                         row.innerHTML = `
-                            <td class="p-4 pl-6 font-mono text-[10px] text-gray-500">#${order._id.slice(-6).toUpperCase()}</td>
+                            <td class="p-4 pl-6 font-mono text-[10px] text-gray-500">#${escapeHtml(order._id.slice(-6).toUpperCase())}</td>
                             <td class="p-4 font-semibold text-white">
-                                <div>${order.userId ? order.userId.username : 'Ẩn danh'}</div>
-                                <div class="text-[10px] text-gray-500 font-normal">${order.userId && order.userId.email ? order.userId.email : ''}</div>
-                                <div class="text-[10px] text-neon-amber font-normal">${order.userId && order.userId.phone ? order.userId.phone : ''}</div>
+                                <div>${escapeHtml(order.userId ? order.userId.username : 'Ẩn danh')}</div>
+                                <div class="text-[10px] text-gray-500 font-normal">${escapeHtml(order.userId && order.userId.email ? order.userId.email : '')}</div>
+                                <div class="text-[10px] text-neon-amber font-normal">${escapeHtml(order.userId && order.userId.phone ? order.userId.phone : '')}</div>
                             </td>
-                            <td class="p-4">${order.serviceId ? order.serviceId.name : 'Dịch vụ'}</td>
-                            <td class="p-4 text-neon-cyan truncate max-w-[150px]"><a href="${order.link}" target="_blank" class="hover:underline">${order.link}</a></td>
+                            <td class="p-4">${escapeHtml(order.serviceId ? order.serviceId.name : 'Dịch vụ')}</td>
+                            <td class="p-4 text-neon-cyan truncate max-w-[150px]"><a href="${safeUrl(order.link)}" target="_blank" rel="noopener noreferrer" class="hover:underline">${escapeHtml(order.link)}</a></td>
                             <td class="p-4 text-right font-mono">${parseInt(order.quantity).toLocaleString()}</td>
                             <td class="p-4 text-right font-bold text-white">$${parseFloat(order.charge).toFixed(2)}</td>
                             <td class="p-4 text-center">${statusSelect}</td>
@@ -816,7 +837,10 @@
             }
         }
 
-        // --- 7. Fetch User Accounts List ---
+        // --- 7. Fetch User Accounts List & Salon Survey Profiles ---
+        let adminUsersCache = [];
+        let currentViewingUser = null;
+
         async function fetchAdminUsers() {
             const tableBody = document.getElementById('admin-users-body');
             const token = localStorage.getItem('bitpaw_token');
@@ -828,24 +852,49 @@
                 });
                 if (res.status === 401 || res.status === 403) {
                     alert('Tài khoản hiện tại không có quyền Admin. Vui lòng đăng nhập lại bằng tài khoản Admin!');
-                    window.location.href = '/login.html';
+                    window.location.href = '/';
                     return;
                 }
                 const data = await res.json();
                 if (data.success && data.data && data.data.length > 0) {
+                    adminUsersCache = data.data;
                     tableBody.innerHTML = '';
                     data.data.forEach(user => {
                         const row = document.createElement('tr');
                         row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5 text-xs text-gray-300";
+                        
+                        const hasSurvey = user.salonName || user.surveyCompleted;
+                        const safeUserId = escapeHtml(user._id);
+
                         row.innerHTML = `
-                            <td class="p-4 pl-6 font-bold text-white">${user.fullName || user.username}</td>
-                            <td class="p-4 text-gray-400">${user.phone || 'Trống'}</td>
+                            <td class="p-4 pl-6">
+                                <div class="font-bold text-white text-sm">${escapeHtml(user.fullName || user.username)}</div>
+                                <div class="text-[11px] text-gray-500 font-mono">@${escapeHtml(user.username)}</div>
+                            </td>
+                            <td class="p-4">
+                                <div class="font-mono text-white font-semibold">${escapeHtml(user.phone || 'Trống')}</div>
+                                <div class="text-[11px] text-gray-400">${escapeHtml(user.email || 'N/A')}</div>
+                            </td>
+                            <td class="p-4">
+                                ${hasSurvey ? `
+                                    <div class="font-semibold text-pink-300 flex items-center space-x-1">
+                                        <i class="fa-solid fa-shop text-xs text-neon-pink mr-1"></i>
+                                        <span>${escapeHtml(user.salonName || 'Tiệm Nails')}</span>
+                                    </div>
+                                    <div class="text-[10px] text-gray-400 mt-0.5">
+                                        <i class="fa-solid fa-location-dot mr-1"></i>${escapeHtml(user.salonLocation || 'Chưa cập nhật')}
+                                    </div>
+                                ` : `
+                                    <span class="text-gray-500 text-[11px] italic">Chưa làm khảo sát</span>
+                                `}
+                            </td>
                             <td class="p-4 text-right font-mono font-bold text-neon-amber">$${parseFloat(user.balance || 0).toFixed(2)}</td>
                             <td class="p-4 text-center text-gray-400">${user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
                             <td class="p-4 text-center">
-                                <span class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-white/5 border border-white/10 uppercase tracking-widest text-gray-300">
-                                    ${user.role}
-                                </span>
+                                <button onclick="viewUserSalonProfile('${safeUserId}')" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-neon-pink/15 hover:bg-neon-pink/25 border border-neon-pink/30 text-neon-pink font-semibold text-xs transition duration-200 shadow-sm hover:shadow-[0_0_15px_rgba(236,72,153,0.25)]">
+                                    <i class="fa-solid fa-clipboard-list text-xs"></i>
+                                    <span>Xem Khảo Sát</span>
+                                </button>
                             </td>
                         `;
                         tableBody.appendChild(row);
@@ -853,7 +902,7 @@
                 } else {
                     tableBody.innerHTML = `
                         <tr>
-                            <td colspan="5" class="p-8 text-center text-gray-500 text-xs">
+                            <td colspan="6" class="p-8 text-center text-gray-500 text-xs">
                                 Chưa có người dùng nào đăng ký.
                             </td>
                         </tr>
@@ -862,6 +911,92 @@
             } catch (err) {
                 console.error(err);
             }
+        }
+
+        function viewUserSalonProfile(userId) {
+            const user = adminUsersCache.find(u => String(u._id) === String(userId));
+            if (!user) {
+                alert('Không tìm thấy thông tin người dùng.');
+                return;
+            }
+
+            currentViewingUser = user;
+
+            document.getElementById('modal-salon-title').textContent = user.salonName ? `Tiệm: ${user.salonName}` : 'Hồ Sơ Người Dùng';
+            
+            const surveyStatus = document.getElementById('modal-survey-status');
+            if (user.salonName || user.surveyCompleted) {
+                surveyStatus.textContent = 'Đã Khảo Sát';
+                surveyStatus.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-neon-emerald/15 text-neon-emerald border border-neon-emerald/30 uppercase';
+            } else {
+                surveyStatus.textContent = 'Chưa Khảo Sát';
+                surveyStatus.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/15 text-yellow-400 border border-yellow-500/30 uppercase';
+            }
+
+            document.getElementById('modal-user-fullname').textContent = user.fullName || 'Chưa cung cấp';
+            document.getElementById('modal-user-username').textContent = '@' + (user.username || '');
+            document.getElementById('modal-user-phone').textContent = user.phone || 'Chưa có';
+            
+            const callBtn = document.getElementById('modal-user-call-btn');
+            if (user.phone) {
+                callBtn.href = `tel:${user.phone}`;
+                callBtn.classList.remove('hidden');
+            } else {
+                callBtn.classList.add('hidden');
+            }
+
+            document.getElementById('modal-user-email').textContent = user.email || 'Chưa có';
+            document.getElementById('modal-salon-name').textContent = user.salonName || 'Chưa điền';
+            document.getElementById('modal-salon-location').textContent = user.salonLocation || 'Chưa điền';
+            document.getElementById('modal-salon-scale').textContent = user.salonScale || 'Chưa cung cấp';
+            document.getElementById('modal-has-website').textContent = user.hasWebsite || 'Chưa cung cấp';
+            document.getElementById('modal-customer-traffic').textContent = user.customerTraffic || 'Chưa cung cấp';
+            document.getElementById('modal-marketing-goal').textContent = user.marketingGoal || 'Chưa cung cấp';
+
+            const platformsContainer = document.getElementById('modal-platforms');
+            if (user.existingPlatforms && user.existingPlatforms.length > 0) {
+                platformsContainer.innerHTML = user.existingPlatforms.map(p => `
+                    <span class="px-2.5 py-1 rounded-lg bg-white/10 border border-white/15 text-gray-200 font-semibold text-[11px] inline-flex items-center space-x-1">
+                        <i class="fa-solid fa-check text-neon-pink text-[9px] mr-1"></i>
+                        ${escapeHtml(p)}
+                    </span>
+                `).join('');
+            } else {
+                platformsContainer.innerHTML = '<span class="text-gray-500 italic">Không có hoặc chưa chọn</span>';
+            }
+
+            document.getElementById('modal-user-created').textContent = 'Đăng ký ngày: ' + (user.createdAt ? new Date(user.createdAt).toLocaleString('vi-VN') : 'N/A');
+
+            const modal = document.getElementById('salon-profile-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeSalonProfileModal() {
+            const modal = document.getElementById('salon-profile-modal');
+            modal.classList.add('hidden');
+            currentViewingUser = null;
+        }
+
+        function copySalonSurveyInfo() {
+            if (!currentViewingUser) return;
+            const u = currentViewingUser;
+            const text = `=== HỒ SƠ TIỆM NAILS (BITPAWNETWORK) ===
+Chủ tiệm: ${u.fullName || u.username} (@${u.username})
+SĐT: ${u.phone} | Email: ${u.email}
+Tên tiệm: ${u.salonName || 'N/A'}
+Địa chỉ: ${u.salonLocation || 'N/A'}
+Quy mô: ${u.salonScale || 'N/A'}
+Hiện trạng khách: ${u.customerTraffic || 'N/A'}
+Tình trạng website: ${u.hasWebsite || 'N/A'}
+Nền tảng đang dùng: ${(u.existingPlatforms || []).join(', ')}
+Mục tiêu marketing: ${u.marketingGoal || 'N/A'}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Đã sao chép hồ sơ tiệm Nails vào clipboard!');
+            }).catch(err => {
+                console.error(err);
+                alert('Không thể sao chép tự động: ' + err);
+            });
         }
 
         // --- 8. Fetch Pending Deposit Requests ---
@@ -880,18 +1015,19 @@
                     data.data.forEach(tx => {
                         const row = document.createElement('tr');
                         row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5 text-xs text-gray-300";
+                        const safeTxId = escapeHtml(tx._id);
                         row.innerHTML = `
                             <td class="p-4 pl-6 font-semibold text-white">
-                                <div>${tx.userId ? tx.userId.username : 'N/A'}</div>
-                                <div class="text-[10px] text-gray-500">${tx.userId ? tx.userId.email : ''}</div>
+                                <div>${escapeHtml(tx.userId ? tx.userId.username : 'N/A')}</div>
+                                <div class="text-[10px] text-gray-500">${escapeHtml(tx.userId ? tx.userId.email : '')}</div>
                             </td>
-                            <td class="p-4 font-mono text-[10px] text-neon-cyan">${tx.transactionId}</td>
+                            <td class="p-4 font-mono text-[10px] text-neon-cyan">${escapeHtml(tx.transactionId)}</td>
                             <td class="p-4 text-right font-bold text-green-400 font-mono">$${parseFloat(tx.amount).toFixed(2)}</td>
                             <td class="p-4 text-gray-500">${new Date(tx.createdAt).toLocaleString('vi-VN')}</td>
                             <td class="p-4 text-center">
                                 <div class="flex items-center justify-center space-x-2">
-                                    <button onclick="approveDeposit('${tx._id}')" class="px-3 py-1.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-bold text-[10px] shadow transition">Duyệt</button>
-                                    <button onclick="rejectDeposit('${tx._id}')" class="px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 text-white font-bold text-[10px] shadow transition">Từ chối</button>
+                                    <button onclick="approveDeposit('${safeTxId}')" class="px-3 py-1.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-bold text-[10px] shadow transition">Duyệt</button>
+                                    <button onclick="rejectDeposit('${safeTxId}')" class="px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-600 text-white font-bold text-[10px] shadow transition">Từ chối</button>
                                 </div>
                             </td>
                         `;
@@ -1123,5 +1259,123 @@
             }
         });
     </script>
+
+    <!-- ========================================================================= -->
+    <!-- SALON PROFILE & SURVEY DETAILS MODAL FOR ADMIN                            -->
+    <!-- ========================================================================= -->
+    <div id="salon-profile-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md hidden transition-opacity duration-300 p-4">
+        <div class="glass-card w-full max-w-[680px] max-h-[90vh] overflow-y-auto custom-scrollbar rounded-[28px] p-6 sm:p-8 relative shadow-2xl border border-white/10 mx-auto font-sans">
+            <!-- Close Button -->
+            <button onclick="closeSalonProfileModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-neon-pink/10 hover:border-neon-pink/30 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Header -->
+            <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-white/10">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-neon-pink/20 to-neon-purple/20 border border-neon-pink/40 flex items-center justify-center text-neon-pink text-xl shadow-lg shadow-neon-pink/20">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h3 id="modal-salon-title" class="font-heading font-black text-xl text-white">Hồ Sơ Khảo Sát Tiệm Nails</h3>
+                        <span id="modal-survey-status" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-neon-emerald/15 text-neon-emerald border border-neon-emerald/30 uppercase">Đã Khảo Sát</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-0.5">Thông tin chi tiết hiện trạng & nhu cầu marketing của khách hàng</p>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="space-y-6 text-xs text-gray-300">
+                <!-- 1. Thông Tin Chủ Tiệm -->
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <h4 class="font-heading font-bold text-xs uppercase text-neon-pink tracking-wider mb-3 flex items-center">
+                        <i class="fa-regular fa-user mr-1.5"></i> Thông Tin Chủ Tiệm / Tài Khoản
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Họ và tên:</span>
+                            <span id="modal-user-fullname" class="font-bold text-white text-sm">--</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Username:</span>
+                            <span id="modal-user-username" class="font-mono text-neon-cyan">--</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Số điện thoại liên hệ:</span>
+                            <div class="flex items-center space-x-2 mt-0.5">
+                                <span id="modal-user-phone" class="font-bold text-white font-mono text-sm">--</span>
+                                <a id="modal-user-call-btn" href="#" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 text-[10px] font-bold transition">
+                                    <i class="fa-solid fa-phone mr-1"></i> Gọi ngay
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Email:</span>
+                            <span id="modal-user-email" class="text-gray-200">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Thông Tin Tiệm Nails & Khu Vực -->
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <h4 class="font-heading font-bold text-xs uppercase text-neon-purple tracking-wider mb-3 flex items-center">
+                        <i class="fa-solid fa-shop mr-1.5"></i> Quy Mô & Địa Chỉ Tiệm Tại Mỹ
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Tên Tiệm Nails:</span>
+                            <span id="modal-salon-name" class="font-bold text-white text-sm">--</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Khu vực (Bang & Zipcode):</span>
+                            <span id="modal-salon-location" class="font-semibold text-white">--</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Quy mô thợ & bàn ghế:</span>
+                            <span id="modal-salon-scale" class="text-white font-medium">--</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Tình trạng Website:</span>
+                            <span id="modal-has-website" class="text-white font-medium">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Nỗi Đau & Nhu Cầu Marketing -->
+                <div class="p-4 rounded-2xl bg-gradient-to-r from-neon-pink/5 to-neon-purple/5 border border-neon-pink/20">
+                    <h4 class="font-heading font-bold text-xs uppercase text-neon-pink tracking-wider mb-3 flex items-center">
+                        <i class="fa-solid fa-bullseye mr-1.5"></i> Thực Trạng Lượng Khách & Mục Tiêu Số 1
+                    </h4>
+                    <div class="space-y-3">
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Hiện trạng lượng khách hiện tại:</span>
+                            <div id="modal-customer-traffic" class="mt-1 p-2.5 rounded-xl bg-dark-950/80 border border-white/10 text-pink-200 font-medium">--</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Nền tảng số đang sử dụng:</span>
+                            <div id="modal-platforms" class="flex flex-wrap gap-1.5 mt-1.5">--</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block text-[10px] uppercase">Mục tiêu Marketing cấp bách nhất:</span>
+                            <div id="modal-marketing-goal" class="mt-1 p-2.5 rounded-xl bg-neon-pink/15 border border-neon-pink/30 text-white font-bold">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Footer -->
+            <div class="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                <span id="modal-user-created" class="text-[11px] text-gray-500">Đăng ký ngày: --</span>
+                <div class="flex items-center space-x-2">
+                    <button onclick="copySalonSurveyInfo()" class="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 font-semibold text-xs transition">
+                        <i class="fa-regular fa-copy mr-1"></i> Sao chép hồ sơ
+                    </button>
+                    <button onclick="closeSalonProfileModal()" class="px-4 py-2 rounded-xl btn-beauty-primary font-bold text-white text-xs transition">
+                        Đóng <i class="fa-solid fa-check ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

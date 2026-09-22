@@ -116,10 +116,11 @@ async function syncAndMarkup(req, res) {
 const activeSmmPurchases = new Set();
 
 async function placeOrder(req, res) {
-    const activeUserId = req.user ? req.user._id : (req.body.userId || req.body.userDbId);
-    if (!activeUserId) {
-        return res.status(400).json({ success: false, message: 'Vui lòng cung cấp đầy đủ thông tin đặt đơn' });
+    // CHẶN HOÀN TOÀN IDOR: CHỈ SỬ DỤNG ID TỪ JWT ĐÃ ĐƯỢC XÁC THỰC
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ success: false, message: 'Vui lòng đăng nhập để tiếp tục.' });
     }
+    const activeUserId = req.user._id;
 
     const userIdStr = activeUserId.toString();
     if (activeSmmPurchases.has(userIdStr)) {
@@ -135,10 +136,32 @@ async function placeOrder(req, res) {
         const activeServiceDbId = req.body.serviceId || req.body.serviceDbId;
         const { link, quantity } = req.body;
 
-        // 1. Kiểm tra tham số cơ bản
-        if (!activeServiceDbId || !link || !quantity || quantity <= 0) {
+        // 1. Kiểm tra tham số cơ bản & định dạng bảo mật
+        if (!activeServiceDbId || !link || !quantity) {
             await session.abortTransaction();
-            return res.status(400).json({ success: false, message: 'Vui lòng cung cấp đầy đủ thông tin đặt đơn' });
+            return res.status(400).json({ success: false, message: 'Vui lòng cung cấp đầy đủ thông tin đặt đơn.' });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(activeServiceDbId)) {
+            await session.abortTransaction();
+            return res.status(400).json({ success: false, message: 'Mã dịch vụ không hợp lệ.' });
+        }
+
+        if (typeof link !== 'string' || link.trim().length === 0 || link.length > 1000) {
+            await session.abortTransaction();
+            return res.status(400).json({ success: false, message: 'Đường dẫn liên kết không hợp lệ.' });
+        }
+
+        const cleanLink = link.trim();
+        if (!cleanLink.startsWith('http://') && !cleanLink.startsWith('https://')) {
+            await session.abortTransaction();
+            return res.status(400).json({ success: false, message: 'Đường dẫn phải bắt đầu bằng http:// hoặc https://' });
+        }
+
+        const parsedQuantity = parseInt(quantity, 10);
+        if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+            await session.abortTransaction();
+            return res.status(400).json({ success: false, message: 'Số lượng mua phải là số nguyên dương.' });
         }
 
         // 2. Tìm kiếm dịch vụ trong Database cục bộ của Bitpawnetwork
@@ -350,22 +373,23 @@ async function getServices(req, res) {
             console.error('[Get Services] Lỗi truy vấn DB:', dbFindErr.message);
         }
         
-        // 4. Nếu Database trống rỗng (0 dịch vụ), tự động nạp (seed) dịch vụ từ file cấu hình vào DB
-        if (services.length === 0) {
-            console.log('[Get Services] Database trống. Tiến hành nạp (seed) dịch vụ từ services_config.json vào Database...');
-            try {
-                const configPath = path.join(__dirname, 'services_config.json');
-                if (fs.existsSync(configPath)) {
-                    const raw = fs.readFileSync(configPath, 'utf8');
-                    const defaultServices = JSON.parse(raw);
-                    
-                    await Service.insertMany(defaultServices);
-                    services = await Service.find({ status: true }).sort({ serviceId: 1 });
-                    console.log(`[Get Services] Đã seed thành công ${services.length} dịch vụ vào Database.`);
+        // 4. Đồng bộ các dịch vụ từ file cấu hình vào DB nếu chưa có
+        try {
+            const configPath = path.join(__dirname, 'services_config.json');
+            if (fs.existsSync(configPath)) {
+                const raw = fs.readFileSync(configPath, 'utf8');
+                const defaultServices = JSON.parse(raw);
+                for (const ds of defaultServices) {
+                    const sid = ds.serviceId ? ds.serviceId.toString() : '';
+                    const exists = await Service.findOne({ serviceId: sid });
+                    if (!exists) {
+                        await Service.create(ds);
+                    }
                 }
-            } catch (seedErr) {
-                console.error('[Get Services] Lỗi tự động seed dịch vụ từ cấu hình:', seedErr.message);
+                services = await Service.find({ status: true }).sort({ serviceId: 1 });
             }
+        } catch (seedErr) {
+            console.error('[Get Services] Lỗi tự động seed dịch vụ từ cấu hình:', seedErr.message);
         }
 
         // Áp dụng công thức giá phân tầng (USD)
@@ -426,6 +450,10 @@ async function updateOrderStatus(req, res) {
         const validStatuses = ['Pending', 'Processing', 'Completed', 'Canceled', 'Partial'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ success: false, message: 'Trạng thái đơn hàng không hợp lệ.' });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return res.status(400).json({ success: false, message: 'Mã đơn hàng không hợp lệ.' });
         }
         
         const order = await Order.findById(orderId);
@@ -633,12 +661,15 @@ async function getViaProducts(req, res) {
 
 // 3. API đặt mua Via
 async function buyVia(req, res) {
-    const activeUserId = req.user ? req.user._id : (req.body.userId || req.body.userDbId);
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ success: false, message: 'Vui lòng đăng nhập để thực hiện đặt hàng.' });
+    }
+    const activeUserId = req.user._id;
     const { productId, quantity } = req.body;
-    const qty = parseInt(quantity);
+    const qty = parseInt(quantity, 10);
 
-    if (!activeUserId || !productId || !qty || qty <= 0) {
-        return res.status(400).json({ success: false, message: 'Dữ liệu mua hàng không hợp lệ.' });
+    if (!productId || typeof productId !== 'string' || isNaN(qty) || qty <= 0 || qty > 1000) {
+        return res.status(400).json({ success: false, message: 'Dữ liệu mua hàng không hợp lệ (số lượng từ 1 - 1000).' });
     }
 
     const session = await mongoose.startSession();
@@ -758,7 +789,7 @@ async function getAllViaOrders(req, res) {
 async function saveSettings(req, res) {
     try {
         const { key, value } = req.body;
-        if (!key || value === undefined) {
+        if (!key || typeof key !== 'string' || !/^[a-zA-Z0-9_-]{1,50}$/.test(key) || value === undefined) {
             return res.status(400).json({ success: false, message: 'Dữ liệu cấu hình không hợp lệ.' });
         }
         await SystemConfig.findOneAndUpdate(
@@ -781,6 +812,9 @@ async function saveSettings(req, res) {
 async function getSetting(req, res) {
     try {
         const { key } = req.params;
+        if (!key || typeof key !== 'string' || !/^[a-zA-Z0-9_-]{1,50}$/.test(key)) {
+            return res.status(400).json({ success: false, message: 'Tên cấu hình không hợp lệ.' });
+        }
         const config = await SystemConfig.findOne({ key });
         return res.status(200).json({
             success: true,

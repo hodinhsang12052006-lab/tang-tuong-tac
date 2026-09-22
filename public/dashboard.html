@@ -1263,6 +1263,26 @@
 
     <!-- Vanilla Javascript Logic -->
     <script>
+        // --- XSS & Sanitization Security Helpers ---
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function safeUrl(url) {
+            if (!url || typeof url !== 'string') return '#';
+            const trimmed = url.trim();
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                return escapeHtml(trimmed);
+            }
+            return '#';
+        }
+
         // --- Fetch with Timeout Helper ---
         async function fetchWithTimeout(resource, options = {}) {
             const { timeout = 8000 } = options;
@@ -1673,7 +1693,7 @@
                         row.className = "hover:bg-white/5 transition duration-150 border-b border-white/5 text-xs text-gray-300";
 
                         let statusBadge = '';
-                        if (tx.status === 'Success') {
+                        if (tx.status === 'Success' || tx.status === 'Approved') {
                             statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold bg-green-500/10 text-green-400 border border-green-500/20">Thành công</span>`;
                         } else if (tx.status === 'Pending') {
                             statusBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">Đang duyệt</span>`;
@@ -1685,7 +1705,7 @@
                         const dateFormatted = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
                         row.innerHTML = `
-                            <td class="p-2 pl-0 font-mono text-[10px] text-gray-500" title="${tx.transactionId}">${tx.transactionId.length > 10 ? tx.transactionId.slice(0, 10) + '...' : tx.transactionId}</td>
+                            <td class="p-2 pl-0 font-mono text-[10px] text-gray-500" title="${escapeHtml(tx.transactionId)}">${escapeHtml(tx.transactionId.length > 10 ? tx.transactionId.slice(0, 10) + '...' : tx.transactionId)}</td>
                             <td class="p-2 text-[10px] text-gray-400">${dateFormatted}</td>
                             <td class="p-2 text-right text-white font-bold">$${parseFloat(tx.amount).toFixed(2)}</td>
                             <td class="p-2 text-center pr-0">${statusBadge}</td>
@@ -1745,10 +1765,10 @@
                         const dateFormatted = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
                         row.innerHTML = `
-                            <td class="p-4 pl-6 font-mono text-xs text-gray-500">#${order._id.slice(-6).toUpperCase()}</td>
+                            <td class="p-4 pl-6 font-mono text-xs text-gray-500">#${escapeHtml(order._id.slice(-6).toUpperCase())}</td>
                             <td class="p-4 text-xs text-gray-400">${dateFormatted}</td>
-                            <td class="p-4 text-xs font-bold text-white">${order.serviceId ? order.serviceId.name : 'Dịch vụ hệ thống'}</td>
-                            <td class="p-4 text-xs text-neon-cyan max-w-[200px] truncate"><a href="${order.link}" target="_blank" class="hover:underline">${order.link}</a></td>
+                            <td class="p-4 text-xs font-bold text-white">${escapeHtml(order.serviceId ? order.serviceId.name : 'Dịch vụ hệ thống')}</td>
+                            <td class="p-4 text-xs text-neon-cyan max-w-[200px] truncate"><a href="${safeUrl(order.link)}" target="_blank" rel="noopener noreferrer" class="hover:underline">${escapeHtml(order.link)}</a></td>
                             <td class="p-4 text-xs text-right font-mono">${parseInt(order.quantity).toLocaleString()}</td>
                             <td class="p-4 text-xs text-right text-white font-bold">$${parseFloat(order.charge).toFixed(2)}</td>
                             <td class="p-4 text-center">${statusBadge}</td>

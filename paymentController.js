@@ -22,15 +22,24 @@ async function requestDeposit(req, res) {
             return res.status(400).json({ success: false, message: 'Vui lòng cung cấp Số tiền và Mã giao dịch.' });
         }
 
-        const parsedAmount = parseFloat(amount);
-        if (isNaN(parsedAmount) || parsedAmount <= 0) {
-            return res.status(400).json({ success: false, message: 'Số tiền chuyển khoản không hợp lệ.' });
+        if (typeof transactionId !== 'string') {
+            return res.status(400).json({ success: false, message: 'Mã giao dịch không hợp lệ.' });
         }
 
-        const method = paymentMethod || 'Vikki Bank';
+        const cleanTxId = transactionId.trim().replace(/[<>]/g, '');
+        if (cleanTxId.length < 3 || cleanTxId.length > 80) {
+            return res.status(400).json({ success: false, message: 'Mã giao dịch phải từ 3 đến 80 ký tự.' });
+        }
+
+        const parsedAmount = parseFloat(amount);
+        if (isNaN(parsedAmount) || !isFinite(parsedAmount) || parsedAmount < 1.0 || parsedAmount > 50000.0) {
+            return res.status(400).json({ success: false, message: 'Số tiền chuyển khoản phải từ $1.00 đến $50,000.00.' });
+        }
+
+        const method = (typeof paymentMethod === 'string' && paymentMethod.trim().length <= 50) ? paymentMethod.trim() : 'Vikki Bank';
 
         // PHÒNG CHỐNG SPAM / TRÙNG LẶP MÃ GIAO DỊCH
-        const existingTx = await Transaction.findOne({ transactionId: transactionId.trim() });
+        const existingTx = await Transaction.findOne({ transactionId: cleanTxId });
         if (existingTx) {
             return res.status(409).json({ 
                 success: false, 
@@ -41,8 +50,8 @@ async function requestDeposit(req, res) {
         // Tạo yêu cầu nạp tiền mới với trạng thái mặc định: Pending
         const newTx = new Transaction({
             userId,
-            transactionId: transactionId.trim(),
-            amount: parsedAmount,
+            transactionId: cleanTxId,
+            amount: parseFloat(parsedAmount.toFixed(2)),
             paymentMethod: method,
             status: 'Pending'
         });
@@ -75,6 +84,11 @@ async function approveDeposit(req, res) {
         session.startTransaction();
 
         const { txId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(txId)) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(400).json({ success: false, message: 'Mã định danh giao dịch không hợp lệ.' });
+        }
 
         // Tìm kiếm giao dịch trong DB
         const tx = await Transaction.findById(txId).session(session);
@@ -138,6 +152,9 @@ async function approveDeposit(req, res) {
 async function rejectDeposit(req, res) {
     try {
         const { txId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(txId)) {
+            return res.status(400).json({ success: false, message: 'Mã định danh giao dịch không hợp lệ.' });
+        }
 
         const tx = await Transaction.findById(txId);
         if (!tx) {

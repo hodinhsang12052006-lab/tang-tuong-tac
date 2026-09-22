@@ -133,10 +133,19 @@ const paymentLimiter = rateLimit({
     legacyHeaders: false,
 });
 
+// Bảo vệ tiêu đề HTTP & chống tấn công Clickjacking / Sniffing
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+});
+
 app.use(globalLimiter); // Áp dụng giới hạn toàn cục
 app.use(cors()); // Cho phép gọi API chéo tên miền (Cross-Origin Resource Sharing)
-app.use(express.json()); // Phân tích Request Body dạng JSON
-app.use(express.urlencoded({ extended: true })); // Phân tích Request Body dạng Form Urlencoded
+app.use(express.json({ limit: '1mb' })); // Giới hạn kích thước payload JSON chống DoS
+app.use(express.urlencoded({ extended: true, limit: '1mb' })); // Giới hạn Form Urlencoded
 
 // Phục vụ các file tĩnh trong thư mục public (ví dụ các tệp css, JS Client, ảnh, v.v.)
 app.use(express.static(path.join(__dirname, 'public')));
@@ -163,6 +172,21 @@ mongoose.connect(MONGO_URI, {
 .catch((err) => {
     console.error('[Database Error] Không thể kết nối tới MongoDB:', err.message);
     console.warn('[Database Alert] Vui lòng đảm bảo dịch vụ MongoDB đã được khởi động trên máy chủ.');
+});
+
+// Middleware đảm bảo kết nối MongoDB trước khi xử lý yêu cầu (Hỗ trợ Vercel Serverless Cold Start)
+app.use(async (req, res, next) => {
+    if (mongoose.connection.readyState === 0) {
+        try {
+            await mongoose.connect(MONGO_URI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
+        } catch (err) {
+            console.error('[Serverless DB Connect Error]', err.message);
+        }
+    }
+    next();
 });
 
 // ==========================================

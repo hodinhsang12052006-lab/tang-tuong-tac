@@ -37,6 +37,43 @@ const UserSchema = new mongoose.Schema({
         required: [true, 'Vui lòng cung cấp mật khẩu'],
         minlength: [6, 'Mật khẩu phải từ 6 ký tự trở lên']
     },
+    fullName: {
+        type: String,
+        trim: true
+    },
+    // Dữ liệu khảo sát hiện trạng tiệm Nails phục vụ Marketing
+    salonName: {
+        type: String,
+        trim: true
+    },
+    salonLocation: {
+        type: String, // Ví dụ: "Houston, TX", "California", "Zip 77001"
+        trim: true
+    },
+    salonScale: {
+        type: String, // Ví dụ: "1 - 3 thợ", "4 - 7 thợ", "8 - 15 thợ", "> 15 thợ"
+        trim: true
+    },
+    customerTraffic: {
+        type: String, // Ví dụ: "Vắng đầu tuần", "Khách bấp bênh", "Ổn định muốn tăng thêm"
+        trim: true
+    },
+    hasWebsite: {
+        type: String, // "Chưa có website", "Có website cũ", "Đã có website chuẩn"
+        trim: true
+    },
+    existingPlatforms: [{
+        type: String, // ["Google Maps", "Facebook", "Instagram", "TikTok", "Yelp", "Clover/Square"]
+        trim: true
+    }],
+    marketingGoal: {
+        type: String, // "Kéo khách gần 5-10 miles", "Tăng review 5 sao", "Lấp đầy lịch đầu tuần"
+        trim: true
+    },
+    surveyCompleted: {
+        type: Boolean,
+        default: false
+    },
     balance: {
         type: Number,
         default: 0.0, // Số dư mặc định khi tạo tài khoản

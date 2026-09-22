@@ -18,16 +18,34 @@ const JWT_SECRET = process.env.JWT_SECRET || 'SECRET_KEY_BITPAW_NETWORK';
  */
 async function register(req, res) {
     try {
-        const { emailOrPhone, username, password, email: reqEmail, phone: reqPhone, fullName, confirmPassword } = req.body;
+        const { 
+            emailOrPhone, username, password, email: reqEmail, phone: reqPhone, fullName, confirmPassword,
+            salonName, salonLocation, salonScale, customerTraffic, hasWebsite, existingPlatforms, marketingGoal
+        } = req.body;
 
-
+        // Chống NoSQL Injection & Type Confusion: đảm bảo dữ liệu là chuỗi hợp lệ
+        if (reqEmail !== undefined && typeof reqEmail !== 'string') {
+            return res.status(400).json({ success: false, message: 'Định dạng Email không hợp lệ.' });
+        }
+        if (reqPhone !== undefined && typeof reqPhone !== 'string') {
+            return res.status(400).json({ success: false, message: 'Định dạng Số điện thoại không hợp lệ.' });
+        }
+        if (username !== undefined && typeof username !== 'string') {
+            return res.status(400).json({ success: false, message: 'Tên đăng nhập không hợp lệ.' });
+        }
+        if (typeof password !== 'string') {
+            return res.status(400).json({ success: false, message: 'Vui lòng cung cấp mật khẩu dạng chuỗi.' });
+        }
+        if (fullName !== undefined && typeof fullName !== 'string') {
+            return res.status(400).json({ success: false, message: 'Họ và tên không hợp lệ.' });
+        }
 
         let email = reqEmail ? reqEmail.trim().toLowerCase() : null;
         let phone = reqPhone ? reqPhone.trim() : null;
 
         if (!email && !phone) {
             // Fallback to emailOrPhone
-            if (!emailOrPhone) {
+            if (!emailOrPhone || typeof emailOrPhone !== 'string') {
                 return res.status(400).json({ success: false, message: 'Vui lòng cung cấp Email hoặc Số điện thoại.' });
             }
             const isEmail = emailOrPhone.includes('@');
@@ -47,24 +65,31 @@ async function register(req, res) {
             return res.status(400).json({ success: false, message: 'Mật khẩu phải chứa ít nhất 6 ký tự.' });
         }
 
+        if (password.length > 72) {
+            return res.status(400).json({ success: false, message: 'Mật khẩu không được vượt quá 72 ký tự.' });
+        }
+
         if (confirmPassword && password !== confirmPassword) {
             return res.status(400).json({ success: false, message: 'Mật khẩu nhập lại không khớp.' });
         }
 
         // Validate email format if provided
         if (email) {
+            if (email.length > 100) return res.status(400).json({ success: false, message: 'Email quá dài.' });
             const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             if (!isEmailValid) {
                 return res.status(400).json({ success: false, message: 'Định dạng Email không hợp lệ.' });
             }
         }
 
-        // Validate phone format if provided
+        // Validate phone format if provided (Hỗ trợ định dạng số Mỹ/VN có khoảng trắng, dấu ngoặc, gạch nối)
         if (phone) {
-            const isPhoneValid = /^[0-9+]{9,15}$/.test(phone);
+            const cleanPhone = phone.replace(/[\s\(\)\-\.]/g, '');
+            const isPhoneValid = /^\+?[0-9]{9,15}$/.test(cleanPhone);
             if (!isPhoneValid) {
-                return res.status(400).json({ success: false, message: 'Định dạng Số điện thoại không hợp lệ.' });
+                return res.status(400).json({ success: false, message: 'Định dạng Số điện thoại không hợp lệ (9 - 15 số).' });
             }
+            phone = cleanPhone;
         }
 
         // Tạo username mặc định nếu không cung cấp
@@ -113,6 +138,20 @@ async function register(req, res) {
         if (phone) userObj.phone = phone;
         if (fullName) userObj.fullName = fullName;
 
+        // Lưu thông tin khảo sát tiệm Nails
+        if (salonName && typeof salonName === 'string') userObj.salonName = salonName.trim().slice(0, 100);
+        if (salonLocation && typeof salonLocation === 'string') userObj.salonLocation = salonLocation.trim().slice(0, 100);
+        if (salonScale && typeof salonScale === 'string') userObj.salonScale = salonScale.trim().slice(0, 50);
+        if (customerTraffic && typeof customerTraffic === 'string') userObj.customerTraffic = customerTraffic.trim().slice(0, 100);
+        if (hasWebsite && typeof hasWebsite === 'string') userObj.hasWebsite = hasWebsite.trim().slice(0, 100);
+        if (marketingGoal && typeof marketingGoal === 'string') userObj.marketingGoal = marketingGoal.trim().slice(0, 150);
+        if (Array.isArray(existingPlatforms)) {
+            userObj.existingPlatforms = existingPlatforms.filter(p => typeof p === 'string').map(p => p.trim().slice(0, 50));
+        }
+        if (salonName || salonLocation || salonScale || customerTraffic || hasWebsite || marketingGoal) {
+            userObj.surveyCompleted = true;
+        }
+
         const newUser = new User(userObj);
         await newUser.save();
 
@@ -121,15 +160,24 @@ async function register(req, res) {
 
         return res.status(201).json({
             success: true,
-            message: 'Đăng ký tài khoản thành công!',
+            message: 'Đăng ký tài khoản và hoàn tất hồ sơ tiệm Nails thành công!',
             token,
             user: {
                 id: newUser._id,
                 username: newUser.username,
+                fullName: newUser.fullName,
                 email: newUser.email,
                 phone: newUser.phone,
                 balance: newUser.balance,
-                role: newUser.role
+                role: newUser.role,
+                salonName: newUser.salonName,
+                salonLocation: newUser.salonLocation,
+                salonScale: newUser.salonScale,
+                customerTraffic: newUser.customerTraffic,
+                hasWebsite: newUser.hasWebsite,
+                existingPlatforms: newUser.existingPlatforms,
+                marketingGoal: newUser.marketingGoal,
+                surveyCompleted: newUser.surveyCompleted
             }
         });
 
@@ -153,16 +201,25 @@ async function login(req, res) {
             return res.status(400).json({ success: false, message: 'Vui lòng điền Email/Số điện thoại và Mật khẩu.' });
         }
 
+        // Chống NoSQL Injection: đảm bảo emailOrPhone và password là chuỗi
+        if (typeof emailOrPhone !== 'string' || typeof password !== 'string') {
+            return res.status(400).json({ success: false, message: 'Thông tin tài khoản hoặc mật khẩu không hợp lệ.' });
+        }
+
+        if (password.length > 72 || emailOrPhone.length > 100) {
+            return res.status(400).json({ success: false, message: 'Thông tin tài khoản hoặc mật khẩu không chính xác.' });
+        }
+
         const cleanIdentifier = emailOrPhone.trim();
+        const strippedPhone = cleanIdentifier.replace(/[\s\(\)\-\.]/g, '');
 
-
-
-        // Tìm người dùng theo Username, Email hoặc Số điện thoại
+        // Tìm người dùng theo Username, Email hoặc Số điện thoại (kể cả số đã chuẩn hóa)
         const user = await User.findOne({
             $or: [
                 { username: cleanIdentifier.toLowerCase() },
                 { email: cleanIdentifier.toLowerCase() },
-                { phone: cleanIdentifier }
+                { phone: cleanIdentifier },
+                { phone: strippedPhone }
             ]
         });
 

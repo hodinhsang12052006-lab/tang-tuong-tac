@@ -71,6 +71,7 @@ shop-via-vercel/.env
 
 # Temporary files & Artifact folders
 .tempmediaStorage/
+test_screenshots/
 scratch/
 browser/
 walkthrough.md

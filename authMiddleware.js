@@ -38,6 +38,13 @@ async function verifyUser(req, res, next) {
         // Giải mã và xác minh token
         const decoded = jwt.verify(token, JWT_SECRET);
 
+        if (!decoded || !decoded.id || !mongoose.Types.ObjectId.isValid(decoded.id)) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Mã xác thực JWT không hợp lệ (ID cấu trúc sai).' 
+            });
+        }
+
         // Tìm người dùng trong Database để đảm bảo tài khoản vẫn đang hoạt động
         const user = await User.findById(decoded.id).select('-password'); // Bỏ qua mật khẩu
 
