@@ -418,6 +418,40 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Bank Deposit Info Setting -->
+                <div class="glass-card rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-white/5 pb-4">
+                        <div class="w-8 h-8 rounded-lg bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
+                            <i class="fa-solid fa-building-columns text-sm"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-lg text-white">Cài Đặt Thông Tin Ngân Hàng Nạp Tiền</h3>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed font-light">
+                        Thông tin bên dưới hiển thị trực tiếp cho khách hàng ở mục "Nạp Tiền Vào Tài Khoản" trên Dashboard. Đổi xong bấm Lưu là khách hàng sẽ thấy ngay (không cần sửa code).
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Tên Ngân Hàng</label>
+                            <input type="text" id="bank-info-name" maxlength="30" placeholder="Vikki" class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Chủ Tài Khoản</label>
+                            <input type="text" id="bank-info-holder" maxlength="60" placeholder="HODINHSANG" class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Số Tài Khoản</label>
+                            <input type="text" id="bank-info-number" maxlength="30" placeholder="559583034" class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Đường Dẫn Ảnh QR</label>
+                            <input type="text" id="bank-info-qr" maxlength="300" placeholder="/stk%20nganhang.jpg" class="w-full bg-dark-900 border border-white/10 focus:border-neon-cyan rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                        </div>
+                    </div>
+                    <button onclick="saveBankInfo()" class="w-full sm:w-auto text-center text-xs font-bold text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-neon-cyan/50 py-3.5 px-8 rounded-xl transition duration-200 uppercase tracking-wider">
+                        Lưu Thông Tin Ngân Hàng
+                    </button>
+                </div>
             </div>
 
             <!-- 3. SERVICES MANAGEMENT TAB -->
@@ -1239,6 +1273,68 @@ Mục tiêu marketing: ${u.marketingGoal || 'N/A'}`;
             }
         }
 
+        // --- 12.2. Cài đặt Thông tin Ngân hàng Nạp tiền ---
+        async function saveBankInfo() {
+            const value = {
+                bankName: document.getElementById('bank-info-name').value.trim(),
+                accountHolder: document.getElementById('bank-info-holder').value.trim(),
+                accountNumber: document.getElementById('bank-info-number').value.trim(),
+                qrImageUrl: document.getElementById('bank-info-qr').value.trim()
+            };
+            if (!value.bankName || !value.accountHolder || !value.accountNumber) {
+                alert('Vui lòng điền đầy đủ Tên ngân hàng, Chủ tài khoản và Số tài khoản.');
+                return;
+            }
+
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) {
+                alert('Vui lòng đăng nhập lại.');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/admin/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ key: 'bank_info', value })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('Lưu thông tin ngân hàng thành công! Khách hàng sẽ thấy thông tin mới ngay khi vào Dashboard.');
+                } else {
+                    alert('Lỗi khi lưu thông tin ngân hàng: ' + data.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Lỗi kết nối khi lưu thông tin ngân hàng.');
+            }
+        }
+
+        async function fetchBankInfoSettings() {
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) return;
+            try {
+                const res = await fetch('/api/admin/settings/bank_info', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                const info = (data.success && data.data) ? data.data : null;
+                // Nếu Admin chưa từng lưu, tải giá trị mặc định đang hiển thị cho khách từ /api/config/bank-info để prefill form
+                const fallback = info || await fetch('/api/config/bank-info').then(r => r.json()).then(d => d.data).catch(() => null);
+                if (fallback) {
+                    if (fallback.bankName) document.getElementById('bank-info-name').value = fallback.bankName;
+                    if (fallback.accountHolder) document.getElementById('bank-info-holder').value = fallback.accountHolder;
+                    if (fallback.accountNumber) document.getElementById('bank-info-number').value = fallback.accountNumber;
+                    if (fallback.qrImageUrl) document.getElementById('bank-info-qr').value = fallback.qrImageUrl;
+                }
+            } catch (err) {
+                console.error('Lỗi khi tải thông tin ngân hàng:', err);
+            }
+        }
+
 
         // --- 13. Initialization on Load ---
         window.addEventListener('DOMContentLoaded', async () => {
@@ -1250,7 +1346,8 @@ Mục tiêu marketing: ${u.marketingGoal || 'N/A'}`;
                 fetchAdminUsers(),
                 fetchAdminOrders(),
                 fetchPendingDeposits(),
-                fetchSettings()
+                fetchSettings(),
+                fetchBankInfoSettings()
             ]).catch(err => console.error('Lỗi khi tải trước dữ liệu Admin:', err));
 
             // Mobile Sidebar toggle logic

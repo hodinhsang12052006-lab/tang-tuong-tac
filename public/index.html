@@ -583,7 +583,7 @@
             <a href="#hero" class="flex items-center space-x-2.5 sm:space-x-3 group flex-shrink-0 mr-1 sm:mr-3">
                 <div class="relative flex items-center justify-center">
                     <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-neon-pink via-neon-purple to-neon-cyan opacity-75 blur-[3px] group-hover:opacity-100 transition duration-500 animate-spin-slow"></div>
-                    <img src="cho1.jpg" alt="Bitpaw Mascot Logo" class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-white/20 shadow-lg shadow-neon-pink/20">
+                    <img src="cho1.jpg" alt="Bitpawnetwork Logo" class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-white/20 shadow-lg shadow-neon-pink/20">
                 </div>
                 <div class="flex flex-col">
                     <span class="font-heading font-extrabold text-base sm:text-xl 2xl:text-2xl tracking-wider text-white whitespace-nowrap">
@@ -627,12 +627,14 @@
                     </button>
                 </div>
 
-                <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-gray-300 hover:text-white font-semibold transition-colors duration-200 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl hover:bg-white/5 border border-white/10 hover:border-neon-pink/30 text-xs sm:text-sm whitespace-nowrap">
-                    <i class="fa-solid fa-arrow-right-to-bracket mr-1 text-neon-pink"></i> <span data-i18n="nav_login">Đăng Nhập</span>
-                </a>
-                <a href="javascript:void(0)" onclick="openAuthModal('register')" class="btn-beauty-primary font-semibold text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm tracking-wide flex items-center shadow-lg whitespace-nowrap">
-                    <i class="fa-solid fa-user-plus mr-1"></i> <span data-i18n="nav_register">Đăng Ký</span>
-                </a>
+                <div id="nav-auth-buttons" class="flex items-center space-x-2">
+                    <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-gray-300 hover:text-white font-semibold transition-colors duration-200 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl hover:bg-white/5 border border-white/10 hover:border-neon-pink/30 text-xs sm:text-sm whitespace-nowrap">
+                        <i class="fa-solid fa-arrow-right-to-bracket mr-1 text-neon-pink"></i> <span data-i18n="nav_login">Đăng Nhập</span>
+                    </a>
+                    <a href="javascript:void(0)" onclick="openAuthModal('register')" class="btn-beauty-primary font-semibold text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm tracking-wide flex items-center shadow-lg whitespace-nowrap">
+                        <i class="fa-solid fa-user-plus mr-1"></i> <span data-i18n="nav_register">Đăng Ký</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Hamburger Button (Mobile & Tablet) -->
@@ -671,7 +673,7 @@
                 <a href="#ecosystem" data-i18n="nav_ecosystem" class="block px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 font-medium transition duration-200">Hệ Sinh Thái</a>
                 <a href="#faq" data-i18n="nav_faq" class="block px-3 py-2 rounded-xl text-neon-cyan hover:text-white hover:bg-white/5 font-medium transition duration-200">Câu Hỏi Thường Gặp (FAQ)</a>
                 <a href="#contact-consult" data-i18n="nav_consult" class="block px-3 py-2 rounded-xl text-neon-pink hover:text-white hover:bg-white/5 font-semibold transition duration-200">Đăng Ký Tư Vấn</a>
-                <div class="pt-4 flex flex-col space-y-2.5 px-2">
+                <div id="mobile-nav-auth-buttons" class="pt-4 flex flex-col space-y-2.5 px-2">
                     <a href="javascript:void(0)" onclick="openAuthModal('login')" class="text-center font-semibold text-gray-300 hover:text-white py-2.5 rounded-xl border border-white/10 hover:bg-white/5 transition duration-200 text-sm">
                         <i class="fa-solid fa-arrow-right-to-bracket mr-2 text-neon-pink"></i> Đăng Nhập
                     </a>
@@ -4618,6 +4620,39 @@
             const savedLang = localStorage.getItem('bitpaw_lang') || 'vi';
             if (savedLang === 'en') {
                 switchLanguage('en', true);
+            }
+
+            // Sync logged-in session state in header
+            const token = localStorage.getItem('bitpaw_token');
+            const storedUser = localStorage.getItem('bitpaw_user');
+            if (token && storedUser) {
+                try {
+                    const u = JSON.parse(storedUser);
+                    const displayName = u.salonName || u.fullName || u.username;
+                    const targetUrl = u.role === 'admin' ? '/admin' : '/dashboard';
+
+                    const navAuthContainer = document.getElementById('nav-auth-buttons');
+                    if (navAuthContainer) {
+                        navAuthContainer.innerHTML = `
+                            <a href="${targetUrl}" class="btn-beauty-primary font-semibold text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm tracking-wide flex items-center shadow-lg whitespace-nowrap space-x-1.5">
+                                <i class="fa-solid fa-chart-pie mr-1 text-neon-cyan"></i>
+                                <span>Vào Dashboard (${displayName}) ↗</span>
+                            </a>
+                        `;
+                    }
+
+                    const mobileAuthContainer = document.getElementById('mobile-nav-auth-buttons');
+                    if (mobileAuthContainer) {
+                        mobileAuthContainer.innerHTML = `
+                            <a href="${targetUrl}" class="btn-beauty-primary text-center font-semibold text-white py-3 rounded-xl text-sm shadow-lg flex items-center justify-center space-x-2">
+                                <i class="fa-solid fa-chart-pie mr-1"></i>
+                                <span>Vào Bảng Điều Khiển (${displayName}) ↗</span>
+                            </a>
+                        `;
+                    }
+                } catch (e) {
+                    console.error('Lỗi phân tích phiên đăng nhập:', e);
+                }
             }
         });
     </script>

@@ -9,7 +9,10 @@ const mongoose = require('mongoose');
 const { User } = require('./models');
 
 // Khóa bí mật dùng để ký và xác thực JWT
-const JWT_SECRET = process.env.JWT_SECRET || 'SECRET_KEY_BITPAW_NETWORK';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    throw new Error('[Security] Thiếu biến môi trường JWT_SECRET. Không thể khởi động middleware xác thực.');
+}
 
 /**
  * ============================================================================

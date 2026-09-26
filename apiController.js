@@ -18,6 +18,22 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 phút (TTL)
 // Cấu hình mẫu hoặc các hằng số cấu hình hệ thống
 const PROVIDER_API_KEY = process.env.PROVIDER_API_KEY || 'MOCK_API_KEY_BITPAW'; // Token nhà cung cấp gốc
 const PROVIDER_API_URL = process.env.PROVIDER_API_URL || 'https://subvip247.com/api/v2'; // API URL gốc
+const VIA_API_KEY = process.env.VIA_API_KEY || ''; // Token nhà cung cấp Via/Clone (shopwinvia.com)
+const VIA_API_URL = process.env.VIA_API_URL || 'https://shopwinvia.com/api/products.php';
+
+/**
+ * Công thức tính % markup và giá bán ra duy nhất của toàn hệ thống (SMM & Via/Clone),
+ * dùng chung ở mọi nơi tính giá để tránh lệch giá giữa lúc đồng bộ/seed và lúc hiển thị/thu tiền.
+ */
+function computeMarkupPercent(originalPrice) {
+    const price = parseFloat(originalPrice) || 0;
+    return price < 0.4 ? 100 : 40;
+}
+function computeSellingPrice(originalPrice) {
+    const price = parseFloat(originalPrice) || 0;
+    const percent = computeMarkupPercent(price);
+    return parseFloat((price + (price * percent / 100)).toFixed(4));
+}
 
 /**
  * ============================================================================
@@ -29,19 +45,14 @@ async function syncAndMarkup(req, res) {
     try {
         const activeProviderUrl = PROVIDER_API_URL || 'https://subvip247.com/api/v2';
         const activeApiKey = PROVIDER_API_KEY;
-        const activeMarkup = 50; // Áp dụng cứng Markup 50%
 
         if (!activeApiKey) {
             return res.status(500).json({ success: false, message: 'Chưa cấu hình PROVIDER_API_KEY bảo mật trên máy chủ.' });
         }
 
-        console.log(`[API Sync] Bắt đầu đồng bộ an toàn từ: ${activeProviderUrl} với tỉ lệ tăng giá: ${activeMarkup}%`);
+        console.log(`[API Sync] Bắt đầu đồng bộ an toàn từ: ${activeProviderUrl} (áp dụng công thức giá phân tầng chung của hệ thống)`);
 
-        // 1. Xóa sạch toàn bộ dịch vụ cũ (bao gồm dịch vụ giả) trước khi lưu dịch vụ thật
-        await Service.deleteMany({});
-        console.log(`[API Sync] Đã xóa toàn bộ dịch vụ cũ trong Database.`);
-
-        // 2. Gọi API nhà cung cấp gốc bằng POST urlencoded
+        // 1. Gọi API nhà cung cấp gốc bằng POST urlencoded
         const params = new URLSearchParams();
         params.append('key', activeApiKey);
         params.append('action', 'services');
@@ -53,15 +64,20 @@ async function syncAndMarkup(req, res) {
             timeout: 15000
         });
 
-        // Xác thực kết quả trả về từ Provider gốc
+        // Xác thực kết quả trả về từ Provider gốc TRƯỚC khi xóa dữ liệu cũ,
+        // tránh trường hợp provider lỗi/trả dữ liệu hỏng làm catalog dịch vụ bị xóa trắng
         const rawServices = response.data;
         if (!rawServices || !Array.isArray(rawServices)) {
             console.error('[API Sync Error] Dữ liệu từ nhà cung cấp không phải là một mảng:', rawServices);
-            return res.status(502).json({ 
-                success: false, 
-                message: 'Nhận dữ liệu không hợp lệ từ nhà cung cấp gốc (Có thể sai API Key hoặc URL)' 
+            return res.status(502).json({
+                success: false,
+                message: 'Nhận dữ liệu không hợp lệ từ nhà cung cấp gốc (Có thể sai API Key hoặc URL)'
             });
         }
+
+        // 2. Xóa sạch toàn bộ dịch vụ cũ (bao gồm dịch vụ giả) sau khi đã xác nhận dữ liệu mới hợp lệ
+        await Service.deleteMany({});
+        console.log(`[API Sync] Đã xóa toàn bộ dịch vụ cũ trong Database.`);
 
         let createdCount = 0;
 
@@ -72,15 +88,13 @@ async function syncAndMarkup(req, res) {
 
             if (!serviceId || isNaN(originalPrice)) continue;
 
-            const calculatedSellingPrice = originalPrice * 1.5; // Markup 50%
-
             await Service.create({
                 serviceId: serviceId.toString(),
                 name: item.name,
                 providerUrl: activeProviderUrl,
                 originalPrice: originalPrice,
-                markupPercent: activeMarkup,
-                sellingPrice: calculatedSellingPrice,
+                markupPercent: computeMarkupPercent(originalPrice),
+                sellingPrice: computeSellingPrice(originalPrice),
                 status: true
             });
             createdCount++;
@@ -161,9 +175,9 @@ async function placeOrder(req, res) {
         }
 
         const parsedQuantity = parseInt(quantity, 10);
-        if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+        if (isNaN(parsedQuantity) || parsedQuantity < 10) {
             await session.abortTransaction();
-            return res.status(400).json({ success: false, message: 'Số lượng mua phải là số nguyên dương.' });
+            return res.status(400).json({ success: false, message: 'Số lượng đặt mua tối thiểu là 10.' });
         }
 
         // 2. Tìm kiếm dịch vụ trong Database cục bộ của Bitpawnetwork
@@ -178,14 +192,8 @@ async function placeOrder(req, res) {
             return res.status(400).json({ success: false, message: 'Dịch vụ này hiện đang tạm đóng' });
         }
 
-        // 3. Tính toán tổng chi phí đơn hàng dựa trên logic giá phân tầng (USD)
-        const original = service.originalPrice;
-        let calculatedSellingPrice;
-        if (original < 0.4) {
-            calculatedSellingPrice = parseFloat((original * 2).toFixed(4));
-        } else {
-            calculatedSellingPrice = parseFloat((original * 1.4).toFixed(4));
-        }
+        // 3. Tính toán tổng chi phí đơn hàng dựa trên công thức giá phân tầng chung của hệ thống (USD)
+        const calculatedSellingPrice = computeSellingPrice(service.originalPrice);
         const totalCharge = parseFloat(((calculatedSellingPrice / 1000) * quantity).toFixed(4));
 
         // 4. Tìm kiếm khách hàng và kiểm tra số dư (balance)
@@ -328,19 +336,12 @@ async function getServices(req, res) {
                 if (fs.existsSync(configPath)) {
                     const raw = fs.readFileSync(configPath, 'utf8');
                     const services = JSON.parse(raw);
-                    // Áp dụng công thức giá phân tầng (USD)
+                    // Áp dụng công thức giá phân tầng chung của hệ thống (USD)
                     const servicesWithBump = services.map(s => {
                         const obj = { ...s };
                         const original = obj.originalPrice !== undefined ? obj.originalPrice : (obj.original_price || 0);
-                        let sellingPrice;
-                        let markupPercent;
-                        if (original < 0.4) {
-                            sellingPrice = parseFloat((original * 2).toFixed(4));
-                            markupPercent = 100;
-                        } else {
-                            sellingPrice = parseFloat((original * 1.4).toFixed(4));
-                            markupPercent = 40;
-                        }
+                        const sellingPrice = computeSellingPrice(original);
+                        const markupPercent = computeMarkupPercent(original);
                         obj.sellingPrice = sellingPrice;
                         obj.markupPercent = markupPercent;
                         if (obj.selling_price !== undefined) obj.selling_price = sellingPrice;
@@ -383,9 +384,18 @@ async function getServices(req, res) {
                 const defaultServices = JSON.parse(raw);
                 for (const ds of defaultServices) {
                     const sid = ds.serviceId ? ds.serviceId.toString() : '';
-                    const exists = await Service.findOne({ serviceId: sid });
-                    if (!exists) {
-                        await Service.create(ds);
+                    try {
+                        const exists = await Service.findOne({ serviceId: sid });
+                        if (!exists) {
+                            await Service.create({
+                                ...ds,
+                                providerUrl: PROVIDER_API_URL,
+                                markupPercent: computeMarkupPercent(ds.originalPrice),
+                                sellingPrice: computeSellingPrice(ds.originalPrice)
+                            });
+                        }
+                    } catch (itemSeedErr) {
+                        console.error(`[Get Services] Lỗi seed dịch vụ #${sid}:`, itemSeedErr.message);
                     }
                 }
                 services = await Service.find({ status: true }).sort({ serviceId: 1 });
@@ -394,19 +404,12 @@ async function getServices(req, res) {
             console.error('[Get Services] Lỗi tự động seed dịch vụ từ cấu hình:', seedErr.message);
         }
 
-        // Áp dụng công thức giá phân tầng (USD)
+        // Áp dụng công thức giá phân tầng chung của hệ thống (USD)
         const servicesWithBump = services.map(s => {
             const obj = s.toObject ? s.toObject() : s;
             const original = obj.originalPrice !== undefined ? obj.originalPrice : (obj.original_price || 0);
-            let sellingPrice;
-            let markupPercent;
-            if (original < 0.4) {
-                sellingPrice = parseFloat((original * 2).toFixed(4));
-                markupPercent = 100;
-            } else {
-                sellingPrice = parseFloat((original * 1.4).toFixed(4));
-                markupPercent = 40;
-            }
+            const sellingPrice = computeSellingPrice(original);
+            const markupPercent = computeMarkupPercent(original);
             obj.sellingPrice = sellingPrice;
             obj.markupPercent = markupPercent;
             if (obj.selling_price !== undefined) obj.selling_price = sellingPrice;
@@ -572,13 +575,15 @@ const MOCK_VIA_PRODUCTS = [
     }
 ];
 
-// 1. Đồng bộ sản phẩm Via/Clone từ nguồn (Markup 40%)
+// 1. Đồng bộ sản phẩm Via/Clone từ nguồn (áp dụng công thức giá phân tầng chung)
 async function syncViaProducts(req, res) {
-    const VIA_API_KEY = 'a72aa98a763ee661649a9a93ff40d06cD7tnwyZHC2q5YeBM6Vpmg4sIPJ1vTjKA';
+    if (!VIA_API_KEY) {
+        console.warn('[syncViaProducts] Chưa cấu hình VIA_API_KEY, chỉ dùng Mock Data.');
+    }
     try {
         let products = [];
         try {
-            const response = await axios.get(`https://shopwinvia.com/api/products.php?api_key=${VIA_API_KEY}`, { timeout: 6000 });
+            const response = await axios.get(`${VIA_API_URL}?api_key=${VIA_API_KEY}`, { timeout: 6000 });
             if (response.data && Array.isArray(response.data)) {
                 products = response.data;
             } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
@@ -605,7 +610,7 @@ async function syncViaProducts(req, res) {
         let updatedCount = 0;
         for (const item of products) {
             const originalPrice = parseFloat(item.price || item.original_price || 1.0);
-            const sellingPrice = parseFloat((originalPrice * 1.4).toFixed(2)); // Markup 40%
+            const sellingPrice = computeSellingPrice(originalPrice);
 
             await ViaProduct.findOneAndUpdate(
                 { productId: item.id || item.productId },
@@ -645,13 +650,7 @@ async function getViaProducts(req, res) {
         const mappedProducts = products.map(p => {
             const obj = p.toObject ? p.toObject() : p;
             const original = obj.originalPrice !== undefined ? obj.originalPrice : 0;
-            let sellingPrice;
-            if (original < 0.4) {
-                sellingPrice = parseFloat((original * 2).toFixed(2));
-            } else {
-                sellingPrice = parseFloat((original * 1.4).toFixed(2));
-            }
-            obj.sellingPrice = sellingPrice;
+            obj.sellingPrice = computeSellingPrice(original);
             return obj;
         });
         return res.status(200).json({ success: true, data: mappedProducts });
@@ -698,14 +697,9 @@ async function buyVia(req, res) {
             return res.status(400).json({ success: false, message: 'Số lượng hàng trong kho không đủ.' });
         }
 
-        // Đảm bảo logic tính tổng tiền cũng theo logic giá phân tầng (USD)
+        // Đảm bảo logic tính tổng tiền cũng theo công thức giá phân tầng chung của hệ thống (USD)
         const original = product.originalPrice !== undefined ? product.originalPrice : 0;
-        let calculatedSellingPrice;
-        if (original < 0.4) {
-            calculatedSellingPrice = parseFloat((original * 2).toFixed(2));
-        } else {
-            calculatedSellingPrice = parseFloat((original * 1.4).toFixed(2));
-        }
+        const calculatedSellingPrice = computeSellingPrice(original);
         const totalCharge = parseFloat((calculatedSellingPrice * qty).toFixed(2));
 
         if (user.balance < totalCharge) {
@@ -762,10 +756,10 @@ async function buyVia(req, res) {
 
 // 4. Lấy lịch sử mua Via của User đang đăng nhập
 async function getMyViaOrders(req, res) {
-    const activeUserId = req.user ? req.user._id : req.query.userId;
-    if (!activeUserId) {
-        return res.status(400).json({ success: false, message: 'Thiếu mã định danh người dùng.' });
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ success: false, message: 'Vui lòng đăng nhập để tiếp tục.' });
     }
+    const activeUserId = req.user._id;
 
     try {
         const orders = await ViaOrder.find({ userId: activeUserId }).sort({ createdAt: -1 });
@@ -788,12 +782,30 @@ async function getAllViaOrders(req, res) {
 }
 
 // Cấu hình lưu/lấy cấu hình Admin
+// Các trường hợp lệ và độ dài tối đa cho phép khi lưu thông tin ngân hàng nạp tiền (chống spam/DoS dữ liệu)
+const BANK_INFO_FIELDS = { bankName: 30, accountHolder: 60, accountNumber: 30, qrImageUrl: 300 };
+
 async function saveSettings(req, res) {
     try {
         const { key, value } = req.body;
         if (!key || typeof key !== 'string' || !/^[a-zA-Z0-9_-]{1,50}$/.test(key) || value === undefined) {
             return res.status(400).json({ success: false, message: 'Dữ liệu cấu hình không hợp lệ.' });
         }
+
+        if (key === 'bank_info') {
+            if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+                return res.status(400).json({ success: false, message: 'Thông tin ngân hàng không hợp lệ.' });
+            }
+            for (const field of Object.keys(value)) {
+                if (!(field in BANK_INFO_FIELDS)) {
+                    return res.status(400).json({ success: false, message: `Trường không hợp lệ: ${field}` });
+                }
+                if (typeof value[field] !== 'string' || value[field].length > BANK_INFO_FIELDS[field]) {
+                    return res.status(400).json({ success: false, message: `Trường ${field} không hợp lệ hoặc quá dài.` });
+                }
+            }
+        }
+
         await SystemConfig.findOneAndUpdate(
             { key },
             { key, value },
@@ -828,6 +840,28 @@ async function getSetting(req, res) {
     }
 }
 
+// Thông tin ngân hàng mặc định (dùng khi Admin chưa cấu hình gì trong SystemConfig)
+const DEFAULT_BANK_INFO = {
+    bankName: 'Vikki',
+    accountHolder: 'HODINHSANG',
+    accountNumber: '559583034',
+    qrImageUrl: '/stk%20nganhang.jpg'
+};
+
+// Lấy thông tin ngân hàng nạp tiền — công khai, không cần đăng nhập (giống /api/config/exchange-rate)
+async function getBankInfo(req, res) {
+    try {
+        const config = await SystemConfig.findOne({ key: 'bank_info' });
+        const info = (config && config.value && typeof config.value === 'object')
+            ? { ...DEFAULT_BANK_INFO, ...config.value }
+            : DEFAULT_BANK_INFO;
+        return res.status(200).json({ success: true, data: info });
+    } catch (error) {
+        console.error('[Get Bank Info Error]', error);
+        return res.status(200).json({ success: true, data: DEFAULT_BANK_INFO });
+    }
+}
+
 module.exports = {
     syncAndMarkup,
     placeOrder,
@@ -843,5 +877,6 @@ module.exports = {
     getMyViaOrders,
     getAllViaOrders,
     saveSettings,
-    getSetting
+    getSetting,
+    getBankInfo
 };

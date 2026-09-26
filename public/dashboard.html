@@ -154,14 +154,31 @@
             transform: translateY(-1px);
         }
 
-        /* Background glow blob */
-        .glow-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.15;
+        /* Premier Packages Styling */
+        .premier-card {
+            background: linear-gradient(180deg, rgba(17, 28, 68, 0.45) 0%, rgba(7, 11, 25, 0.75) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .premier-card:hover {
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 0 30px -5px rgba(6, 182, 212, 0.15);
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        .animate-badge-pulse {
+            animation: badge-pulse 2.5s infinite ease-in-out;
         }
     </style>
 </head>
@@ -369,6 +386,232 @@
         <div class="p-6 md:p-8 space-y-8 flex-1">
             <!-- 1. MAIN DASHBOARD CONTENT -->
             <div id="section-dashboard" class="space-y-8">
+
+                <!-- ========================================================================= -->
+                <!-- 0. PREMIER 3 CORE PACKAGES SHOWCASE (ĐẬP NGAY VÀO MẮT KHI VỪA VÀO TRANG CHỦ) -->
+                <!-- ========================================================================= -->
+                <section id="premier-packages-section" class="relative rounded-3xl p-6 sm:p-8 border border-white/10 bg-gradient-to-b from-white/[0.04] via-dark-900/80 to-dark-950/90 shadow-2xl overflow-hidden backdrop-blur-2xl">
+                    <!-- Background ambient glows -->
+                    <div class="absolute -top-24 -left-24 w-80 h-80 bg-neon-cyan/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-neon-pink/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <!-- Header Banner -->
+                    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10 mb-8">
+                        <div>
+                            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-neon-pink/20 to-neon-purple/20 border border-neon-pink/40 text-[11px] font-extrabold tracking-wider text-neon-pink uppercase mb-2.5 shadow-lg shadow-neon-pink/10 animate-badge-pulse">
+                                <span class="w-2 h-2 rounded-full bg-neon-pink animate-ping"></span>
+                                <span>Bộ 3 Vũ Khí Đột Phá Khách Hàng Tiệm Nails</span>
+                            </div>
+                            <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight flex flex-wrap items-center gap-2.5">
+                                <span>Gói Giải Pháp Tăng Trưởng Toàn Diện</span>
+                                <span class="text-[11px] px-3 py-1 rounded-full bg-neon-cyan/20 border border-neon-cyan/40 text-neon-cyan font-bold tracking-normal uppercase">Dành Cho Tiệm Nails Tại Mỹ</span>
+                            </h2>
+                            <p class="text-xs sm:text-sm text-gray-300 mt-1.5 max-w-3xl leading-relaxed">
+                                Đẩy Top 1 Google Maps, chạy Ads Facebook/Instagram gom khách theo Zipcode giàu và trợ lý AI Bot chốt lịch tự động 24/7. Vừa vào hệ thống là có thể chọn kích hoạt ngay để nhân đôi doanh thu tiệm!
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-3 shrink-0">
+                            <div class="inline-flex items-center space-x-2.5 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-neon-cyan/15 to-neon-blue/15 border border-neon-cyan/30 text-neon-cyan text-xs font-bold shadow-lg">
+                                <i class="fa-solid fa-store text-sm"></i>
+                                <span id="user-salon-name-display">Tiệm Nails Của Bạn</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3 Core Packages Cards Grid -->
+                    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
+                        
+                        <!-- GÓI 1: TOP SEO GOOGLE MAPS -->
+                        <div class="premier-card rounded-2xl p-6 sm:p-7 border-2 border-neon-cyan/30 hover:border-neon-cyan transition-all duration-300 relative flex flex-col justify-between group shadow-xl shadow-cyan-500/5 hover:-translate-y-1.5">
+                            <div class="space-y-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="w-12 h-12 rounded-2xl bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan text-2xl group-hover:scale-110 transition duration-300 shadow-inner">
+                                        <i class="fa-solid fa-map-location-dot"></i>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30">
+                                        📍 LOCAL SEO #1
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <h3 class="font-heading font-extrabold text-xl text-white group-hover:text-neon-cyan transition">Top SEO Google Maps</h3>
+                                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Đưa tiệm lên Top 1-3 Google Maps Local 5-10 Miles & Lọc bão review 5 sao</p>
+                                </div>
+
+                                <div class="p-3.5 rounded-xl bg-white/[0.03] border border-neon-cyan/20">
+                                    <span class="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Mục Tiêu Trọng Tâm</span>
+                                    <span class="text-xs sm:text-sm font-bold text-neon-cyan mt-0.5 block">Thống Lĩnh Tìm Kiếm + Xóa Review 1 Sao</span>
+                                </div>
+
+                                <ul class="space-y-2.5 text-xs text-gray-300">
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-cyan mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Đẩy thứ hạng tiệm lên <strong>Top 1-3 Google Maps</strong> quanh bán kính 5 - 10 miles</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-cyan mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Tối ưu hóa toàn diện Google Business Profile (GBP) & Apple Maps chuẩn Mỹ</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-cyan mt-0.5 mr-2 shrink-0"></i>
+                                        <span><strong>Bộ lọc review 5 sao độc quyền</strong>: ngăn chặn review xấu 1 sao công khai</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-cyan mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Cung cấp mã QR Menu thông minh để quầy tiếp tân gom review thật</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-cyan mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Target từ khóa bản xứ: <em>"Nail salon near me", "Pedicure best price"</em></span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="pt-6 mt-6 border-t border-white/10 space-y-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-xs text-gray-400">Chi phí đầu tư:</span>
+                                    <div class="text-right">
+                                        <span class="text-2xl font-extrabold text-white font-heading">$199</span>
+                                        <span class="text-[10px] text-gray-400 block">/ trọn gói Setup & Duy trì</span>
+                                    </div>
+                                </div>
+                                <button onclick="openPackageActionModal('seo')" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-neon-cyan to-blue-600 hover:from-cyan-400 hover:to-blue-500 font-bold text-white text-xs uppercase tracking-wider shadow-lg shadow-neon-cyan/20 transition-all duration-200 flex items-center justify-center space-x-2">
+                                    <span>Kích Hoạt Gói Top SEO</span>
+                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- GÓI 2: MARKETING ADS (BEST SELLER) -->
+                        <div class="premier-card rounded-2xl p-6 sm:p-7 border-2 border-neon-pink/70 hover:border-neon-pink bg-gradient-to-b from-neon-pink/15 via-white/[0.02] to-dark-950/90 transition-all duration-300 relative flex flex-col justify-between group shadow-2xl shadow-neon-pink/20 lg:-translate-y-2 hover:-translate-y-3">
+                            <!-- Best Seller Ribbon -->
+                            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-neon-pink via-purple-600 to-neon-blue text-white text-[10px] font-extrabold uppercase tracking-widest shadow-xl shadow-neon-pink/40 border border-white/30 whitespace-nowrap">
+                                🔥 GÓI ĐƯỢC CHỌN NHIỀU NHẤT
+                            </div>
+
+                            <div class="space-y-5 pt-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="w-12 h-12 rounded-2xl bg-neon-pink/15 border border-neon-pink/40 flex items-center justify-center text-neon-pink text-2xl group-hover:scale-110 transition duration-300 shadow-inner">
+                                        <i class="fa-solid fa-bullseye"></i>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-neon-pink/20 text-neon-pink border border-neon-pink/40">
+                                        🎯 ADS SIÊU TRÚNG ĐÍCH
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <h3 class="font-heading font-extrabold text-xl text-white group-hover:text-neon-pink transition">Marketing Ads Zipcode</h3>
+                                    <p class="text-xs text-gray-300 mt-1 leading-relaxed">Chạy Ads Facebook & Instagram Target Nữ Zipcode Giàu & Kéo Lead Thật</p>
+                                </div>
+
+                                <div class="p-3.5 rounded-xl bg-neon-pink/10 border border-neon-pink/30">
+                                    <span class="text-[10px] uppercase font-bold text-neon-pink block tracking-wider">Mục Tiêu Trọng Tâm</span>
+                                    <span class="text-xs sm:text-sm font-bold text-white mt-0.5 block">Kéo Khách Bản Xứ Chịu Chi & Lấp Ghế Đầu Tuần</span>
+                                </div>
+
+                                <ul class="space-y-2.5 text-xs text-gray-200">
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-pink mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Target siêu chuẩn <strong>Mã Zipcode</strong> các khu vực dân cư thu nhập cao quanh tiệm</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-pink mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Tiếp cận đúng tệp phụ nữ bản xứ thích làm móng nghệ thuật, Gel-X & Spa Nails</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-pink mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Thiết kế trọn gói bộ <strong>Banner & Video Clip mẫu móng Hot Trend</strong> bắt mắt</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-pink mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Giải quyết triệt để nỗi lo vắng khách các ngày đầu tuần (Thứ 2 - Thứ 4)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-pink mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Cam kết lead tin nhắn hỏi giá và đặt hẹn thật gửi trực tiếp về Fanpage tiệm</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="pt-6 mt-6 border-t border-white/10 space-y-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-xs text-gray-400">Chi phí đầu tư:</span>
+                                    <div class="text-right">
+                                        <span class="text-2xl font-extrabold text-neon-pink font-heading">$299</span>
+                                        <span class="text-[10px] text-gray-400 block">/ chiến dịch tối ưu doanh thu</span>
+                                    </div>
+                                </div>
+                                <button onclick="openPackageActionModal('ads')" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neon-pink via-purple-600 to-neon-blue hover:opacity-95 font-extrabold text-white text-xs uppercase tracking-wider shadow-xl shadow-neon-pink/30 transition-all duration-200 flex items-center justify-center space-x-2">
+                                    <span>Kích Hoạt Marketing Ads</span>
+                                    <i class="fa-solid fa-bolt text-yellow-300 text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- GÓI 3: WEBSITE CHATBOT & AI BOOKING -->
+                        <div class="premier-card rounded-2xl p-6 sm:p-7 border-2 border-neon-purple/40 hover:border-neon-purple transition-all duration-300 relative flex flex-col justify-between group shadow-xl shadow-purple-500/5 hover:-translate-y-1.5">
+                            <div class="space-y-5">
+                                <div class="flex items-center justify-between">
+                                    <div class="w-12 h-12 rounded-2xl bg-neon-purple/15 border border-neon-purple/30 flex items-center justify-center text-neon-purple text-2xl group-hover:scale-110 transition duration-300 shadow-inner">
+                                        <i class="fa-solid fa-robot"></i>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-neon-purple/20 text-neon-purple border border-neon-purple/30">
+                                        🤖 TỰ ĐỘNG HÓA 24/7
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <h3 class="font-heading font-extrabold text-xl text-white group-hover:text-neon-purple transition">Website Chatbot & AI Booking</h3>
+                                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Trợ Lý AI Chốt Lịch Tiếng Anh 24/7 & Website Đặt Hẹn QR Chống Trùng Thợ</p>
+                                </div>
+
+                                <div class="p-3.5 rounded-xl bg-white/[0.03] border border-neon-purple/20">
+                                    <span class="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Mục Tiêu Trọng Tâm</span>
+                                    <span class="text-xs sm:text-sm font-bold text-neon-purple mt-0.5 block">Chốt Lịch Ban Đêm 24/7 & Quản Lý Đặt Hẹn Tự Động</span>
+                                </div>
+
+                                <ul class="space-y-2.5 text-xs text-gray-300">
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-purple mt-0.5 mr-2 shrink-0"></i>
+                                        <span><strong>AI Bot chốt lịch tự động bằng tiếng Anh 24/7</strong>: không bỏ lỡ khách nhắn tin ban đêm</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-purple mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Đồng bộ trả lời tức thì trên Fanpage Facebook, Instagram DM & tin nhắn SMS</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-purple mt-0.5 mr-2 shrink-0"></i>
+                                        <span><strong>Website Booking chuẩn Mỹ</strong>: khách chọn thợ, chọn dịch vụ & giờ hẹn dễ dàng</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-purple mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Cung cấp <strong>Mã QR để bàn quầy</strong>: khách tự quét check-in, chống trùng lịch</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa-solid fa-circle-check text-neon-purple mt-0.5 mr-2 shrink-0"></i>
+                                        <span>Tự động gửi SMS nhắc lịch hẹn và tin nhắn chăm sóc mời khách quay lại</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="pt-6 mt-6 border-t border-white/10 space-y-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-xs text-gray-400">Chi phí đầu tư:</span>
+                                    <div class="text-right">
+                                        <span class="text-2xl font-extrabold text-white font-heading">$179</span>
+                                        <span class="text-[10px] text-gray-400 block">/ bản quyền trọn đời</span>
+                                    </div>
+                                </div>
+                                <button onclick="openPackageActionModal('chatbot')" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-neon-purple to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-bold text-white text-xs uppercase tracking-wider shadow-lg shadow-neon-purple/20 transition-all duration-200 flex items-center justify-center space-x-2">
+                                    <span>Kích Hoạt Website & Bot</span>
+                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
 
                 <!-- Quick Stats Grid (4 columns) -->
                 <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -729,13 +972,13 @@
                                         <span
                                             class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold mb-1">Ngân
                                             hàng</span>
-                                        <span class="text-lg font-bold text-white uppercase tracking-wide">Vikki</span>
+                                        <span id="bank-name" class="text-lg font-bold text-white uppercase tracking-wide">Vikki</span>
                                     </div>
                                     <div>
                                         <span
                                             class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold mb-1">Chủ
                                             tài khoản</span>
-                                        <span
+                                        <span id="bank-holder"
                                             class="text-lg font-bold text-white uppercase tracking-wide">HODINHSANG</span>
                                     </div>
                                 </div>
@@ -748,7 +991,7 @@
                                         <span
                                             class="text-2xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-blue tracking-wide"
                                             id="bank-acc-num">559583034</span>
-                                        <button onclick="copyToClipboard('559583034', this)"
+                                        <button onclick="copyToClipboard(document.getElementById('bank-acc-num').textContent.trim(), this)"
                                             class="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/5 transition flex items-center space-x-1"
                                             title="Sao chép">
                                             <i class="fa-regular fa-copy text-xs"></i>
@@ -830,8 +1073,8 @@
                         <div class="lg:col-span-5 space-y-6">
                             <div
                                 class="glass-card p-4 rounded-3xl border-white/10 shadow-2xl relative overflow-hidden group flex flex-col items-center">
-                                <!-- QR Image displaying stk nganhang.jpg -->
-                                <img src="stk%20nganhang.jpg" alt="QR Code Chuyển Khoản Vikki"
+                                <!-- QR Image displaying stk nganhang.jpg (mặc định), Admin có thể đổi qua Cài đặt Ngân hàng -->
+                                <img id="bank-qr-img" src="stk%20nganhang.jpg" alt="QR Code Chuyển Khoản"
                                     class="w-full max-w-[280px] rounded-2xl border border-white/5 shadow-inner transition duration-300 group-hover:scale-[1.02]">
                                 <div class="text-center mt-3">
                                     <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Quét mã
@@ -1340,6 +1583,27 @@
                 }
             } catch (err) {
                 console.error('Lỗi tải tỷ giá nạp tiền:', err);
+            }
+        }
+
+        // --- Bank Info System (Admin có thể đổi qua Cài đặt Ngân hàng trong Admin Portal) ---
+        async function fetchBankInfo() {
+            try {
+                const res = await fetchWithTimeout('/api/config/bank-info');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const info = data.data;
+                    const nameEl = document.getElementById('bank-name');
+                    const holderEl = document.getElementById('bank-holder');
+                    const numEl = document.getElementById('bank-acc-num');
+                    const qrEl = document.getElementById('bank-qr-img');
+                    if (nameEl && info.bankName) nameEl.textContent = info.bankName;
+                    if (holderEl && info.accountHolder) holderEl.textContent = info.accountHolder;
+                    if (numEl && info.accountNumber) numEl.textContent = info.accountNumber;
+                    if (qrEl && info.qrImageUrl) qrEl.src = info.qrImageUrl;
+                }
+            } catch (err) {
+                console.error('Lỗi tải thông tin ngân hàng:', err);
             }
         }
 
@@ -1859,6 +2123,11 @@
                     // Sync bank memo with username
                     const memo = document.getElementById('bank-memo');
                     if (memo) memo.textContent = `BITPAW ${data.user.username.toUpperCase()}`;
+
+                    if (data.user.salonName) {
+                        const salonTag = document.getElementById('user-salon-name-display');
+                        if (salonTag) salonTag.textContent = data.user.salonName;
+                    }
                 }
             } catch (err) {
                 console.error('Lỗi tải thông tin tài khoản:', err);
@@ -1901,6 +2170,236 @@
             });
         }
 
+        // --- 10.3 Premier 3 Core Packages Modal & Payment Logic ---
+        let currentSelectedPackageKey = null;
+
+        const packagesData = {
+            seo: {
+                id: '101',
+                title: 'Top SEO Google Maps Local Pack',
+                shortTitle: 'Gói Top SEO Google Maps',
+                badge: '📍 LOCAL SEO #1 THỐNG LĨNH TÌM KIẾM',
+                price: 199,
+                icon: 'fa-map-location-dot',
+                iconColor: 'text-neon-cyan',
+                bgIcon: 'bg-neon-cyan/15 border-neon-cyan/30',
+                badgeClass: 'bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30',
+                btnGradient: 'from-neon-cyan to-blue-600',
+                desc: 'Đưa tiệm lên Top 1-3 Google Maps Local bán kính 5-10 miles, lọc bão review 5 sao và tối ưu Google Business Profile chuyên sâu chuẩn SEO.',
+                items: [
+                    'Đẩy thứ hạng tiệm lên Top 1-3 Google Maps Local Pack bán kính 5-10 miles',
+                    'Tối ưu hóa toàn diện Google Business Profile (GBP) & Apple Maps chuẩn Mỹ',
+                    'Bộ lọc review 5 sao độc quyền, ngăn chặn review 1 sao công khai',
+                    'Cung cấp mã QR Menu thông minh để bàn quầy tiếp tân gom review thật',
+                    'Bảo đảm thứ hạng và duy trì uy tín thương hiệu lâu dài'
+                ]
+            },
+            ads: {
+                id: '102',
+                title: 'Marketing Ads Facebook & Instagram Target Zipcode',
+                shortTitle: 'Gói Marketing Ads Zipcode',
+                badge: '🎯 ADS SIÊU TRÚNG ĐÍCH • TĂNG KHÁCH ĐẦU TUẦN',
+                price: 299,
+                icon: 'fa-bullseye',
+                iconColor: 'text-neon-pink',
+                bgIcon: 'bg-neon-pink/15 border-neon-pink/40',
+                badgeClass: 'bg-neon-pink/20 text-neon-pink border border-neon-pink/40',
+                btnGradient: 'from-neon-pink via-purple-600 to-neon-blue',
+                desc: 'Chạy chiến dịch quảng cáo định vị chính xác theo Zipcode các khu vực dân cư thu nhập cao quanh tiệm, kéo tệp khách bản xứ chịu chi lấp đầy ghế.',
+                items: [
+                    'Target chuẩn xác mã Zipcode khu vực dân cư giàu có quanh tiệm 10 miles',
+                    'Tiếp cận tệp khách nữ bản xứ chịu chi làm móng, Pedicure & Nail Art',
+                    'Thiết kế trọn gói bộ Banner & Video Clip mẫu móng Hot Trend bắt mắt',
+                    'Lấp đầy ghế trống các ngày đầu tuần vắng khách (Thứ 2 - Thứ 4)',
+                    'Cam kết lead tin nhắn hỏi giá và đặt hẹn thật đổ về Fanpage mỗi ngày'
+                ]
+            },
+            chatbot: {
+                id: '104',
+                title: 'Website Chatbot & AI Booking Tự Động 24/7',
+                shortTitle: 'Gói Website Chatbot & AI Booking',
+                badge: '🤖 AI TỰ ĐỘNG HÓA 24/7 • TRỌN ĐỜI',
+                price: 179,
+                icon: 'fa-robot',
+                iconColor: 'text-neon-purple',
+                bgIcon: 'bg-neon-purple/15 border-neon-purple/30',
+                badgeClass: 'bg-neon-purple/20 text-neon-purple border border-neon-purple/30',
+                btnGradient: 'from-neon-purple to-indigo-600',
+                desc: 'Trợ lý AI Bot thông minh tư vấn và chốt lịch bằng tiếng Anh 24/7, kèm Website đặt hẹn Booking chuẩn Mỹ và mã QR để bàn chống trùng lịch.',
+                items: [
+                    'AI Bot tự động tư vấn dịch vụ & chốt hẹn bằng tiếng Anh 24/7',
+                    'Tích hợp đa kênh Fanpage Facebook, Instagram DM & SMS tiệm',
+                    'Website đặt lịch hẹn online chuyên nghiệp chuẩn phong cách Mỹ',
+                    'Mã QR Menu để bàn khách tự quét book lịch, chống trùng thợ tuyệt đối',
+                    'Tự động gửi SMS nhắc hẹn và chăm sóc khách hàng cũ định kỳ'
+                ]
+            }
+        };
+
+        function openPackageActionModal(pkgKey) {
+            const pkg = packagesData[pkgKey];
+            if (!pkg) return;
+            currentSelectedPackageKey = pkgKey;
+
+            const modal = document.getElementById('package-action-modal');
+            if (!modal) return;
+
+            const badgeEl = document.getElementById('modal-pkg-badge');
+            badgeEl.textContent = pkg.badge;
+            badgeEl.className = `px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${pkg.badgeClass}`;
+            
+            const iconContainer = document.getElementById('modal-pkg-icon-wrap');
+            iconContainer.className = `w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-inner ${pkg.bgIcon} ${pkg.iconColor}`;
+            iconContainer.innerHTML = `<i class="fa-solid ${pkg.icon}"></i>`;
+
+            document.getElementById('modal-pkg-title').textContent = pkg.title;
+            document.getElementById('modal-pkg-desc').textContent = pkg.desc;
+            document.getElementById('modal-pkg-price').textContent = `$${pkg.price.toFixed(2)}`;
+
+            const rate = currentExchangeRate || 25400;
+            const vnd = Math.round(pkg.price * rate).toLocaleString('vi-VN');
+            document.getElementById('modal-pkg-price-vnd').textContent = `~ ${vnd} đ`;
+
+            // List items
+            const listEl = document.getElementById('modal-pkg-items');
+            listEl.innerHTML = pkg.items.map(it => `
+                <li class="flex items-start text-xs text-gray-300">
+                    <i class="fa-solid fa-circle-check text-neon-cyan mt-0.5 mr-2 shrink-0"></i>
+                    <span>${it}</span>
+                </li>
+            `).join('');
+
+            // Balance check
+            let currentBalance = 0;
+            const storedUser = localStorage.getItem('bitpaw_user');
+            if (storedUser) {
+                try {
+                    const u = JSON.parse(storedUser);
+                    currentBalance = parseFloat(u.balance) || 0;
+                } catch(e){}
+            }
+
+            document.getElementById('modal-user-balance').textContent = `$${currentBalance.toFixed(2)}`;
+
+            const balancePayBtn = document.getElementById('modal-pay-balance-btn');
+            const insufficientNotice = document.getElementById('modal-insufficient-funds-wrap');
+
+            if (currentBalance >= pkg.price) {
+                balancePayBtn.classList.remove('hidden');
+                balancePayBtn.className = `w-full py-3.5 px-4 rounded-xl bg-gradient-to-r ${pkg.btnGradient} hover:opacity-95 font-bold text-white text-xs uppercase tracking-wider shadow-xl transition-all duration-200 flex items-center justify-center space-x-2`;
+                balancePayBtn.innerHTML = `<span>Thanh Toán $${pkg.price.toFixed(2)} & Kích Hoạt Ngay</span><i class="fa-solid fa-bolt text-xs"></i>`;
+                insufficientNotice.classList.add('hidden');
+            } else {
+                balancePayBtn.classList.add('hidden');
+                insufficientNotice.classList.remove('hidden');
+                const needed = (pkg.price - currentBalance).toFixed(2);
+                document.getElementById('modal-funds-needed').textContent = `$${needed}`;
+            }
+
+            // Update contact links
+            let salonName = 'tiệm Nails';
+            if (storedUser) {
+                try {
+                    const u = JSON.parse(storedUser);
+                    if (u.salonName) salonName = u.salonName;
+                    else if (u.username) salonName = u.username;
+                } catch(e){}
+            }
+            const msg = encodeURIComponent(`Chào Admin Bitpawnetwork, tôi muốn tư vấn & kích hoạt ${pkg.shortTitle} cho ${salonName}.`);
+            document.getElementById('modal-contact-zalo').href = `https://zalo.me/0559583034`;
+            document.getElementById('modal-contact-fb').href = `https://www.facebook.com/profile.php?id=100083987337739`;
+            document.getElementById('modal-contact-tele').href = `https://t.me/bitpawsoftware?text=${msg}`;
+
+            const alertBox = document.getElementById('modal-pkg-alert');
+            if (alertBox) alertBox.classList.add('hidden');
+
+            modal.classList.remove('hidden');
+        }
+
+        function closePackageActionModal() {
+            const modal = document.getElementById('package-action-modal');
+            if (modal) modal.classList.add('hidden');
+            const alertBox = document.getElementById('modal-pkg-alert');
+            if (alertBox) alertBox.classList.add('hidden');
+        }
+
+        async function handleDirectPackagePayment() {
+            if (!currentSelectedPackageKey) return;
+            const pkg = packagesData[currentSelectedPackageKey];
+            if (!pkg) return;
+
+            const token = localStorage.getItem('bitpaw_token');
+            if (!token) {
+                alert('Vui lòng đăng nhập lại để tiếp tục!');
+                window.location.href = '/';
+                return;
+            }
+
+            const btn = document.getElementById('modal-pay-balance-btn');
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang kích hoạt gói...';
+
+            const alertBox = document.getElementById('modal-pkg-alert');
+            alertBox.classList.add('hidden');
+
+            try {
+                // Find service from databaseServices matching pkg.id
+                let serviceObj = databaseServices.find(s => s.serviceId === pkg.id);
+                const activeServiceDbId = serviceObj ? serviceObj._id : pkg.id;
+
+                let salonInfo = 'Kích hoạt gói dịch vụ Nails';
+                const storedUser = localStorage.getItem('bitpaw_user');
+                if (storedUser) {
+                    try {
+                        const u = JSON.parse(storedUser);
+                        salonInfo = `${u.salonName || u.username} (${u.salonLocation || 'US'})`;
+                    } catch(e){}
+                }
+
+                const res = await fetchWithTimeout('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        serviceId: activeServiceDbId,
+                        link: `https://bitpawnetwork.com/salon-package/${pkg.id}?info=${encodeURIComponent(salonInfo)}`,
+                        quantity: 1000
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alertBox.className = 'p-3.5 rounded-xl text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/20 mb-4';
+                    alertBox.textContent = `🎉 Kích hoạt ${pkg.shortTitle} thành công! Đội ngũ kỹ thuật viên Bitpawnetwork đang tiến hành cài đặt cho tiệm của bạn trong vòng 24h.`;
+                    alertBox.classList.remove('hidden');
+
+                    btn.classList.add('hidden');
+                    fetchUserProfile();
+                    fetchUserOrders();
+
+                    setTimeout(() => {
+                        closePackageActionModal();
+                        alert(`🎉 Kích hoạt ${pkg.shortTitle} thành công! Kỹ thuật viên sẽ hỗ trợ setup ngay.`);
+                    }, 2500);
+                } else {
+                    alertBox.className = 'p-3.5 rounded-xl text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 mb-4';
+                    alertBox.textContent = data.message || 'Kích hoạt chưa thành công, vui lòng kiểm tra lại số dư.';
+                    alertBox.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error('[Package Direct Payment Error]', err);
+                alertBox.className = 'p-3.5 rounded-xl text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 mb-4';
+                alertBox.textContent = `Lỗi mạng khi kích hoạt: ${err.message || err}`;
+                alertBox.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+
 
 
         // --- 11. Profile Sync & Initial loading ---
@@ -1922,6 +2421,10 @@
                     document.getElementById('user-balance-top').textContent = `$${parseFloat(user.balance).toFixed(2)}`;
                     document.getElementById('user-balance-stat').textContent = `$${parseFloat(user.balance).toFixed(2)}`;
                     document.getElementById('bank-memo').textContent = `BITPAW ${user.username.toUpperCase()}`;
+                    if (user.salonName) {
+                        const salonTag = document.getElementById('user-salon-name-display');
+                        if (salonTag) salonTag.textContent = user.salonName;
+                    }
                 } catch (e) {
                     console.error('Lỗi phân tích thông tin user lưu trữ:', e);
                 }
@@ -1930,6 +2433,7 @@
             // Gọi đồng loạt tất cả các API để tải dữ liệu, ngăn ngừa tình trạng F5 bị reset về 0
             await Promise.all([
                 fetchExchangeRate(),
+                fetchBankInfo(),
                 fetchServicesFromDb(),
                 fetchUserProfile(),
                 fetchUserDeposits(),
@@ -2002,6 +2506,117 @@
                         </span>
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </a>
+                </div>
+            </div>
+        </div>
+    <!-- Premier Package Action Modal (Kích Hoạt Nhanh & Tư Vấn 1-Click) -->
+    <div id="package-action-modal"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md hidden transition-opacity duration-300 p-4">
+        <div class="glass-sidebar w-full max-w-lg rounded-3xl p-6 sm:p-7 relative border border-white/15 shadow-2xl overflow-y-auto max-h-[92vh]">
+            <!-- Close Button -->
+            <button onclick="closePackageActionModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-xl bg-white/5 border border-white/10 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Alert box -->
+            <div id="modal-pkg-alert" class="hidden"></div>
+
+            <!-- Modal Content -->
+            <div class="space-y-6 pt-1">
+                <!-- Header Icon & Badge -->
+                <div class="flex items-center space-x-4">
+                    <div id="modal-pkg-icon-wrap" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-inner bg-neon-cyan/15 border-neon-cyan/30 text-neon-cyan shrink-0">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <div>
+                        <span id="modal-pkg-badge" class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30 inline-block mb-1">
+                            📍 LOCAL SEO #1
+                        </span>
+                        <h3 id="modal-pkg-title" class="font-heading font-extrabold text-xl text-white">Top SEO Google Maps</h3>
+                    </div>
+                </div>
+
+                <p id="modal-pkg-desc" class="text-xs sm:text-sm text-gray-300 leading-relaxed font-light">
+                    Mô tả gói giải pháp
+                </p>
+
+                <!-- Pricing & Deliverables Box -->
+                <div class="rounded-2xl p-4 sm:p-5 bg-white/[0.03] border border-white/10 space-y-4">
+                    <div class="flex items-baseline justify-between border-b border-white/10 pb-3">
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Đơn Giá Trọn Gói:</span>
+                        <div class="text-right">
+                            <span id="modal-pkg-price" class="text-2xl sm:text-3xl font-extrabold text-white font-heading">$199.00</span>
+                            <span id="modal-pkg-price-vnd" class="text-xs text-gray-400 font-sans block mt-0.5">~ 5,054,600 đ</span>
+                        </div>
+                    </div>
+
+                    <!-- Deliverables Checklist -->
+                    <div class="space-y-2">
+                        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Quyền Lợi & Hạng Mục Triển Khai:</span>
+                        <ul id="modal-pkg-items" class="space-y-2">
+                            <!-- Items injected dynamically -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Account Balance Section -->
+                <div class="rounded-2xl p-4 bg-gradient-to-r from-neon-blue/10 to-neon-purple/10 border border-white/10 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 flex items-center justify-center text-neon-cyan">
+                            <i class="fa-solid fa-wallet text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Số Dư Ví Tài Khoản</span>
+                            <span id="modal-user-balance" class="text-base font-extrabold text-white font-heading">$0.00</span>
+                        </div>
+                    </div>
+                    <button onclick="switchDashboardTab('add-funds'); closePackageActionModal();" class="text-xs font-bold text-neon-cyan hover:underline flex items-center space-x-1">
+                        <span>Nạp thêm tiền</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Payment Action Button (Direct Balance) -->
+                <div>
+                    <button id="modal-pay-balance-btn" onclick="handleDirectPackagePayment()" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-neon-cyan to-blue-600 hover:opacity-95 font-bold text-white text-xs uppercase tracking-wider shadow-xl transition-all duration-200 flex items-center justify-center space-x-2">
+                        <span>Thanh Toán & Kích Hoạt Ngay</span>
+                        <i class="fa-solid fa-bolt text-xs"></i>
+                    </button>
+                    <!-- Insufficient notice if balance is low -->
+                    <div id="modal-insufficient-funds-wrap" class="hidden rounded-xl p-3.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-2">
+                        <div class="flex items-center space-x-2 font-semibold">
+                            <i class="fa-solid fa-circle-exclamation text-amber-400"></i>
+                            <span>Số dư ví hiện tại còn thiếu <strong id="modal-funds-needed" class="text-white">$0.00</strong> để kích hoạt gói tự động.</span>
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button onclick="switchDashboardTab('add-funds'); closePackageActionModal();" class="flex-1 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-center text-xs transition">
+                                <i class="fa-solid fa-wallet mr-1"></i> Nạp Ví Ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Direct Expert 1:1 Contact Section -->
+                <div class="pt-3 border-t border-white/10 space-y-2.5">
+                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block text-center">Hoặc Tư Vấn Thiết Lập 1:1 Miễn Phí Với Chuyên Gia:</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <a id="modal-contact-zalo" href="https://zalo.me/0559583034" target="_blank"
+                            class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/30 text-cyan-300 hover:text-white transition duration-200 text-center">
+                            <i class="fa-solid fa-comment-dots text-base mb-1"></i>
+                            <span class="text-[11px] font-bold">Chat Zalo</span>
+                        </a>
+                        <a id="modal-contact-fb" href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank"
+                            class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 hover:text-white transition duration-200 text-center">
+                            <i class="fa-brands fa-facebook text-base mb-1"></i>
+                            <span class="text-[11px] font-bold">Facebook</span>
+                        </a>
+                        <a id="modal-contact-tele" href="https://t.me/bitpawsoftware" target="_blank"
+                            class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-sky-600/15 hover:bg-sky-600/25 border border-sky-500/30 text-sky-300 hover:text-white transition duration-200 text-center">
+                            <i class="fa-brands fa-telegram text-base mb-1"></i>
+                            <span class="text-[11px] font-bold">Telegram</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

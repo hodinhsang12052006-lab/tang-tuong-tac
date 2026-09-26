@@ -8,6 +8,7 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@sentry/node": "^11.0.0",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -16,7 +17,7 @@
     "express-rate-limit": "^8.5.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.1",
-    "node-cron": "^3.0.2",
+    "node-cron": "^4.6.0",
     "playwright-core": "^1.61.1"
   },
   "devDependencies": {

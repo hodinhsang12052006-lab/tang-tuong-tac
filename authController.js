@@ -8,7 +8,10 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { User } = require('./models');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'SECRET_KEY_BITPAW_NETWORK';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    throw new Error('[Security] Thiếu biến môi trường JWT_SECRET. Không thể khởi động module xác thực.');
+}
 
 /**
  * ============================================================================
@@ -182,6 +185,10 @@ async function register(req, res) {
         });
 
     } catch (error) {
+        if (error.code === 11000) {
+            console.warn('[Register Duplicate] Đăng ký trùng lặp đồng thời:', error.message);
+            return res.status(409).json({ success: false, message: 'Tên đăng nhập, Email hoặc Số điện thoại này đã được đăng ký.' });
+        }
         console.error('[Register Error] Lỗi đăng ký:', error);
         return res.status(500).json({ success: false, message: 'Lỗi máy chủ khi đăng ký tài khoản.', error: error.message });
     }

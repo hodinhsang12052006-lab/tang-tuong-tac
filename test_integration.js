@@ -5,13 +5,18 @@
  * kiểm tra logic trừ tiền an toàn, phòng chống Race Condition (Spam click) và rà soát lỗi API.
  */
 
+require('dotenv').config();
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-// Import các cấu hình môi trường
-const MONGO_URI = 'mongodb://hodinhsang12052006_db_user:123456Az%40@ac-e4kyuxi-shard-00-00.z54uv8s.mongodb.net:27017,ac-e4kyuxi-shard-00-01.z54uv8s.mongodb.net:27017,ac-e4kyuxi-shard-00-02.z54uv8s.mongodb.net:27017/bitpawnetwork?ssl=true&authSource=admin';
-const JWT_SECRET = 'Bitpawnetwork_Super_Secret_Key_2026';
-const WEB2_URL = 'http://localhost:4000';
+// Import các cấu hình môi trường (đọc từ .env, không hard-code giá trị thật trong test)
+const MONGO_URI = process.env.MONGO_URI;
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!MONGO_URI || !JWT_SECRET) {
+    console.error('❌ Thiếu MONGO_URI hoặc JWT_SECRET trong .env. Không thể chạy test_integration.js.');
+    process.exit(1);
+}
+const WEB2_URL = `http://localhost:${process.env.PORT_VIA || 4000}`;
 
 async function runTests() {
     console.log('===========================================================');

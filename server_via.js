@@ -17,7 +17,12 @@ const { User, ViaOrder } = require('./models');
 const app = express();
 const PORT = process.env.PORT_VIA || 4000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/bitpawnetwork';
-const JWT_SECRET = process.env.JWT_SECRET || 'SECRET_KEY_BITPAW_NETWORK';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    throw new Error('[Security] Thiếu biến môi trường JWT_SECRET. Không thể khởi động Web 2 server.');
+}
+const VIA_API_KEY = process.env.VIA_API_KEY || '';
+const VIA_API_URL = process.env.VIA_API_URL || 'https://shopwinvia.com/api/products.php';
 const EXCHANGE_RATE = 26162; // Tỷ giá USD/VND dùng chung
 
 // Khóa chống race condition giao dịch (Spam click)
@@ -90,9 +95,8 @@ app.get('/api/auth/me', verifyUser, (req, res) => {
 
 // 2. API lấy danh sách sản phẩm từ nguồn (Markup 40%)
 app.get('/api/get-via-products', async (req, res) => {
-    const VIA_API_KEY = 'a72aa98a763ee661649a9a93ff40d06cD7tnwyZHC2q5YeBM6Vpmg4sIPJ1vTjKA';
     try {
-        const response = await fetch(`https://shopwinvia.com/api/products.php?api_key=${VIA_API_KEY}`);
+        const response = await fetch(`${VIA_API_URL}?api_key=${VIA_API_KEY}`);
         const data = await response.json();
 
         if (data.status !== 'success' || !data.categories) {
@@ -161,10 +165,9 @@ app.post('/api/buy-via', verifyUser, async (req, res) => {
         session.startTransaction();
 
         // Tải danh sách sản phẩm từ nguồn để kiểm tra giá thực tế và tình trạng tồn kho (Có timeout 5s chống lag treo)
-        const VIA_API_KEY = 'a72aa98a763ee661649a9a93ff40d06cD7tnwyZHC2q5YeBM6Vpmg4sIPJ1vTjKA';
         let response, data;
         try {
-            response = await fetch(`https://shopwinvia.com/api/products.php?api_key=${VIA_API_KEY}`, { signal: AbortSignal.timeout(5000) });
+            response = await fetch(`${VIA_API_URL}?api_key=${VIA_API_KEY}`, { signal: AbortSignal.timeout(5000) });
             data = await response.json();
         } catch (apiErr) {
             console.error('[Web 2 API Source Timeout/Error]', apiErr.message);

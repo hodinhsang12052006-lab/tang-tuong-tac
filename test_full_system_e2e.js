@@ -304,6 +304,9 @@ async function runAllTests() {
         await desktopPage.evaluate((token) => {
             localStorage.setItem('bitpaw_token', token);
         }, adminToken);
+        // Chờ trang tải xong lần đầu (không token) ổn định trước khi reload,
+        // tránh race condition "frame detached" khi reload() bắn ra ngay lúc trang đang tải dở
+        await sleep(400);
         await desktopPage.reload({ waitUntil: 'networkidle' });
         await sleep(1500);
 

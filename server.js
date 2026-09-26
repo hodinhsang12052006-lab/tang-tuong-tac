@@ -1,11 +1,17 @@
+const Sentry = require('@sentry/node');
+require('dotenv').config();
+
+// Khởi tạo Sentry theo dõi lỗi và hiệu năng hệ thống
+Sentry.init({
+    dsn: process.env.SENTRY_DSN || '<DÁN_MÃ_DSN_CỦA_BẠN_VÀO_ĐÂY>',
+    tracesSampleRate: 1.0,
+});
+
 /**
  * server.js
  * Điểm khởi chạy chính (Entry Point) của hệ thống SMM Panel Bitpawnetwork.
  * Lắp ráp toàn bộ các module: HTML Pages, Mongoose Models, API Controllers, Webhook nạp tiền, Cron Jobs và JWT Middlewares.
  */
-
-// Load các biến môi trường cấu hình trong tệp .env
-require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -16,7 +22,7 @@ const rateLimit = require('express-rate-limit');
 // Import các Module Backend tự thiết lập ở các giai đoạn trước
 const { User, Service } = require('./models');
 const { verifyUser, verifyAdmin } = require('./authMiddleware');
-const { syncAndMarkup, placeOrder, getMyOrders, getAllOrders, getServices, getAllUsers, updateOrderStatus, getAdminStats, syncViaProducts, getViaProducts, buyVia, getMyViaOrders, getAllViaOrders, saveSettings, getSetting } = require('./apiController');
+const { syncAndMarkup, placeOrder, getMyOrders, getAllOrders, getServices, getAllUsers, updateOrderStatus, getAdminStats, syncViaProducts, getViaProducts, buyVia, getMyViaOrders, getAllViaOrders, saveSettings, getSetting, getBankInfo } = require('./apiController');
 const { requestDeposit, approveDeposit, rejectDeposit, getUserTransactions, getAllPendingTransactions } = require('./paymentController');
 const { register, login, getProfile } = require('./authController');
 const { initStatusCronJob } = require('./cronJob');
@@ -25,18 +31,29 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/bitpawnetwork';
 
-// Hàm tự động khởi tạo tài khoản Admin mặc định
+// Tin tưởng header X-Forwarded-* từ 1 lớp proxy phía trước (Vercel/Nginx),
+// bắt buộc phải có để express-rate-limit đọc đúng IP thực của client thay vì IP của proxy
+app.set('trust proxy', 1);
+
+// Hàm tự động khởi tạo tài khoản Admin mặc định (chỉ chạy khi có cấu hình trong .env)
 async function seedAdminUser() {
     try {
-        const adminEmail = 'hodinhsang30052003@gmail.com';
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminPassword = process.env.ADMIN_DEFAULT_PASSWORD;
+
+        if (!adminEmail || !adminPassword) {
+            console.warn('[Database Seed] Bỏ qua tạo tài khoản Admin mặc định: thiếu ADMIN_EMAIL/ADMIN_DEFAULT_PASSWORD trong .env');
+            return;
+        }
+
         const existingAdmin = await User.findOne({ email: adminEmail });
-        
+
         if (!existingAdmin) {
             // Mật khẩu sẽ tự động được mã hóa (hash) bởi middleware pre('save') trong models.js
             const newAdmin = new User({
                 username: 'admin',
                 email: adminEmail,
-                password: '123456Az@',
+                password: adminPassword,
                 balance: 1000.0,
                 role: 'admin'
             });
@@ -54,10 +71,12 @@ async function seedDefaultServices() {
     try {
         const count = await Service.countDocuments();
         if (count === 0) {
+            const defaultProviderUrl = process.env.PROVIDER_API_URL || 'https://subvip247.com/api/v2';
             const defaultServices = [
                 {
                     serviceId: "1",
                     name: "Tăng Likes Bài Viết Facebook",
+                    providerUrl: defaultProviderUrl,
                     originalPrice: 0.5,
                     sellingPrice: 0.8,
                     min: 100,
@@ -71,6 +90,7 @@ async function seedDefaultServices() {
                 {
                     serviceId: "2",
                     name: "Tăng Followers TikTok",
+                    providerUrl: defaultProviderUrl,
                     originalPrice: 3.0,
                     sellingPrice: 4.5,
                     min: 100,
@@ -84,6 +104,7 @@ async function seedDefaultServices() {
                 {
                     serviceId: "3",
                     name: "Tăng Views Video YouTube",
+                    providerUrl: defaultProviderUrl,
                     originalPrice: 2.8,
                     sellingPrice: 4.2,
                     min: 500,
@@ -151,7 +172,11 @@ app.use((req, res, next) => {
 
 // Áp dụng giới hạn rate limit riêng cho các tuyến /api
 app.use('/api', apiLimiter);
-app.use(cors()); // Cho phép gọi API chéo tên miền (Cross-Origin Resource Sharing)
+// Giới hạn CORS về (các) origin frontend đã khai báo trong .env (phân tách bằng dấu phẩy nếu nhiều origin)
+const allowedOrigins = (process.env.FRONTEND_URL || '').split(',').map(o => o.trim()).filter(Boolean);
+app.use(cors({
+    origin: allowedOrigins.length > 0 ? allowedOrigins : true,
+}));
 app.use(express.json({ limit: '5mb' })); // Hỗ trợ JSON an toàn
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
@@ -257,7 +282,10 @@ app.post('/api/admin/sync-services', verifyUser, verifyAdmin, syncAndMarkup);
 
 // Cấu hình Hệ thống (Admin settings)
 app.post('/api/admin/settings', verifyUser, verifyAdmin, saveSettings);
-app.get('/api/admin/settings/:key', verifyUser, getSetting);
+app.get('/api/admin/settings/:key', verifyUser, verifyAdmin, getSetting);
+
+// Tuyến thông tin ngân hàng nạp tiền (công khai, Admin chỉnh qua /api/admin/settings key=bank_info)
+app.get('/api/config/bank-info', getBankInfo);
 
 // Tuyến tỷ giá USD/VND (Binance + 3% markup)
 app.get('/api/config/exchange-rate', (req, res) => {
@@ -280,6 +308,10 @@ app.get('/api/health', (req, res) => {
 // 4.5. BỘ XỬ LÝ LỖI TOÀN CỤC & CHỐNG SẬP MÁY CHỦ (ANTI-CRASH)
 // ==========================================
 app.use((err, req, res, next) => {
+    // Ghi nhận lỗi tới Sentry Dashboard
+    if (Sentry && typeof Sentry.captureException === 'function') {
+        Sentry.captureException(err);
+    }
     // Tuyệt đối không để lộ stack trace hoặc cấu trúc thư mục ra ngoài client
     console.error('[Protected Error Handler]', err.message || err);
     if (err.type === 'entity.parse.failed' || err.status === 400) {
@@ -294,15 +326,31 @@ app.use((err, req, res, next) => {
 // Chống sập tiến trình Node.js khi gặp lỗi ngoại lệ hoặc unhandled promise
 process.on('uncaughtException', (err) => {
     console.error('[SECURITY ANTI-CRASH - Uncaught Exception]:', err.message || err);
+    if (Sentry && typeof Sentry.captureException === 'function') {
+        Sentry.captureException(err);
+    }
+    // Lỗi khởi động cổng (vd: cổng đã bị chiếm) là lỗi KHÔNG THỂ tự phục hồi —
+    // phải để tiến trình thoát hẳn (thay vì "chống sập" và sống sót ở trạng thái treo,
+    // gây zombie process âm thầm chiếm kết nối MongoDB, giành tài nguyên với tiến trình chạy thật)
+    if (err && (err.code === 'EADDRINUSE' || err.code === 'EACCES')) {
+        console.error('[FATAL] Không thể khởi động server (lỗi cổng). Thoát tiến trình.');
+        process.exit(1);
+    }
 });
 
 process.on('unhandledRejection', (reason) => {
     console.error('[SECURITY ANTI-CRASH - Unhandled Rejection]:', reason);
+    if (Sentry && typeof Sentry.captureException === 'function') {
+        Sentry.captureException(reason);
+    }
 });
 
 // ==========================================
 // 5. KHỞI CHẠY MÁY CHỦ EXPRESS SERVER
 // ==========================================
+// Cấu hình middleware bắt lỗi Sentry ngay trước dòng app.listen
+Sentry.setupExpressErrorHandler(app);
+
 if (!process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`===========================================================`);
