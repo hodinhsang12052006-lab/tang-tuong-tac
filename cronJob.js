@@ -104,7 +104,11 @@ function initStatusCronJob() {
 
                         // A. XỬ LÝ HOÀN TIỀN (REFUND LOGIC) KHI ĐƠN BỊ HỦY (Canceled) HOẶC THIẾU (Refunded)
                         if (providerStatus === 'Canceled' || providerStatus === 'Refunded' || providerStatus === 'Partial') {
-                            const user = await User.findById(order.userId._id).session(session);
+                            // order.userId có thể là null nếu tài khoản khách hàng đã bị xóa khỏi hệ thống
+                            const user = order.userId ? await User.findById(order.userId._id).session(session) : null;
+                            if (!order.userId) {
+                                console.warn(`[Cron Job Warning] Đơn hàng #${order._id} không còn liên kết User hợp lệ (đã bị xóa), bỏ qua hoàn tiền.`);
+                            }
                             if (user) {
                                 let refundAmount = order.charge; // Mặc định hoàn trả toàn bộ
 

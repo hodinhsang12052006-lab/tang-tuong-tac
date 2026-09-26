@@ -60,7 +60,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Phục vụ thư mục tĩnh
-app.use(express.static(path.join(__dirname, 'public_via')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Route phục vụ Logo dùng chung từ thư mục cha
 app.get('/cho1.jpg', (req, res) => {
@@ -90,7 +90,7 @@ async function verifyUser(req, res, next) {
 
         const decoded = jwt.verify(token, JWT_SECRET);
         if (mongoose.connection.readyState !== 1) {
-            // Tuyệt đối KHÔNG fallback về user giả (từng có role 'admin' + số dư $9999.99) khi DB mất kết nối —
+            // Tuyệt đối KHÔNG fallback về user giả (từng có role 'admin') khi DB mất kết nối —
             // fail-closed: từ chối truy cập thay vì fail-open cấp quyền admin ảo cho bất kỳ ai có JWT hợp lệ
             return res.status(503).json({ success: false, message: 'Hệ thống đang bảo trì kết nối cơ sở dữ liệu, vui lòng thử lại sau.' });
         }
@@ -106,9 +106,14 @@ async function verifyUser(req, res, next) {
     }
 }
 
-// 1. API lấy thông tin Profile & Số dư
+// 1. API lấy thông tin Profile & Số dư (Hỗ trợ cả lồng trong user và phẳng trực tiếp ở root)
 app.get('/api/auth/me', verifyUser, (req, res) => {
-    res.json({ success: true, user: req.user });
+    res.json({ 
+        success: true, 
+        user: req.user,
+        username: req.user.username,
+        balance: req.user.balance
+    });
 });
 
 // 2. API lấy danh sách sản phẩm từ nguồn (Markup 40%)
@@ -305,7 +310,6 @@ app.use((err, req, res, next) => {
 
 process.on('uncaughtException', (err) => {
     console.error('[Web 2 SECURITY ANTI-CRASH - Uncaught Exception]:', err.message || err);
-    // Lỗi khởi động cổng là lỗi không thể tự phục hồi — thoát hẳn thay vì để tiến trình sống sót thành zombie
     if (err && (err.code === 'EADDRINUSE' || err.code === 'EACCES')) {
         console.error('[FATAL] Không thể khởi động Web 2 server (lỗi cổng). Thoát tiến trình.');
         process.exit(1);
@@ -317,9 +321,13 @@ process.on('unhandledRejection', (reason) => {
 });
 
 // Khởi chạy server
-app.listen(PORT, () => {
-    console.log(`===========================================================`);
-    console.log(`🚀 Web 2 (Shop Via/Clone) đang chạy độc lập tại:`);
-    console.log(`🔗 Cổng kết nối: http://localhost:${PORT}`);
-    console.log(`===========================================================`);
-});
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`===========================================================`);
+        console.log(`🚀 Web 2 (Shop Via/Clone) đang chạy độc lập tại:`);
+        console.log(`🔗 Cổng kết nối: http://localhost:${PORT}`);
+        console.log(`===========================================================`);
+    });
+}
+
+module.exports = app;

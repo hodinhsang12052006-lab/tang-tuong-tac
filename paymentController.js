@@ -165,8 +165,8 @@ async function rejectDeposit(req, res) {
             return res.status(400).json({ success: false, message: `Giao dịch này đã được xử lý trước đó (Trạng thái: ${tx.status}).` });
         }
 
-        // Cập nhật trạng thái giao dịch sang Failed (Từ chối) và không cộng tiền
-        tx.status = 'Failed';
+        // Cập nhật trạng thái giao dịch sang Rejected (Admin từ chối) và không cộng tiền
+        tx.status = 'Rejected';
         await tx.save();
 
         console.log(`[Payment Rejected] Admin từ chối giao dịch #${tx._id} (TxID: ${tx.transactionId})`);
