@@ -159,8 +159,9 @@ async function runFullTestSuite() {
         await adminPage.waitForTimeout(1200);
         await saveEvidence(adminPage, 'step10_admin_users_table.png', 'Bảng Người Dùng & Cột Tiệm Nails/Địa Chỉ');
 
-            // Tìm nút Xem Khảo Sát của chủ tiệm vừa tạo
-            const userRow = adminPage.locator(`#admin-users-body tr:has-text("${testUser}"), #admin-users-body tr:has-text("Dallas Luxury Nails")`);
+            // Tìm nút Xem Khảo Sát của chủ tiệm vừa tạo — chỉ khớp theo username DUY NHẤT của user vừa tạo trong lần chạy này
+            // (tránh khớp nhầm nhiều dòng cũ tồn dư từ các lần chạy test trước có cùng tên salon mẫu)
+            const userRow = adminPage.locator(`#admin-users-body tr:has-text("${testUser}")`);
             if (await userRow.count() > 0) {
                 const surveyBtn = userRow.locator('button:has-text("Xem Khảo Sát")');
                 if (await surveyBtn.count() > 0) {
