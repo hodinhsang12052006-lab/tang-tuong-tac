@@ -2515,10 +2515,10 @@
                             <span data-i18n="consult_direct_help">Cần tư vấn nhanh bằng tiếng Việt?</span>
                         </div>
                         <div class="flex items-center space-x-4">
-                            <a href="https://zalo.me/0559583034" target="_blank" class="text-neon-cyan hover:underline font-semibold flex items-center">
+                            <a href="https://zalo.me/0559583034" target="_blank" rel="noopener noreferrer" class="text-neon-cyan hover:underline font-semibold flex items-center">
                                 <i class="fa-solid fa-comment mr-1"></i> Zalo: +84 559 583 034
                             </a>
-                            <a href="https://t.me/bitpawsoftware" target="_blank" class="text-neon-pink hover:underline font-semibold flex items-center">
+                            <a href="https://t.me/bitpawsoftware" target="_blank" rel="noopener noreferrer" class="text-neon-pink hover:underline font-semibold flex items-center">
                                 <i class="fa-brands fa-telegram mr-1"></i> Telegram: @bitpawsoftware
                             </a>
                         </div>
@@ -2803,10 +2803,6 @@
                             <i class="fa-solid fa-building text-[#38bdf8] w-4 text-center text-sm flex-shrink-0"></i>
                             <span class="font-bold text-white text-xs">Bitpaw Technology LLC</span>
                         </div>
-                        <div class="flex items-center space-x-2.5">
-                            <i class="fa-solid fa-id-card text-[#38bdf8] w-4 text-center text-sm flex-shrink-0"></i>
-                            <span class="text-gray-300">Business Registration: <span class="font-bold text-white tracking-wide">888999777</span></span>
-                        </div>
                         <div class="flex items-start space-x-2.5 pt-0.5">
                             <i class="fa-solid fa-location-dot text-[#38bdf8] w-4 text-center text-sm mt-0.5 flex-shrink-0"></i>
                             <span class="text-gray-300 text-[11px] leading-snug">1390 Market Street, Suite 200, San Francisco, CA 94102, United States</span>
@@ -2892,19 +2888,19 @@
                                 <i class="fa-solid fa-lock text-sm"></i>
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-xs font-bold text-white tracking-wide">SSL Secured</span>
-                                <span class="text-[10px] text-gray-400">256-bit Encryption</span>
+                                <span class="text-xs font-bold text-white tracking-wide">SSL / HTTPS</span>
+                                <span class="text-[10px] text-gray-400" data-i18n="footer_badge_ssl">Mọi kết nối đều được mã hóa</span>
                             </div>
                         </div>
 
-                        <!-- AWS Cloud -->
+                        <!-- Hạ tầng thật: Cloudflare (CDN, chống DDoS) + Vercel -->
                         <div class="rounded-xl px-4 py-3 bg-[#0a1224] border border-[#1e2e4a] hover:border-amber-500/50 transition duration-200 flex items-center space-x-3.5 shadow-md">
-                            <div class="w-8 h-8 rounded-lg bg-amber-950/40 border border-amber-500/30 flex items-center justify-center text-[#ff9900] flex-shrink-0">
-                                <i class="fa-brands fa-aws text-base"></i>
+                            <div class="w-8 h-8 rounded-lg bg-amber-950/40 border border-amber-500/30 flex items-center justify-center text-[#f38020] flex-shrink-0">
+                                <i class="fa-brands fa-cloudflare text-base" aria-hidden="true"></i>
                             </div>
                             <div class="flex flex-col">
-                                <span class="text-xs font-bold text-white tracking-wide">AWS Cloud</span>
-                                <span class="text-[10px] text-gray-400">99.99% Uptime SLA</span>
+                                <span class="text-xs font-bold text-white tracking-wide">Cloudflare + Vercel</span>
+                                <span class="text-[10px] text-gray-400" data-i18n="footer_badge_cdn">CDN toàn cầu, chống DDoS</span>
                             </div>
                         </div>
                     </div>
@@ -3048,7 +3044,7 @@
             </a>
 
             <!-- WhatsApp Direct -->
-            <a href="https://wa.me/84794678904" target="_blank" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/5 transition group">
+            <a href="https://wa.me/84794678904" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/5 transition group">
                 <div class="w-8 h-8 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                 </div>
@@ -3059,7 +3055,7 @@
             </a>
 
             <!-- Telegram -->
-            <a href="https://t.me/bitpawsoftware" target="_blank" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/5 transition group">
+            <a href="https://t.me/bitpawsoftware" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/5 transition group">
                 <div class="w-8 h-8 rounded-full bg-sky-950/80 border border-sky-500/40 text-sky-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
                     <i class="fa-brands fa-telegram text-sm"></i>
                 </div>
@@ -3070,7 +3066,7 @@
             </a>
 
             <!-- Facebook Official -->
-            <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/5 transition group">
+            <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/5 transition group">
                 <div class="w-8 h-8 rounded-full bg-indigo-950/80 border border-indigo-500/40 text-indigo-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
                     <i class="fa-brands fa-facebook-f text-xs"></i>
                 </div>
@@ -3354,7 +3350,7 @@
                     <div class="flex items-start space-x-2 pt-1">
                         <input type="checkbox" id="register-terms" required class="mt-0.5 w-3.5 h-3.5 rounded bg-dark-950 border-white/10 text-neon-pink focus:ring-neon-pink/40 focus:ring-offset-0 focus:outline-none">
                         <label for="register-terms" class="text-[10px] text-gray-400 leading-normal select-none" data-i18n="reg_terms_label">
-                            Tôi đồng ý với <a href="/terms.html" target="_blank" class="text-neon-pink hover:underline">Điều khoản Dịch vụ</a> và <a href="/privacy.html" target="_blank" class="text-neon-pink hover:underline">Chính sách bảo mật</a> của Bitpawnetwork.
+                            Tôi đồng ý với <a href="/terms.html" target="_blank" rel="noopener noreferrer" class="text-neon-pink hover:underline">Điều khoản Dịch vụ</a> và <a href="/privacy.html" target="_blank" rel="noopener noreferrer" class="text-neon-pink hover:underline">Chính sách bảo mật</a> của Bitpawnetwork.
                         </label>
                     </div>
 
@@ -4273,6 +4269,8 @@
                 footer_label_hotline: "Hotline 24/7",
                 footer_label_whatsapp: "Hỗ trợ qua WhatsApp",
                 footer_copyright: "&copy; 2026 Bitpaw Technology LLC. Mọi quyền được bảo lưu.",
+                footer_badge_ssl: "Mọi kết nối đều được mã hóa",
+                footer_badge_cdn: "CDN toàn cầu, chống DDoS",
 
                 // Pricing Section
                 pricing_badge: "Chi phí hợp lý - hiệu quả cam kết",
@@ -4546,7 +4544,7 @@
                 reg_opt_goal_3: "Cứu Review Yelp & Google bị xấu, đẩy review 5★ uy tín",
                 reg_opt_goal_4: "Cài đặt AI Bot tư vấn & tự động chốt lịch hẹn 24/7",
                 reg_opt_goal_5: "Gói Thống Lĩnh Toàn Diện - Nhân đôi doanh thu tiệm",
-                reg_terms_label: 'Tôi đồng ý với <a href="/terms.html" target="_blank" class="text-neon-pink hover:underline">Điều khoản Dịch vụ</a> và <a href="/privacy.html" target="_blank" class="text-neon-pink hover:underline">Chính sách bảo mật</a> của Bitpawnetwork.',
+                reg_terms_label: 'Tôi đồng ý với <a href="/terms.html" target="_blank" rel="noopener noreferrer" class="text-neon-pink hover:underline">Điều khoản Dịch vụ</a> và <a href="/privacy.html" target="_blank" rel="noopener noreferrer" class="text-neon-pink hover:underline">Chính sách bảo mật</a> của Bitpawnetwork.',
                 reg_back_btn: "Quay lại",
                 reg_submit_btn: "Hoàn tất đăng ký",
                 // Dynamic JS status/validation messages (login & register)
@@ -4700,6 +4698,8 @@
                 footer_label_hotline: "Hotline 24/7",
                 footer_label_whatsapp: "WhatsApp support",
                 footer_copyright: "&copy; 2026 Bitpaw Technology LLC. All rights reserved.",
+                footer_badge_ssl: "Every connection is encrypted",
+                footer_badge_cdn: "Global CDN with DDoS protection",
 
                 // Pricing Section
                 pricing_badge: "Predictable Pricing • Guaranteed Growth",
@@ -4984,7 +4984,7 @@
                 reg_opt_goal_3: "Fix bad Yelp & Google reviews, boost trustworthy 5★ reviews",
                 reg_opt_goal_4: "Set up an AI Bot to advise & auto-book appointments 24/7",
                 reg_opt_goal_5: "Full Domination Package - Double the salon's revenue",
-                reg_terms_label: 'I agree to the <a href="/terms.html" target="_blank" class="text-neon-pink hover:underline">Terms of Service</a> and <a href="/privacy.html" target="_blank" class="text-neon-pink hover:underline">Privacy Policy</a> of Bitpawnetwork.',
+                reg_terms_label: 'I agree to the <a href="/terms.html" target="_blank" rel="noopener noreferrer" class="text-neon-pink hover:underline">Terms of Service</a> and <a href="/privacy.html" target="_blank" rel="noopener noreferrer" class="text-neon-pink hover:underline">Privacy Policy</a> of Bitpawnetwork.',
                 reg_back_btn: "Back",
                 reg_submit_btn: "Complete Registration",
 

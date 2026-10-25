@@ -198,16 +198,25 @@
         .animate-badge-pulse {
             animation: badge-pulse 2.5s infinite ease-in-out;
         }
+
+        /* Nền trang quản lý: 2 vùng sáng rất nhẹ, vẽ thẳng bằng gradient (không blur nên nhẹ máy, không bao giờ thành khối đặc) */
+        .app-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(34rem 28rem at 32% 16%, rgba(59, 130, 246, 0.10), transparent 70%),
+                radial-gradient(36rem 30rem at 86% 88%, rgba(168, 85, 247, 0.10), transparent 70%);
+        }
     </style>
 </head>
 
 <body class="font-sans antialiased h-screen flex overflow-hidden">
 
-    <!-- Background glow elements (Contained to prevent document horizontal overflow on mobile) -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="glow-blob bg-neon-blue w-[400px] h-[400px] top-[10%] left-[20%]"></div>
-        <div class="glow-blob bg-neon-purple w-[450px] h-[450px] bottom-[10%] right-[10%]"></div>
-    </div>
+    <!-- Nền: 2 vùng sáng xanh / tím vẽ bằng gradient. Trước đây là 2 div .glow-blob nhưng trang này thiếu CSS của class đó
+         nên chúng hiện thành 2 khối vuông màu đặc (điện thoại bị phủ kín nền xanh/tím, chữ khó đọc) -->
+    <div class="app-backdrop" aria-hidden="true"></div>
 
     <!-- Mobile Sidebar Backdrop Overlay -->
     <div id="sidebar-backdrop"
@@ -273,7 +282,7 @@
                     <i class="fa-solid fa-crown text-amber-400 text-lg w-5 text-center"></i>
                     <span class="text-sm">Dịch Vụ VIP 👑</span>
                 </a>
-                <a href="https://shop.bitpawnetwork.com" target="_blank"
+                <a href="https://shop.bitpawnetwork.com" target="_blank" rel="noopener noreferrer"
                     class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-400 hover:text-white hover:bg-white/5 hover:border-l-4 hover:border-white/20 transition-all duration-150"
                     id="nav-via-shop">
                     <i class="fa-solid fa-store text-sky-400 text-lg w-5 text-center"></i>
@@ -291,17 +300,17 @@
                             id="support-arrow"></i>
                     </a>
                     <div id="support-submenu" class="hidden pl-6 pr-2 py-2 space-y-2">
-                        <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank"
+                        <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" rel="noopener noreferrer"
                             class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-blue-600/10 hover:bg-blue-600/25 border border-blue-500/20 text-xs font-semibold text-blue-400 hover:text-blue-300 transition duration-150">
                             <i class="fa-brands fa-facebook text-sm"></i>
                             <span>Chat Facebook</span>
                         </a>
-                        <a href="https://zalo.me/0559583034" target="_blank"
+                        <a href="https://zalo.me/0559583034" target="_blank" rel="noopener noreferrer"
                             class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-cyan-600/10 hover:bg-cyan-600/25 border border-cyan-500/20 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition duration-150">
                             <i class="fa-solid fa-comment-dots text-sm"></i>
                             <span>Chat Zalo</span>
                         </a>
-                        <a href="https://t.me/bitpawsoftware" target="_blank"
+                        <a href="https://t.me/bitpawsoftware" target="_blank" rel="noopener noreferrer"
                             class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-sky-600/10 hover:bg-sky-600/25 border border-sky-500/20 text-xs font-semibold text-sky-400 hover:text-sky-300 transition duration-150">
                             <i class="fa-brands fa-telegram text-sm"></i>
                             <span>Chat Telegram</span>
@@ -454,7 +463,7 @@
 
                                 <div>
                                     <h3 class="font-heading font-extrabold text-xl text-white group-hover:text-neon-cyan transition">Top SEO Google Maps</h3>
-                                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Đưa tiệm lên Top 1-3 Google Maps Local 5-10 Miles & Lọc bão review 5 sao</p>
+                                    <p class="text-xs text-gray-400 mt-1 leading-relaxed">Đưa tiệm lên Top 1-3 Google Maps Local 5-10 Miles & Lọc review 5 sao thật</p>
                                 </div>
 
                                 <div class="p-3.5 rounded-xl bg-white/[0.03] border border-neon-cyan/20">
@@ -1230,7 +1239,7 @@
                             với chúng tôi qua các kênh hỗ trợ 24/7 dưới đây:
                         </p>
                         <div class="space-y-3.5">
-                            <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank"
+                            <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" rel="noopener noreferrer"
                                 class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-blue-600/10 hover:bg-blue-600/25 border border-blue-500/20 text-sm font-semibold text-blue-400 hover:text-blue-300 transition duration-200">
                                 <span class="flex items-center space-x-3">
                                     <i class="fa-brands fa-facebook text-lg"></i>
@@ -1238,7 +1247,7 @@
                                 </span>
                                 <i class="fa-solid fa-chevron-right text-xs"></i>
                             </a>
-                            <a href="https://zalo.me/0559583034" target="_blank"
+                            <a href="https://zalo.me/0559583034" target="_blank" rel="noopener noreferrer"
                                 class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-cyan-600/10 hover:bg-cyan-600/25 border border-cyan-500/20 text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition duration-200">
                                 <span class="flex items-center space-x-3">
                                     <i class="fa-solid fa-comment-dots text-lg"></i>
@@ -1246,7 +1255,7 @@
                                 </span>
                                 <i class="fa-solid fa-chevron-right text-xs"></i>
                             </a>
-                            <a href="https://t.me/bitpawsoftware" target="_blank"
+                            <a href="https://t.me/bitpawsoftware" target="_blank" rel="noopener noreferrer"
                                 class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-sky-600/10 hover:bg-sky-600/25 border border-sky-500/20 text-sm font-semibold text-sky-400 hover:text-sky-300 transition duration-200">
                                 <span class="flex items-center space-x-3">
                                     <i class="fa-brands fa-telegram text-lg"></i>
@@ -2223,7 +2232,7 @@
                 bgIcon: 'bg-neon-cyan/15 border-neon-cyan/30',
                 badgeClass: 'bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/30',
                 btnGradient: 'from-neon-cyan to-blue-600',
-                desc: 'Đưa tiệm lên Top 1-3 Google Maps Local bán kính 5-10 miles, lọc bão review 5 sao và tối ưu Google Business Profile chuyên sâu chuẩn SEO.',
+                desc: 'Đưa tiệm lên Top 1-3 Google Maps Local bán kính 5-10 miles, lọc review 5 sao thật và tối ưu Google Business Profile chuyên sâu chuẩn SEO.',
                 items: [
                     'Đẩy thứ hạng tiệm lên Top 1-3 Google Maps Local Pack bán kính 5-10 miles',
                     'Tối ưu hóa toàn diện Google Business Profile (GBP) & Apple Maps chuẩn Mỹ',
@@ -2536,7 +2545,7 @@
                         </span>
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </a>
-                    <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank"
+                    <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" rel="noopener noreferrer"
                         class="flex items-center justify-between px-4 py-3.5 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-sm font-semibold text-blue-400 transition duration-200">
                         <span class="flex items-center space-x-3">
                             <i class="fa-brands fa-facebook"></i>
@@ -2639,17 +2648,17 @@
                 <div class="pt-3 border-t border-white/10 space-y-2.5">
                     <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block text-center">Hoặc Tư Vấn Thiết Lập 1:1 Miễn Phí Với Chuyên Gia:</span>
                     <div class="grid grid-cols-3 gap-2">
-                        <a id="modal-contact-zalo" href="https://zalo.me/0559583034" target="_blank"
+                        <a id="modal-contact-zalo" href="https://zalo.me/0559583034" target="_blank" rel="noopener noreferrer"
                             class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-cyan-600/15 hover:bg-cyan-600/25 border border-cyan-500/30 text-cyan-300 hover:text-white transition duration-200 text-center">
                             <i class="fa-solid fa-comment-dots text-base mb-1"></i>
                             <span class="text-[11px] font-bold">Chat Zalo</span>
                         </a>
-                        <a id="modal-contact-fb" href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank"
+                        <a id="modal-contact-fb" href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" rel="noopener noreferrer"
                             class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 hover:text-white transition duration-200 text-center">
                             <i class="fa-brands fa-facebook text-base mb-1"></i>
                             <span class="text-[11px] font-bold">Facebook</span>
                         </a>
-                        <a id="modal-contact-tele" href="https://t.me/bitpawsoftware" target="_blank"
+                        <a id="modal-contact-tele" href="https://t.me/bitpawsoftware" target="_blank" rel="noopener noreferrer"
                             class="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-sky-600/15 hover:bg-sky-600/25 border border-sky-500/30 text-sky-300 hover:text-white transition duration-200 text-center">
                             <i class="fa-brands fa-telegram text-base mb-1"></i>
                             <span class="text-[11px] font-bold">Telegram</span>
