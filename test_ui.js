@@ -25,10 +25,10 @@ async function runTest() {
     await page.goto('http://localhost:3005');
 
     // Kiểm tra logo hiển thị
-    console.log('[Bước 1.1] Kiểm tra Logo cho1.jpg hiển thị ở Header...');
+    console.log('[Bước 1.1] Kiểm tra Logo chữ B hiển thị ở Header...');
     const headerLogo = page.locator('header img[alt="Bitpawnetwork Logo"]');
     await headerLogo.waitFor({ state: 'visible' });
-    console.log('[Thành công] Logo cho1.jpg đã hiển thị chuẩn xác.');
+    console.log('[Thành công] Logo chữ B đã hiển thị chuẩn xác.');
 
     // 2. Mở Modal Đăng ký
     console.log('[Bước 2] Mở modal đăng ký...');

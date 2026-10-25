@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://bitpawnetwork.com/sitemap.xml
+Sitemap: https://www.bitpawnetwork.com/sitemap.xml

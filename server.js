@@ -129,10 +129,27 @@ async function seedDefaultServices() {
 // ==========================================
 // 1. CẤU HÌNH MIDDLEWARE HỆ THỐNG
 // ==========================================
+// Bảo vệ tiêu đề HTTP & chống tấn công Clickjacking / Sniffing
+// (phải đặt TRƯỚC express.static, nếu không các trang HTML tĩnh sẽ trả về mà không có header bảo mật)
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    next();
+});
+
 // Phục vụ các file tĩnh trong thư mục public với bộ đệm (Caching) tối ưu hiệu năng
 app.use(express.static(path.join(__dirname, 'public'), {
-    maxAge: '1d', // Tăng tốc độ tải trang, giảm tải CPU khi có hàng ngàn lượt truy cập đồng thời
-    etag: true
+    maxAge: '1d', // Ảnh, logo, font... cache 1 ngày để giảm tải
+    etag: true,
+    setHeaders: (res, filePath) => {
+        // HTML / robots / sitemap luôn kiểm tra lại bản mới (dùng ETag) để nội dung & thẻ SEO cập nhật ngay sau deploy
+        if (/\.(html|xml|txt)$/i.test(filePath)) {
+            res.setHeader('Cache-Control', 'no-cache');
+        }
+    }
 }));
 
 // Định nghĩa các bộ giới hạn tần suất yêu cầu (Rate Limiters)
@@ -159,16 +176,6 @@ const paymentLimiter = rateLimit({
     message: { success: false, message: 'Bạn đang gửi yêu cầu nạp tiền quá nhanh. Vui lòng thử lại sau 1 phút.' },
     standardHeaders: true,
     legacyHeaders: false,
-});
-
-// Bảo vệ tiêu đề HTTP & chống tấn công Clickjacking / Sniffing
-app.use((req, res, next) => {
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-    next();
 });
 
 // Áp dụng giới hạn rate limit riêng cho các tuyến /api
