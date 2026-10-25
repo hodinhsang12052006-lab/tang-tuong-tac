@@ -278,12 +278,13 @@ async function runAllTests() {
         recordTest('Test 9.2: Logo Mascot Shiba & Floating Speeddial 24/7', hasMascot && hasSpeeddial, `Mascot: ${hasMascot}, Speeddial: ${hasSpeeddial}`);
 
         // 9.1.2 Dashboard with User Token
-        await desktopPage.goto(`${BASE_URL}/dashboard`, { waitUntil: 'commit' });
+        // Dashboard giờ đưa người chưa đăng nhập về trang chủ, nên gài token trên trang chủ trước rồi mới mở dashboard
+        await desktopPage.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
         await desktopPage.evaluate(({ token, user }) => {
             localStorage.setItem('bitpaw_token', token);
             localStorage.setItem('bitpaw_user', JSON.stringify(user));
         }, { token: userToken, user: testUser });
-        await desktopPage.reload({ waitUntil: 'networkidle' });
+        await desktopPage.goto(`${BASE_URL}/dashboard`, { waitUntil: 'networkidle' });
         await sleep(1500);
 
         // Click on Deposit tab to see deposit form & QR
@@ -300,10 +301,11 @@ async function runAllTests() {
         recordTest('Test 9.3: Visual User Dashboard - Tab Nạp tiền (Desktop)', true, 'Giao diện QR Vikki, form nạp & bảng lịch sử nạp tiền');
 
         // 9.1.3 Admin Portal with Admin Token
-        await desktopPage.goto(`${BASE_URL}/admin`, { waitUntil: 'commit' });
+        await desktopPage.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
         await desktopPage.evaluate((token) => {
             localStorage.setItem('bitpaw_token', token);
         }, adminToken);
+        await desktopPage.goto(`${BASE_URL}/admin`, { waitUntil: 'commit' });
         // Chờ trang tải xong lần đầu (không token) ổn định trước khi reload,
         // tránh race condition "frame detached" khi reload() bắn ra ngay lúc trang đang tải dở
         await sleep(400);
@@ -346,12 +348,12 @@ async function runAllTests() {
         recordTest('Test 9.6: Visual Landing Page (Mobile 390x844)', true, 'Giao diện co giãn chuẩn mobile, không vỡ layout');
 
         // Mobile dashboard
-        await mobilePage.goto(`${BASE_URL}/dashboard`, { waitUntil: 'commit' });
+        await mobilePage.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
         await mobilePage.evaluate(({ token, user }) => {
             localStorage.setItem('bitpaw_token', token);
             localStorage.setItem('bitpaw_user', JSON.stringify(user));
         }, { token: userToken, user: testUser });
-        await mobilePage.reload({ waitUntil: 'networkidle' });
+        await mobilePage.goto(`${BASE_URL}/dashboard`, { waitUntil: 'networkidle' });
         await sleep(1500);
 
         const p6 = path.join(SCREENSHOT_DIR, '06_dashboard_mobile_390.png');

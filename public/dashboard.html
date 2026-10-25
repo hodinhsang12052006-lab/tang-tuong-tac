@@ -5,6 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitpawnetwork - Bảng Điều Khiển Khách Hàng</title>
+    <script>
+        // Chưa đăng nhập hoặc phiên đã hết hạn: về trang chủ (mở sẵn hộp đăng nhập), không hiện trang quản lý rỗng
+        (function () {
+            try {
+                var t = localStorage.getItem('bitpaw_token');
+                var part = t ? t.split('.')[1] : '';
+                var exp = part ? JSON.parse(atob(part.replace(/-/g, '+').replace(/_/g, '/'))).exp * 1000 : 0;
+                if (!exp || exp <= Date.now()) {
+                    localStorage.removeItem('bitpaw_token');
+                    localStorage.removeItem('bitpaw_user');
+                    window.location.replace('/?session=expired');
+                }
+            } catch (e) { /* token hỏng: để API trả 401 rồi xử lý bên dưới */ }
+        })();
+    </script>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
@@ -312,10 +327,10 @@
                         <span id="user-display-id" class="text-[10px] text-gray-400">ID: #...</span>
                     </div>
                 </div>
-                <!-- Logout Button -->
-                <a href="index.html"
+                <!-- Logout Button: xoá phiên rồi mới về trang chủ -->
+                <a href="/" onclick="return logoutAndExit(event)"
                     class="p-2 rounded-lg bg-white/5 hover:bg-red-500/10 hover:text-red-400 border border-white/5 text-gray-400 transition"
-                    title="Đăng xuất">
+                    title="Đăng xuất" aria-label="Đăng xuất">
                     <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
                 </a>
             </div>
@@ -2105,6 +2120,21 @@
             }
         }
 
+        // --- Phiên đăng nhập: đăng xuất là xoá phiên thật, phiên hết hạn thì về trang chủ ---
+        function bitpawEndSession(reason) {
+            try {
+                localStorage.removeItem('bitpaw_token');
+                localStorage.removeItem('bitpaw_user');
+            } catch (e) {}
+            window.location.replace(reason ? '/?session=' + reason : '/');
+        }
+
+        function logoutAndExit(event) {
+            if (event) event.preventDefault();
+            bitpawEndSession('');
+            return false;
+        }
+
         async function fetchUserProfile() {
             const token = localStorage.getItem('bitpaw_token');
             if (!token) return;
@@ -2113,6 +2143,11 @@
                 const res = await fetchWithTimeout('/api/auth/me', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                // token bị thu hồi / tài khoản đã xoá: không để trang treo "Đang tải..."
+                if (res.status === 401 || res.status === 404) {
+                    bitpawEndSession('expired');
+                    return;
+                }
                 const data = await res.json();
                 if (data.success && data.user) {
                     localStorage.setItem('bitpaw_user', JSON.stringify(data.user));

@@ -666,6 +666,17 @@
 
         /* Gói được gợi ý từ bảng tính ROI: viền sáng 2 giây để mắt tìm thấy ngay */
         #plan-local, #plan-auto, #plan-vip { scroll-margin-top: 7rem; }
+
+        /* Nút đăng xuất cạnh "Trang quản lý" trong header */
+        .session-logout-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            flex-shrink: 0;
+        }
+        @media (min-width: 640px) { .session-logout-btn { width: 2.5rem; height: 2.5rem; } }
         .plan-spotlight { animation: planSpotlight 2.2s cubic-bezier(0.16, 1, 0.3, 1) 1; }
         @keyframes planSpotlight {
             0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
@@ -780,7 +791,7 @@
                     <button id="quick-lang-en" type="button" onclick="switchLanguage('en')" class="px-2 py-0.5 rounded-full text-gray-400">EN</button>
                 </div>
                 <!-- Điện thoại hẹp chỉ hiện icon để không đẩy nút menu ra khỏi màn hình -->
-                <button onclick="openAuthModal('login')" title="Đăng Nhập" data-i18n-title="nav_login" class="sm:hidden text-xs px-2.5 py-1.5 rounded-lg border border-white/10 text-gray-300 hover:text-white whitespace-nowrap">
+                <button id="quick-login-btn" onclick="openAuthModal('login')" title="Đăng nhập" data-i18n-title="nav_login" class="sm:hidden text-xs px-2.5 py-1.5 rounded-lg border border-white/10 text-gray-300 hover:text-white whitespace-nowrap">
                     <i class="fa-solid fa-arrow-right-to-bracket text-neon-pink"></i><span class="hidden min-[440px]:inline ml-1.5" data-i18n="nav_login">Đăng nhập</span>
                 </button>
                 <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2 rounded-xl bg-white/5 border border-white/10" aria-label="Toggle Menu">
@@ -2761,7 +2772,7 @@
     <!-- ========================================================================= -->
     <!-- SECTION 6: FOOTER (CHUẨN HỆ THỐNG CONTACT BITPAW & DOANH NGHIỆP TOÀN CẦU)   -->
     <!-- ========================================================================= -->
-    <footer id="footer" class="bg-[#02050e] border-t border-white/10 relative z-10 pt-16 pb-10 overflow-hidden font-sans">
+    <footer id="footer" class="bg-[#02050e] border-t border-white/10 relative z-10 pt-16 pb-28 overflow-hidden font-sans">
         <!-- Top cyber gradient separator line -->
         <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/40 via-purple-500/50 to-transparent"></div>
         
@@ -2773,17 +2784,17 @@
                     <div class="flex items-center space-x-3">
                         <div class="relative flex items-center justify-center">
                             <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 opacity-70 blur-[3px]"></div>
-                            <img src="cho1.jpg" alt="BitPaw Logo" class="relative h-11 w-11 rounded-full object-cover border border-cyan-400/40 shadow-lg shadow-cyan-500/20">
+                            <img src="cho1.jpg" alt="Bitpawnetwork Logo" class="relative h-11 w-11 rounded-full object-cover border border-cyan-400/40 shadow-lg shadow-cyan-500/20">
                         </div>
                         <div class="flex items-center">
                             <span class="font-heading font-black text-2xl tracking-wide text-white">
-                                Bitpaw<span class="text-[#38bdf8]">network</span>
+                                Bitpaw<span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-pink via-neon-purple to-neon-cyan">network</span>
                             </span>
                         </div>
                     </div>
                     
                     <p class="text-xs text-gray-400 leading-relaxed" data-i18n="footer_desc">
-                        Hệ thống công nghệ Marketing Tự Động Hóa &amp; SEO Local số 1 dành riêng cho các chủ tiệm Nails tại Mỹ. Đột phá doanh thu với Ads Zipcode siêu trúng đích, thống lĩnh Top 1 Google Maps, bão review 5 sao và trợ lý AI chốt lịch 24/7.
+                        Hệ thống marketing tự động hóa &amp; SEO Local số 1 dành riêng cho chủ tiệm nails tại Mỹ. Đột phá doanh thu với Ads Zipcode nhắm đúng khách, lên Top 1 Google Maps, tăng review 5 sao thật và trợ lý AI chốt lịch 24/7.
                     </p>
 
                     <!-- Corporate Address Card -->
@@ -2809,7 +2820,7 @@
 
                 <!-- Col 2: DỊCH VỤ MARKETING (lg:col-span-2) -->
                 <div class="lg:col-span-2 space-y-4">
-                    <h4 class="font-heading font-extrabold text-sm text-white uppercase tracking-wider" data-i18n="footer_products_title">
+                    <h4 class="font-heading font-bold text-[15px] text-white" data-i18n="footer_products_title">
                         Giải pháp marketing
                     </h4>
                     <ul class="space-y-3 text-xs text-gray-400">
@@ -2839,8 +2850,9 @@
                             </a>
                         </li>
                         <li class="pt-1">
-                            <a href="#pricing" class="text-[#22c55e] font-bold text-sm hover:underline inline-flex items-center" data-i18n="footer_prod_pricing">
-                                Bảng giá gói dịch vụ
+                            <a href="#pricing" class="text-neon-pink font-semibold hover:text-white transition duration-200">
+                                <span data-i18n="footer_prod_pricing">Bảng giá gói dịch vụ</span>
+                                <i class="fa-solid fa-arrow-right text-[10px] ml-1.5" aria-hidden="true"></i>
                             </a>
                         </li>
                     </ul>
@@ -2848,7 +2860,7 @@
 
                 <!-- Col 3: PHÁP LÝ & BẢO MẬT (lg:col-span-3) -->
                 <div class="lg:col-span-3 space-y-4">
-                    <h4 class="font-heading font-extrabold text-sm text-white uppercase tracking-wider" data-i18n="footer_legal_title">
+                    <h4 class="font-heading font-bold text-[15px] text-white" data-i18n="footer_legal_title">
                         Pháp lý &amp; bảo mật
                     </h4>
                     <ul class="space-y-3 text-xs text-gray-300">
@@ -2900,8 +2912,8 @@
 
                 <!-- Col 4: CONTACT BITPAW (lg:col-span-3) -->
                 <div class="lg:col-span-3 space-y-4">
-                    <h4 class="font-heading font-extrabold text-sm text-white uppercase tracking-wider">
-                        Contact Bitpaw
+                    <h4 class="font-heading font-bold text-[15px] text-white" data-i18n="footer_contact_title">
+                        Liên hệ Bitpaw
                     </h4>
                     <div class="space-y-3">
                         <!-- Hotline -->
@@ -2910,7 +2922,7 @@
                                 <i class="fa-solid fa-phone text-xs"></i>
                             </div>
                             <div class="flex flex-col text-xs">
-                                <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400">HOTLINE 24/7</span>
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400" data-i18n="footer_label_hotline">Hotline 24/7</span>
                                 <span class="font-bold text-white">US <a href="tel:+17274962470" class="hover:text-cyan-400 transition ml-1">+1 727 496 2470</a></span>
                                 <span class="font-bold text-white">AU <a href="tel:+61385937410" class="hover:text-cyan-400 transition ml-1">+61 3 8593 7410</a></span>
                             </div>
@@ -2922,7 +2934,7 @@
                                 <i class="fa-solid fa-envelope text-xs"></i>
                             </div>
                             <div class="flex flex-col text-xs min-w-0">
-                                <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400" data-i18n="footer_label_email">EMAIL CÔNG VIỆC</span>
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400" data-i18n="footer_label_email">EMAIL CÔNG VIỆC</span>
                                 <a href="mailto:support@bitpawsoftware.com" class="font-bold text-white hover:text-pink-400 transition truncate max-w-[210px]" title="support@bitpawsoftware.com">
                                     support@bitpawsoftware.com
                                 </a>
@@ -2935,9 +2947,9 @@
                                 <i class="fa-brands fa-whatsapp text-sm"></i>
                             </div>
                             <div class="flex flex-col text-xs">
-                                <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400">WHATSAPP SUPPORT</span>
-                                <a href="https://wa.me/84794678904" target="_blank" class="font-bold text-white hover:text-blue-400 transition">
-                                    WhatsApp: (+84) 794.678.904
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400" data-i18n="footer_label_whatsapp">Hỗ trợ qua WhatsApp</span>
+                                <a href="https://wa.me/84794678904" target="_blank" rel="noopener noreferrer" class="font-bold text-white hover:text-blue-400 transition">
+                                    +84 794 678 904
                                 </a>
                             </div>
                         </div>
@@ -2948,8 +2960,8 @@
                                 <i class="fa-brands fa-telegram text-sm"></i>
                             </div>
                             <div class="flex flex-col text-xs">
-                                <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400">TELEGRAM</span>
-                                <a href="https://t.me/bitpawsoftware" target="_blank" class="font-bold text-white hover:text-sky-400 transition">
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Telegram</span>
+                                <a href="https://t.me/bitpawsoftware" target="_blank" rel="noopener noreferrer" class="font-bold text-white hover:text-sky-400 transition">
                                     @Bitpawsoftware
                                 </a>
                             </div>
@@ -2961,8 +2973,8 @@
                                 <i class="fa-brands fa-facebook-f text-xs"></i>
                             </div>
                             <div class="flex flex-col text-xs">
-                                <span class="text-[9px] uppercase font-bold tracking-wider text-gray-400" data-i18n="footer_label_fb">FACEBOOK CHÍNH THỨC</span>
-                                <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" class="font-bold text-white hover:text-indigo-400 transition">
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-gray-400" data-i18n="footer_label_fb">FACEBOOK CHÍNH THỨC</span>
+                                <a href="https://www.facebook.com/profile.php?id=100083987337739" target="_blank" rel="noopener noreferrer" class="font-bold text-white hover:text-indigo-400 transition">
                                     Bitpaw Official
                                 </a>
                             </div>
@@ -2970,7 +2982,7 @@
 
                         <!-- Admin Login Button -->
                         <div class="pt-2">
-                            <button type="button" onclick="openAuthModal('login')" class="w-full py-2.5 px-4 rounded-xl bg-[#141b2d] hover:bg-[#1e2942] border border-white/10 hover:border-cyan-500/40 text-white font-bold text-xs shadow-lg transition duration-200 flex items-center justify-center space-x-2 group">
+                            <button type="button" id="footer-admin-btn" onclick="openAuthModal('login')" class="w-full py-2.5 px-4 rounded-xl bg-[#141b2d] hover:bg-[#1e2942] border border-white/10 hover:border-cyan-500/40 text-white font-bold text-xs shadow-lg transition duration-200 flex items-center justify-center space-x-2 group">
                                 <i class="fa-solid fa-lock text-cyan-400 group-hover:scale-110 transition"></i>
                                 <span data-i18n="footer_admin_login">Đăng nhập quản trị</span>
                             </button>
@@ -2982,8 +2994,8 @@
 
             <!-- Footer Bottom -->
             <div class="border-t border-white/10 pt-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-                <p class="text-center sm:text-left">
-                    &copy; 2026 BitPaw Technology Enterprise. All rights reserved.
+                <p class="text-center sm:text-left" data-i18n="footer_copyright">
+                    &copy; 2026 Bitpaw Technology LLC. Mọi quyền được bảo lưu.
                 </p>
                 <div class="text-center sm:text-right flex items-center">
                     <span data-i18n="footer_credit">Thiết kế &amp; Lập trình bởi:&nbsp;</span>
@@ -3135,7 +3147,7 @@
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="login_label_password">Mật khẩu</label>
                     <div class="relative">
                         <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="password" id="login-password" autocomplete="current-password" required placeholder="••••••••" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        <input type="password" id="login-password" autocomplete="current-password" required placeholder="Nhập mật khẩu" data-i18n-placeholder="login_placeholder_password" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans tracking-wide">
                         <button type="button" onclick="togglePasswordVisibility('login-password', 'login-pw-eye')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1" aria-label="Toggle password visibility">
                             <i id="login-pw-eye" class="fa-regular fa-eye text-xs"></i>
                         </button>
@@ -4251,6 +4263,16 @@
                 roi_cta_desc: "Bitpaw sẽ quét đối thủ trong bán kính 10 miles quanh tiệm bạn và lên phác thảo chiến dịch miễn phí.",
                 roi_cta_btn: "NHẬN KẾ HOẠCH CHO TIỆM NÀY",
                 roi_plan_hint: "Gói hợp với quy mô này:",
+                nav_dashboard: "Trang quản lý",
+                nav_admin_panel: "Trang quản trị",
+                nav_logout: "Đăng xuất",
+                msg_logged_out: "Đã đăng xuất khỏi tài khoản",
+                msg_session_expired: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+                msg_session_noadmin: "Tài khoản này không có quyền quản trị. Vui lòng đăng nhập bằng tài khoản admin.",
+                footer_contact_title: "Liên hệ Bitpaw",
+                footer_label_hotline: "Hotline 24/7",
+                footer_label_whatsapp: "Hỗ trợ qua WhatsApp",
+                footer_copyright: "&copy; 2026 Bitpaw Technology LLC. Mọi quyền được bảo lưu.",
 
                 // Pricing Section
                 pricing_badge: "Chi phí hợp lý - hiệu quả cam kết",
@@ -4353,7 +4375,7 @@
                 // About Section
                 about_h2: "Bitpawnetwork là gì? Hệ thống marketing tự động hóa cho tiệm nails tại Mỹ",
                 // Footer
-                footer_desc: "Hệ thống công nghệ Marketing Tự Động Hóa & SEO Local số 1 dành riêng cho các chủ tiệm Nails tại Mỹ. Đột phá doanh thu với Ads Zipcode siêu trúng đích, thống lĩnh Top 1 Google Maps, bão review 5 sao và trợ lý AI chốt lịch 24/7.",
+                footer_desc: "Hệ thống marketing tự động hóa & SEO Local số 1 dành riêng cho chủ tiệm nails tại Mỹ. Đột phá doanh thu với Ads Zipcode nhắm đúng khách, lên Top 1 Google Maps, tăng review 5 sao thật và trợ lý AI chốt lịch 24/7.",
                 footer_products_title: "Giải pháp marketing",
                 footer_prod_1: "SEO Google Maps Top 1",
                 footer_prod_2: "Meta & TikTok Ads Zipcode",
@@ -4482,6 +4504,7 @@
                 tab_register_survey: "Đăng ký & khảo sát",
                 login_label_identifier: "Email hoặc Số điện thoại",
                 login_placeholder_identifier: "name@email.com hoặc (+1) 832 999 8888",
+                login_placeholder_password: "Nhập mật khẩu",
                 login_label_password: "Mật khẩu",
                 login_remember: "Ghi nhớ đăng nhập",
                 login_forgot: "Quên mật khẩu?",
@@ -4667,6 +4690,16 @@
                 roi_cta_desc: "Bitpaw will audit local competitors within 10 miles and build a custom growth plan.",
                 roi_cta_btn: "GET CUSTOM SALON PLAN",
                 roi_plan_hint: "Best-fit package for this salon size:",
+                nav_dashboard: "Dashboard",
+                nav_admin_panel: "Admin panel",
+                nav_logout: "Sign out",
+                msg_logged_out: "You have been signed out",
+                msg_session_expired: "Your session has expired. Please sign in again.",
+                msg_session_noadmin: "This account does not have admin access. Please sign in with an admin account.",
+                footer_contact_title: "Contact Bitpaw",
+                footer_label_hotline: "Hotline 24/7",
+                footer_label_whatsapp: "WhatsApp support",
+                footer_copyright: "&copy; 2026 Bitpaw Technology LLC. All rights reserved.",
 
                 // Pricing Section
                 pricing_badge: "Predictable Pricing • Guaranteed Growth",
@@ -4907,6 +4940,7 @@
                 tab_register_survey: "Sign Up & Survey",
                 login_label_identifier: "Email or Phone Number",
                 login_placeholder_identifier: "name@email.com or (+1) 832 999 8888",
+                login_placeholder_password: "Enter your password",
                 login_label_password: "Password",
                 login_remember: "Remember me",
                 login_forgot: "Forgot password?",
@@ -5112,6 +5146,223 @@
             }
         }
 
+        // --- Phiên đăng nhập trên trang chủ ---
+        // Chỉ hiện nút "Trang quản lý" khi token còn hạn, rồi hỏi lại server (/api/auth/me) cho chắc.
+        // Phiên hết hạn / bị thu hồi / tài khoản đã xoá -> xoá phiên, trả lại nút Đăng nhập / Đăng ký.
+        // Tên tiệm do người dùng tự nhập nên chỉ gán bằng textContent, không ghép vào HTML.
+        const SESSION_KEYS = ['bitpaw_token', 'bitpaw_user'];
+        const SESSION_SLOTS = [['nav', 'nav-auth-buttons'], ['mobile', 'mobile-nav-auth-buttons'], ['quick', 'quick-login-btn'], ['footer', 'footer-admin-btn']];
+        const loggedOutMarkup = {};
+
+        function readTokenPayload(token) {
+            try {
+                const part = String(token || '').split('.')[1];
+                if (!part) return null;
+                return JSON.parse(atob(part.replace(/-/g, '+').replace(/_/g, '/')));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function clearStoredSession() {
+            SESSION_KEYS.forEach(key => { try { localStorage.removeItem(key); } catch (e) {} });
+        }
+
+        function getStoredSession() {
+            let token = null, user = null;
+            try {
+                token = localStorage.getItem('bitpaw_token');
+                user = JSON.parse(localStorage.getItem('bitpaw_user') || 'null');
+            } catch (e) {
+                user = null;
+            }
+            if (!token) return null;
+            const payload = readTokenPayload(token);
+            if (!payload || typeof payload.exp !== 'number' || payload.exp * 1000 <= Date.now()) {
+                clearStoredSession();
+                return null;
+            }
+            const base = { role: payload.role };
+            return { token, user: Object.assign(base, user && typeof user === 'object' ? user : {}) };
+        }
+
+        function sessionText(key, fallback) {
+            const dict = (typeof i18nTranslations !== 'undefined' && i18nTranslations[currentLang]) || {};
+            return dict[key] || fallback;
+        }
+
+        function makeEl(tag, className, text) {
+            const node = document.createElement(tag);
+            if (className) node.className = className;
+            if (text !== undefined && text !== null) node.textContent = text;
+            return node;
+        }
+
+        function makeIcon(className) {
+            const icon = makeEl('i', className);
+            icon.setAttribute('aria-hidden', 'true');
+            return icon;
+        }
+
+        function makeI18nSpan(key, fallback, className) {
+            const span = makeEl('span', className || '', sessionText(key, fallback));
+            span.setAttribute('data-i18n', key);
+            return span;
+        }
+
+        function makeLogoutButton(className, withText) {
+            const btn = makeEl('button', className);
+            btn.type = 'button';
+            btn.title = sessionText('nav_logout', 'Đăng xuất');
+            btn.setAttribute('data-i18n-title', 'nav_logout');
+            btn.addEventListener('click', logoutFromLanding);
+            btn.append(makeIcon('fa-solid fa-arrow-right-from-bracket' + (withText ? ' mr-2' : '')));
+            btn.append(makeI18nSpan('nav_logout', 'Đăng xuất', withText ? '' : 'sr-only'));
+            return btn;
+        }
+
+        function rememberLoggedOutMarkup() {
+            SESSION_SLOTS.forEach(([slot, id]) => {
+                const node = document.getElementById(id);
+                if (node && !(slot in loggedOutMarkup)) loggedOutMarkup[slot] = node.outerHTML;
+            });
+        }
+
+        function renderLoggedInHeader(user) {
+            rememberLoggedOutMarkup();
+            const isAdmin = user.role === 'admin';
+            const target = isAdmin ? '/admin' : '/dashboard';
+            const labelKey = isAdmin ? 'nav_admin_panel' : 'nav_dashboard';
+            const labelFallback = isAdmin ? 'Trang quản trị' : 'Trang quản lý';
+            const name = String(user.salonName || user.fullName || user.username || '').trim();
+
+            // Header máy tính / tablet: [Trang quản lý] [đăng xuất]. Khung header chỉ rộng 1280px nên không đặt
+            // tên tiệm vào nút (tên dài sẽ đẩy tràn); tên hiện ở tooltip và trong menu điện thoại.
+            const nav = document.getElementById('nav-auth-buttons');
+            if (nav) {
+                const link = makeEl('a', 'btn-beauty-primary font-semibold text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm tracking-wide flex items-center shadow-lg whitespace-nowrap');
+                link.href = target;
+                if (name) link.title = name;
+                link.append(makeIcon('fa-solid fa-gauge-high mr-2'), makeI18nSpan(labelKey, labelFallback));
+                nav.textContent = '';
+                nav.append(link, makeLogoutButton('session-logout-btn text-gray-300 hover:text-white rounded-xl hover:bg-white/5 border border-white/10 hover:border-neon-pink/30 transition-colors duration-200', false));
+            }
+
+            // Nút icon trên điện thoại hẹp
+            const quick = document.getElementById('quick-login-btn');
+            if (quick) {
+                const a = makeEl('a', quick.className);
+                a.id = 'quick-login-btn';
+                a.href = target;
+                a.title = sessionText(labelKey, labelFallback);
+                a.setAttribute('data-i18n-title', labelKey);
+                a.append(makeIcon('fa-solid fa-gauge-high text-neon-pink'), makeI18nSpan(labelKey, labelFallback, 'hidden min-[440px]:inline ml-1.5'));
+                quick.replaceWith(a);
+            }
+
+            // Menu điện thoại: tên tiệm + vào trang quản lý + đăng xuất
+            const mobile = document.getElementById('mobile-nav-auth-buttons');
+            if (mobile) {
+                mobile.textContent = '';
+                if (name) {
+                    const who = makeEl('div', 'flex items-center gap-2.5 px-1 pb-1 text-sm min-w-0');
+                    who.append(makeIcon('fa-solid fa-circle-user text-neon-pink text-base flex-shrink-0'), makeEl('span', 'truncate font-semibold text-white', name));
+                    mobile.append(who);
+                }
+                const go = makeEl('a', 'btn-beauty-primary text-center font-semibold text-white py-2.5 rounded-xl text-sm shadow-lg flex items-center justify-center');
+                go.href = target;
+                go.append(makeIcon('fa-solid fa-gauge-high mr-2'), makeI18nSpan(labelKey, labelFallback));
+                mobile.append(go, makeLogoutButton('text-center font-semibold text-gray-300 hover:text-white py-2.5 rounded-xl border border-white/10 hover:bg-white/5 transition duration-200 text-sm', true));
+            }
+
+            // Nút "Đăng nhập quản trị" ở footer: admin đã đăng nhập thì vào thẳng trang quản trị
+            const footerBtn = document.getElementById('footer-admin-btn');
+            if (footerBtn && isAdmin) {
+                const a = makeEl('a', footerBtn.className);
+                a.id = 'footer-admin-btn';
+                a.href = '/admin';
+                a.append(makeIcon('fa-solid fa-gauge-high text-cyan-400'), makeI18nSpan('nav_admin_panel', 'Trang quản trị'));
+                footerBtn.replaceWith(a);
+            } else if (footerBtn && !isAdmin && footerBtn.tagName === 'A' && loggedOutMarkup.footer) {
+                footerBtn.outerHTML = loggedOutMarkup.footer;
+            }
+        }
+
+        function restoreLoggedOutHeader() {
+            if (!Object.keys(loggedOutMarkup).length) return;
+            SESSION_SLOTS.forEach(([slot, id]) => {
+                const node = document.getElementById(id);
+                if (node && loggedOutMarkup[slot]) node.outerHTML = loggedOutMarkup[slot];
+            });
+            // markup gốc có thể đang là ngôn ngữ cũ: dịch lại theo ngôn ngữ đang chọn
+            switchLanguage(currentLang, true);
+        }
+
+        function logoutFromLanding() {
+            clearStoredSession();
+            restoreLoggedOutHeader();
+            showCyberToast(sessionText('msg_logged_out', 'Đã đăng xuất khỏi tài khoản'));
+        }
+
+        async function verifySessionWithServer(session) {
+            const ctrl = ('AbortController' in window) ? new AbortController() : null;
+            const timer = ctrl ? setTimeout(() => ctrl.abort(), 8000) : null;
+            try {
+                const res = await fetch('/api/auth/me', {
+                    headers: { 'Authorization': 'Bearer ' + session.token },
+                    cache: 'no-store',
+                    signal: ctrl ? ctrl.signal : undefined
+                });
+                if (res.status === 401 || res.status === 403 || res.status === 404) {
+                    clearStoredSession();
+                    restoreLoggedOutHeader();
+                    return;
+                }
+                if (!res.ok) return; // server lỗi tạm thời: giữ nguyên, lần sau kiểm tra lại
+                const data = await res.json();
+                if (data && data.success && data.user) {
+                    const merged = Object.assign({}, session.user, data.user);
+                    try { localStorage.setItem('bitpaw_user', JSON.stringify(merged)); } catch (e) {}
+                    renderLoggedInHeader(merged);
+                }
+            } catch (e) {
+                // mất mạng / quá thời gian: giữ trạng thái đang hiện
+            } finally {
+                if (timer) clearTimeout(timer);
+            }
+        }
+
+        function initHeaderSession() {
+            const session = getStoredSession();
+            if (session) {
+                renderLoggedInHeader(session.user);
+                verifySessionWithServer(session);
+            }
+            // Đăng nhập / đăng xuất ở tab khác thì tab này đổi theo
+            window.addEventListener('storage', (e) => {
+                if (e.key !== null && SESSION_KEYS.indexOf(e.key) === -1) return;
+                const s = getStoredSession();
+                if (s) renderLoggedInHeader(s.user);
+                else restoreLoggedOutHeader();
+            });
+        }
+
+        // Dashboard / admin đưa về đây khi phiên hết hạn (?session=expired) hoặc không có quyền (?session=noadmin)
+        function handleSessionNotice() {
+            let reason = null;
+            try { reason = new URLSearchParams(window.location.search).get('session'); } catch (e) {}
+            if (reason !== 'expired' && reason !== 'noadmin') return;
+            try { history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) {}
+            openAuthModal('login');
+            const box = document.getElementById('auth-message');
+            if (box) {
+                box.className = 'mb-4 p-3.5 rounded-xl text-xs font-semibold leading-relaxed bg-amber-500/10 text-amber-300 border border-amber-500/25';
+                box.textContent = reason === 'noadmin'
+                    ? sessionText('msg_session_noadmin', 'Tài khoản này không có quyền quản trị. Vui lòng đăng nhập bằng tài khoản admin.')
+                    : sessionText('msg_session_expired', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+            }
+        }
+
         // --- Initialization on Page Load ---
         window.addEventListener('DOMContentLoaded', () => {
             // Hiệu ứng trang trí lỗi trên một máy nào đó thì bỏ qua, không được kéo theo ngôn ngữ / đăng nhập bên dưới
@@ -5125,38 +5376,9 @@
                 switchLanguage('en', true);
             }
 
-            // Sync logged-in session state in header
-            const token = localStorage.getItem('bitpaw_token');
-            const storedUser = localStorage.getItem('bitpaw_user');
-            if (token && storedUser) {
-                try {
-                    const u = JSON.parse(storedUser);
-                    const displayName = u.salonName || u.fullName || u.username;
-                    const targetUrl = u.role === 'admin' ? '/admin' : '/dashboard';
-
-                    const navAuthContainer = document.getElementById('nav-auth-buttons');
-                    if (navAuthContainer) {
-                        navAuthContainer.innerHTML = `
-                            <a href="${targetUrl}" class="btn-beauty-primary font-semibold text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm tracking-wide flex items-center shadow-lg whitespace-nowrap space-x-1.5">
-                                <i class="fa-solid fa-chart-pie mr-1 text-neon-cyan"></i>
-                                <span>Vào Dashboard (${displayName})</span>
-                            </a>
-                        `;
-                    }
-
-                    const mobileAuthContainer = document.getElementById('mobile-nav-auth-buttons');
-                    if (mobileAuthContainer) {
-                        mobileAuthContainer.innerHTML = `
-                            <a href="${targetUrl}" class="btn-beauty-primary text-center font-semibold text-white py-3 rounded-xl text-sm shadow-lg flex items-center justify-center space-x-2">
-                                <i class="fa-solid fa-chart-pie mr-1"></i>
-                                <span>Vào Bảng Điều Khiển (${displayName})</span>
-                            </a>
-                        `;
-                    }
-                } catch (e) {
-                    console.error('Lỗi phân tích phiên đăng nhập:', e);
-                }
-            }
+            // Phiên đăng nhập: chỉ hiện "Trang quản lý" khi phiên còn hiệu lực
+            initHeaderSession();
+            handleSessionNotice();
         });
     </script>
 </body>
