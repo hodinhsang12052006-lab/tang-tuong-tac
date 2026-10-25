@@ -2455,7 +2455,8 @@
             const viaShopLink = document.getElementById('nav-via-shop');
             if (viaShopLink && token) {
                 // Fixed template literal token path redirect to avoid SyntaxError
-                viaShopLink.href = `https://shop.bitpawnetwork.com/?token=${encodeURIComponent(token)}`;
+                // Token đi sau dấu # nên trình duyệt không gửi lên server shop (không lọt vào log); shop đọc xong tự xoá khỏi URL
+                viaShopLink.href = `https://shop.bitpawnetwork.com/#token=${encodeURIComponent(token)}`;
             }
 
             // Render local storage cache first to avoid layout shift
