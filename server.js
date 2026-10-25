@@ -35,6 +35,9 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/bitpawnetw
 // bắt buộc phải có để express-rate-limit đọc đúng IP thực của client thay vì IP của proxy
 app.set('trust proxy', 1);
 
+// Ẩn header "X-Powered-By: Express" để không lộ công nghệ nền tảng cho kẻ tấn công dò quét
+app.disable('x-powered-by');
+
 // Hàm tự động khởi tạo tài khoản Admin mặc định (chỉ chạy khi có cấu hình trong .env)
 async function seedAdminUser() {
     try {
@@ -137,6 +140,9 @@ app.use((req, res, next) => {
     res.setHeader('X-XSS-Protection', '1; mode=block');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    // Khóa các quyền trình duyệt nhạy cảm (camera, mic, định vị...) vì trang không dùng tới
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
+    res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
     next();
 });
 
@@ -185,8 +191,9 @@ const allowedOrigins = (process.env.FRONTEND_URL || '').split(',').map(o => o.tr
 app.use(cors({
     origin: allowedOrigins.length > 0 ? allowedOrigins : true,
 }));
-app.use(express.json({ limit: '5mb' })); // Hỗ trợ JSON an toàn
-app.use(express.urlencoded({ extended: true, limit: '5mb' }));
+// Giới hạn kích thước body nhỏ (dữ liệu API của app rất nhẹ) để chống DoS bằng payload khổng lồ
+app.use(express.json({ limit: '100kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
 // ==========================================
 // 2. KẾT NỐI CƠ SỞ DỮ LIỆU MONGODB

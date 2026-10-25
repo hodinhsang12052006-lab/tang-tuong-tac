@@ -16,6 +16,7 @@ const rateLimit = require('express-rate-limit');
 const { User, ViaOrder } = require('./models');
 
 const app = express();
+app.disable('x-powered-by');
 const PORT = process.env.PORT_VIA || 4000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/bitpawnetwork';
 const JWT_SECRET = process.env.JWT_SECRET;
