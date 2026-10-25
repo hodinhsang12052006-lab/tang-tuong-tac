@@ -3128,14 +3128,14 @@
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="login_label_identifier">Email hoặc Số điện thoại</label>
                     <div class="relative">
                         <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="text" id="login-identifier" required placeholder="name@email.com hoặc (+1) 832 999 8888" data-i18n-placeholder="login_placeholder_identifier" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        <input type="text" id="login-identifier" autocomplete="username" required placeholder="name@email.com hoặc (+1) 832 999 8888" data-i18n-placeholder="login_placeholder_identifier" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans tracking-wide">
                     </div>
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="login_label_password">Mật khẩu</label>
                     <div class="relative">
                         <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans tracking-wide">
+                        <input type="password" id="login-password" autocomplete="current-password" required placeholder="••••••••" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans tracking-wide">
                         <button type="button" onclick="togglePasswordVisibility('login-password', 'login-pw-eye')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1" aria-label="Toggle password visibility">
                             <i id="login-pw-eye" class="fa-regular fa-eye text-xs"></i>
                         </button>
@@ -3181,14 +3181,14 @@
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="reg_label_fullname">Họ và tên chủ tiệm</label>
                             <div class="relative">
                                 <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                <input type="text" id="register-fullname" placeholder="vd: Jessica Nguyen" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
+                                <input type="text" id="register-fullname" autocomplete="name" placeholder="vd: Jessica Nguyen" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
                             </div>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="reg_label_username">Tên đăng nhập <span class="text-neon-pink">*</span></label>
                             <div class="relative">
                                 <i class="fa-solid fa-user-gear absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                <input type="text" id="register-username" required placeholder="vd: jessica_nails" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
+                                <input type="text" id="register-username" autocomplete="username" required placeholder="vd: jessica_nails" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
                             </div>
                         </div>
                     </div>
@@ -3198,14 +3198,14 @@
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Email <span class="text-neon-pink">*</span></label>
                             <div class="relative">
                                 <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                <input type="email" id="register-email" required placeholder="contact@email.com" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
+                                <input type="email" id="register-email" autocomplete="email" required placeholder="contact@email.com" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
                             </div>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="reg_label_phone">Số điện thoại US / VN <span class="text-neon-pink">*</span></label>
                             <div class="relative">
                                 <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                <input type="tel" id="register-phone" required placeholder="(+1) 832 999 8888" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
+                                <input type="tel" id="register-phone" autocomplete="tel" required placeholder="(+1) 832 999 8888" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-4 py-3 text-xs text-white transition-all duration-300 font-sans">
                             </div>
                         </div>
                     </div>
@@ -3215,7 +3215,7 @@
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="reg_label_password">Mật khẩu <span class="text-neon-pink">*</span></label>
                             <div class="relative">
                                 <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                <input type="password" id="register-password" required placeholder="Tối thiểu 6 ký tự..." data-i18n-placeholder="reg_placeholder_password" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans">
+                                <input type="password" id="register-password" autocomplete="new-password" required placeholder="Tối thiểu 6 ký tự..." data-i18n-placeholder="reg_placeholder_password" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans">
                                 <button type="button" onclick="togglePasswordVisibility('register-password', 'reg-pw-eye')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1">
                                     <i id="reg-pw-eye" class="fa-regular fa-eye text-xs"></i>
                                 </button>
@@ -3225,7 +3225,7 @@
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5" data-i18n="reg_label_confirm_password">Nhập lại mật khẩu <span class="text-neon-pink">*</span></label>
                             <div class="relative">
                                 <i class="fa-solid fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                                <input type="password" id="register-confirm-password" required placeholder="Xác nhận lại..." data-i18n-placeholder="reg_placeholder_confirm" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans">
+                                <input type="password" id="register-confirm-password" autocomplete="new-password" required placeholder="Xác nhận lại..." data-i18n-placeholder="reg_placeholder_confirm" class="w-full bg-dark-950/85 border border-white/10 focus:border-neon-pink focus:shadow-[0_0_15px_rgba(236,72,153,0.3)] focus:outline-none rounded-xl pl-11 pr-11 py-3 text-xs text-white transition-all duration-300 font-sans">
                                 <button type="button" onclick="togglePasswordVisibility('register-confirm-password', 'reg-cpw-eye')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1">
                                     <i id="reg-cpw-eye" class="fa-regular fa-eye text-xs"></i>
                                 </button>
